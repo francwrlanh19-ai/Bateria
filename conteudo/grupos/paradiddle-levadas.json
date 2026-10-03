@@ -1,0 +1,15 @@
+{
+  "id": "paradiddle-levadas",
+  "categoria": "paradiddle",
+  "ordem": 10,
+  "vozUnica": true,
+  "titulo": "Aplicando em levadas",
+  "descricao": "Paradiddle dividido entre as mãos: D é a direita, no chimbal; E é a esquerda, na caixa. Pratique devagar, sempre com o metrônomo.",
+  "exercicios": [
+    {"id":"pd-1","num":1,"nome":"Exercício 1","compasso":[4,4],"sub":4,"mao":"........DeddEdee","trilhas":{"hh":"x.x.x.x.x.xx.x..","sn":"....x....x..x.xx","bd":"x..x............"}},
+    {"id":"pd-2","num":2,"nome":"Exercício 2","compasso":[4,4],"sub":4,"mao":"....EdeeDedde.d.","trilhas":{"hh":"x.x..x..x.xx..x.","sn":"....x.xx.x..x...","bd":"x..x....x......."}},
+    {"id":"pd-3","num":3,"nome":"Exercício 3","compasso":[4,4],"sub":4,"mao":"Dedde.d.........","trilhas":{"hh":"x.xx..x.x.x.x.x.","sn":".x..x.......x...","bd":"x......xx......."}},
+    {"id":"pd-4","num":4,"nome":"Exercício 4","compasso":[4,4],"sub":4,"mao":"Dedde.d.....Edee","trilhas":{"hh":"x.xx..x.x.x..x..","sn":".x..x.......x.xx","bd":"x......xx......."}},
+    {"id":"pd-5","num":5,"nome":"Exercício 5","compasso":[4,4],"sub":4,"mao":"............Edee","trilhas":{"hh":"x.x.x.x.x.x..x..","sn":"....x..x....x.xx","bd":"x..x.....xx....."}}
+  ]
+}

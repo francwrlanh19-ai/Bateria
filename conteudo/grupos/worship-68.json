@@ -1,0 +1,18 @@
+{
+  "id": "worship-68",
+  "categoria": "worship",
+  "ordem": 30,
+  "vozUnica": true,
+  "andamento": {
+    "inicio": 100,
+    "fim": 160,
+    "bpmFixo": 120
+  },
+  "titulo": "Levadas em 6/8",
+  "descricao": "Comum nas baladas. Aqui o andamento conta colcheias: o metrônomo clica 6 vezes por compasso, mais forte no 1 e no 4.",
+  "exercicios": [
+    {"id":"w68-1","num":1,"nome":"6/8 básica","compasso":[6,8],"sub":2,"trilhas":{"hh":"x.x.x.x.x.x.","sn":"......x.....","bd":"x..........."}},
+    {"id":"w68-2","num":2,"nome":"Bumbo no 6","compasso":[6,8],"sub":2,"trilhas":{"hh":"x.x.x.x.x.x.","sn":"......x.....","bd":"x.........x."}},
+    {"id":"w68-3","num":3,"nome":"Com semicolcheia","compasso":[6,8],"sub":2,"trilhas":{"hh":"x.x.x.x.x.x.","sn":"......x.....","bd":"x...xx....x."}}
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "samba-indep",
+  "categoria": "samba",
+  "ordem": 10,
+  "andamento": {
+    "inicio": 60,
+    "fim": 100
+  },
+  "maosPes": true,
+  "titulo": "Samba Independence, parte 2",
+  "descricao": "Pés sempre iguais: bumbo no 1 e no \"a\" de cada tempo, chimbal com o pé no \"&\". As mãos mudam.",
+  "exercicios": [
+    {"id":"si2-17","num":17,"nome":"Exercício 17","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....xx......xx..","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"si2-18","num":18,"nome":"Exercício 18","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":".xx..xx..xx..xx.","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"si2-19","num":19,"nome":"Exercício 19","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":".xx......xx.....","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"si2-20","num":20,"nome":"Exercício 20","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":".....xx......xx.","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"si2-21","num":21,"nome":"Exercício 21","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"..xx..xx..xx..xx","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"si2-22","num":22,"nome":"Exercício 22","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"..xx......xx....","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"si2-23","num":23,"nome":"Exercício 23","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"......xx......xx","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"si2-24","num":24,"nome":"Exercício 24","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"x..xx..xx..xx..x","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"si2-25","num":25,"nome":"Exercício 25","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"x..x....x..x....","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"si2-26","num":26,"nome":"Exercício 26","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....x..x....x..x","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"si2-27","num":27,"nome":"Exercício 27","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"xxxxxxxxxxxxxxxx","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}}
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "controle-baqueta",
+  "categoria": "tecnica",
+  "ordem": 10,
+  "vozUnica": true,
+  "panMao": true,
+  "modoAcento": true,
+  "andamento": {
+    "inicio": 60,
+    "fim": 120,
+    "passo": 4,
+    "reps": 8
+  },
+  "titulo": "Controle de baqueta",
+  "descricao": "Exercícios de mãos no estilo do Stick Control. Escolha onde ficam os acentos: no início de cada grupo da manulação ou em cada tempo. Com fone, a direita soa do lado direito e a esquerda do esquerdo.",
+  "exercicios": [
+    {"id":"mc-1","num":1,"nome":"Toques simples","compasso":[4,4],"sub":4,"mao":"dededededededede","trilhas":{"sn":"xxxxxxxxxxxxxxxx"},"acentos":{"grupo":[0,2,4,6,8,10,12,14],"tempo":[0,4,8,12]}},
+    {"id":"mc-2","num":2,"nome":"Toques duplos","compasso":[4,4],"sub":4,"mao":"ddeeddeeddeeddee","trilhas":{"sn":"xxxxxxxxxxxxxxxx"},"acentos":{"grupo":[0,2,4,6,8,10,12,14],"tempo":[0,4,8,12]}},
+    {"id":"mc-3","num":3,"nome":"Simples e duplos","compasso":[4,4],"sub":4,"mao":"dededdeedededdee","trilhas":{"sn":"xxxxxxxxxxxxxxxx"},"acentos":{"grupo":[0,8],"tempo":[0,4,8,12]}},
+    {"id":"mc-4","num":4,"nome":"Direita na frente","compasso":[4,4],"sub":4,"mao":"ddedddedddeddded","trilhas":{"sn":"xxxxxxxxxxxxxxxx"},"acentos":{"grupo":[0,4,8,12],"tempo":[0,4,8,12]}},
+    {"id":"mc-5","num":5,"nome":"Esquerda na frente","compasso":[4,4],"sub":4,"mao":"eedeeedeeedeeede","trilhas":{"sn":"xxxxxxxxxxxxxxxx"},"acentos":{"grupo":[0,4,8,12],"tempo":[0,4,8,12]}},
+    {"id":"mc-6","num":6,"nome":"Quatro de cada","compasso":[4,4],"sub":4,"mao":"ddddeeeeddddeeee","trilhas":{"sn":"xxxxxxxxxxxxxxxx"},"acentos":{"grupo":[0,4,8,12],"tempo":[0,4,8,12]}}
+  ]
+}

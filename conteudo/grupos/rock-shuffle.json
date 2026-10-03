@@ -1,0 +1,16 @@
+{
+  "id": "rock-shuffle",
+  "categoria": "rock",
+  "ordem": 20,
+  "vozUnica": true,
+  "andamento": {
+    "inicio": 60,
+    "fim": 110
+  },
+  "titulo": "Shuffle",
+  "descricao": "Colcheias em tercina: o chimbal toca a primeira e a terceira nota de cada tercina, o que dá o balanço.",
+  "exercicios": [
+    {"id":"sh-1","num":1,"nome":"Shuffle básico","compasso":[4,4],"sub":3,"trilhas":{"hh":"x.xx.xx.xx.x","sn":"...x.....x..","bd":"x.....x....."}},
+    {"id":"sh-2","num":2,"nome":"Shuffle com bumbo","compasso":[4,4],"sub":3,"trilhas":{"hh":"x.xx.xx.xx.x","sn":"...x.....x..","bd":"x....xx....."}}
+  ]
+}

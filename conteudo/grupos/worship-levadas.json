@@ -1,0 +1,23 @@
+{
+  "id": "worship-levadas",
+  "categoria": "worship",
+  "ordem": 20,
+  "andamento": {
+    "inicio": 100,
+    "fim": 150,
+    "bpmFixo": 120
+  },
+  "cabecas": {
+    "hh": "g/5/x3"
+  },
+  "vozUnica": true,
+  "titulo": "Levadas para worship",
+  "descricao": "5 levadas de dois compassos. O chimbal marca os tempos e o bumbo e a caixa preenchem os contratempos. São tocadas rápidas.",
+  "exercicios": [
+    {"id":"wl-A","num":"A","nome":"Levada A","compasso":[4,4],"sub":2,"barras":2,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.x..x..x...","bd":"x.xx...x..xx.x.x"}},
+    {"id":"wl-B","num":"B","nome":"Levada B","compasso":[4,4],"sub":2,"barras":2,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.x..x....x.","bd":"x.xx...x..xx.x.g"}},
+    {"id":"wl-C","num":"C","nome":"Levada C","compasso":[4,4],"sub":2,"barras":2,"trilhas":{"hh":"x.x.x.x.x..xx.x.","sn":"....x.x..xx...x.","bd":"x.x....x...xx..x"},"mao":["","","","","","","","","D","E","D","E","D","","",""]},
+    {"id":"wl-D","num":"D","nome":"Levada D","compasso":[4,4],"sub":2,"barras":2,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"x..x..x..x..x.x.","bd":".xx.xx.xx.xx.x.x"}},
+    {"id":"wl-E","num":"E","nome":"Levada E","compasso":[4,4],"sub":2,"barras":2,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"x..x..x..x..xxxx","bd":"x.x.x.x.x.x.x.x."}}
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "samba-grooves",
+  "categoria": "samba",
+  "ordem": 20,
+  "andamento": {
+    "inicio": 60,
+    "fim": 100
+  },
+  "maosPes": true,
+  "titulo": "7 grooves de samba",
+  "descricao": "Grooves completos sobre o mesmo padrão de pés.",
+  "exercicios": [
+    {"id":"sg-1","num":1,"nome":"Groove 1","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"x.x..x.x.xx....x","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"sg-2","num":2,"nome":"Groove 2","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"..x..x...x.xx...","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"sg-3","num":3,"nome":"Groove 3","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"x.x.xx.x.x.xx.x.","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"sg-4","num":4,"nome":"Groove 4","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":".x......x..x....","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"sg-5","num":5,"nome":"Groove 5","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"x..x...x.x......","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"sg-6","num":6,"nome":"Groove 6","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"..x.x...x..x....","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
+    {"id":"sg-7","num":7,"nome":"Groove 7","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"x..x...x..x.x...","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}}
+  ]
+}

@@ -1,0 +1,70 @@
+[
+  {
+    "id": "grooves",
+    "nome": "Grooves",
+    "descricao": "Grooves com semicolcheias no bumbo e na caixa",
+    "cor": "--sn"
+  },
+  {
+    "id": "samba",
+    "nome": "Samba",
+    "descricao": "Independência e grooves de samba",
+    "cor": "--hh"
+  },
+  {
+    "id": "paradiddle",
+    "nome": "Paradiddle",
+    "descricao": "Paradiddle aplicado em levadas",
+    "cor": "--tom"
+  },
+  {
+    "id": "worship",
+    "nome": "Worship",
+    "descricao": "Viradas, levadas e 6/8",
+    "cor": "--cym"
+  },
+  {
+    "id": "afrobeat",
+    "nome": "Afrobeat",
+    "descricao": "Levadas de afrobeat",
+    "cor": "--bd"
+  },
+  {
+    "id": "rock",
+    "nome": "Rock",
+    "descricao": "Levadas de rock e shuffle",
+    "cor": "--ft"
+  },
+  {
+    "id": "ostinato",
+    "nome": "Ostinato",
+    "descricao": "Pés fixos, mãos livres",
+    "cor": "--rd"
+  },
+  {
+    "id": "tecnica",
+    "nome": "Técnica",
+    "descricao": "Controle de baqueta, acentos e tercinas",
+    "cor": "--hp"
+  },
+  {
+    "id": "figuras",
+    "nome": "Figuras",
+    "descricao": "Da semínima à fusa, com foco em quintinas e septinas",
+    "cor": "--brass"
+  },
+  {
+    "id": "rotina",
+    "nome": "Rotina",
+    "descricao": "",
+    "cor": "--muted",
+    "especial": true
+  },
+  {
+    "id": "meus",
+    "nome": "Meus",
+    "descricao": "Exercícios criados por você",
+    "cor": "--muted",
+    "especial": true
+  }
+]

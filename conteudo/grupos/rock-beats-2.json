@@ -1,0 +1,30 @@
+{
+  "id": "rock-beats-2",
+  "categoria": "rock",
+  "ordem": 10,
+  "andamento": {
+    "inicio": 70,
+    "fim": 120
+  },
+  "vozUnica": true,
+  "titulo": "Rock Beats 2",
+  "descricao": "16 levadas de rock. O chimbal toca colcheias o tempo todo; o bumbo e a caixa mudam, e a partir da levada 5 aparecem semicolcheias no bumbo e na caixa.",
+  "exercicios": [
+    {"id":"rk-1","num":1,"nome":"Levada 1","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.x.....x...","bd":"x.......x......."}},
+    {"id":"rk-2","num":2,"nome":"Levada 2","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"x...x...x...x...","bd":"x...x.....x...x."}},
+    {"id":"rk-3","num":3,"nome":"Levada 3","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"x...x...x...x...","bd":"..x...x...x...x."}},
+    {"id":"rk-4","num":4,"nome":"Levada 4","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"..x...x...x...x.","bd":"x...x...x...x..."}},
+    {"id":"rk-5","num":5,"nome":"Levada 5","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.......x...","bd":"x.x..x..x......."}},
+    {"id":"rk-6","num":6,"nome":"Levada 6","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.......x...","bd":"x.......x..x...."}},
+    {"id":"rk-7","num":7,"nome":"Levada 7","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.......x...","bd":"x....xx...x....."}},
+    {"id":"rk-8","num":8,"nome":"Levada 8","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.......x...","bd":"x..x....x.x....."}},
+    {"id":"rk-9","num":9,"nome":"Levada 9","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x..x....x...","bd":"x.x.....x......."}},
+    {"id":"rk-10","num":10,"nome":"Levada 10","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x..x.x..x...","bd":"x.x.....x.x....."}},
+    {"id":"rk-11","num":11,"nome":"Levada 11","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":".x..x..x.x..x..x","bd":"x.x.....x.x....."}},
+    {"id":"rk-12","num":12,"nome":"Levada 12","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.......x...","bd":"x..x....xx.x...."}},
+    {"id":"rk-13","num":13,"nome":"Levada 13","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.......x...","bd":"x.....xx.xx....x"}},
+    {"id":"rk-14","num":14,"nome":"Levada 14","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x..x....x...","bd":"x.x...x.x.x....."}},
+    {"id":"rk-15","num":15,"nome":"Levada 15","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.......x..x","bd":"x.xx..x.x.x....."}},
+    {"id":"rk-16","num":16,"nome":"Levada 16","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.......x...","bd":"x.....xxx.....xx"}}
+  ]
+}

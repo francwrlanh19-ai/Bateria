@@ -1,0 +1,19 @@
+{
+  "id": "tercinas",
+  "categoria": "tecnica",
+  "ordem": 30,
+  "vozUnica": true,
+  "panMao": true,
+  "andamento": {
+    "inicio": 50,
+    "fim": 100,
+    "reps": 8
+  },
+  "titulo": "Tercinas",
+  "descricao": "Três notas por tempo, com acento no tempo. Conte 1 & a, 2 & a.",
+  "exercicios": [
+    {"id":"tc-1","num":1,"nome":"Tercinas alternadas","compasso":[4,4],"sub":3,"mao":"DedEdeDedEde","trilhas":{"sn":"XxxXxxXxxXxx"}},
+    {"id":"tc-2","num":2,"nome":"Direita no tempo","compasso":[4,4],"sub":3,"mao":"DeeDeeDeeDee","trilhas":{"sn":"XxxXxxXxxXxx"}},
+    {"id":"tc-3","num":3,"nome":"Esquerda no tempo","compasso":[4,4],"sub":3,"mao":"EddEddEddEdd","trilhas":{"sn":"XxxXxxXxxXxx"}}
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "figuras-5e7",
+  "categoria": "figuras",
+  "ordem": 30,
+  "vozUnica": true,
+  "panMao": true,
+  "andamento": {
+    "inicio": 40,
+    "fim": 80,
+    "passo": 4,
+    "reps": 8
+  },
+  "titulo": "Foco em 5 e 7",
+  "descricao": "Quintinas e septinas ao lado de figuras que você já domina. Os exercícios com respiro dão um tempo de semínima para você se reorganizar.",
+  "exercicios": [
+    {"id":"f57-1","num":1,"nome":"Quintina com respiro","compasso":[4,4],"sub":1,"subs":[5,1,5,1],"mao":"DEDEDEDEDEDE","trilhas":{"sn":"XxxxxXXxxxxX"}},
+    {"id":"f57-2","num":2,"nome":"Semicolcheia e quintina","compasso":[4,4],"sub":1,"subs":[4,5,4,5],"mao":"DEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxXxxxxXxxxXxxxx"}},
+    {"id":"f57-3","num":3,"nome":"Quintina e sextina","compasso":[4,4],"sub":1,"subs":[5,6,5,6],"mao":"DEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxXxxxxxXxxxxXxxxxx"}},
+    {"id":"f57-4","num":4,"nome":"Septina com respiro","compasso":[4,4],"sub":1,"subs":[7,1,7,1],"mao":"DEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxXXxxxxxxX"}},
+    {"id":"f57-5","num":5,"nome":"Sextina e septina","compasso":[4,4],"sub":1,"subs":[6,7,6,7],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxXxxxxxxXxxxxxXxxxxxx"}},
+    {"id":"f57-6","num":6,"nome":"Septina e fusa","compasso":[4,4],"sub":1,"subs":[7,8,7,8],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxXxxxxxxxXxxxxxxXxxxxxxx"}},
+    {"id":"f57-7","num":7,"nome":"Quintina e septina","compasso":[4,4],"sub":1,"subs":[5,7,5,7],"mao":"DEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxXxxxxxxXxxxxXxxxxxx"}}
+  ]
+}

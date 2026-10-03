@@ -1,0 +1,12 @@
+{
+  "name": "bateria",
+  "private": true,
+  "type": "module",
+  "description": "App de estudo de bateria para os músicos da igreja",
+  "scripts": {
+    "validar": "node scripts/validar.mjs",
+    "montar": "node scripts/montar.mjs",
+    "previa": "node scripts/montar.mjs && node scripts/previa.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

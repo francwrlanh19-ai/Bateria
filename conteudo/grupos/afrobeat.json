@@ -1,0 +1,33 @@
+{
+  "id": "afrobeat",
+  "categoria": "afrobeat",
+  "ordem": 10,
+  "andamento": {
+    "inicio": 70,
+    "fim": 110
+  },
+  "estilo": "curto",
+  "maosPes": true,
+  "titulo": "Afrobeat Groove Study",
+  "descricao": "18 levadas de afrobeat. O chimbal repete sempre o mesmo desenho (colcheia e duas semicolcheias); o que muda é a caixa e o bumbo.",
+  "exercicios": [
+    {"id":"ab-1","num":1,"nome":"Groove 1","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....x......x....","bd":"xx......xx......"}},
+    {"id":"ab-2","num":2,"nome":"Groove 2","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....x......x..x.","bd":"xx......xx......"}},
+    {"id":"ab-3","num":3,"nome":"Groove 3","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....x......x..xx","bd":"xx......xx......"}},
+    {"id":"ab-4","num":4,"nome":"Groove 4","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....x......x.xx.","bd":"xx......xx......"}},
+    {"id":"ab-5","num":5,"nome":"Groove 5","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....x.......xx..","bd":"xx......xx......"}},
+    {"id":"ab-6","num":6,"nome":"Groove 6","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"...x........xx..","bd":"xx......xx......"}},
+    {"id":"ab-7","num":7,"nome":"Groove 7","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....x.......xx..","bd":"xx......x.x....."}},
+    {"id":"ab-8","num":8,"nome":"Groove 8","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"...x........xx..","bd":"xx......x.x....."}},
+    {"id":"ab-9","num":9,"nome":"Groove 9","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....xx......xx..","bd":"xx......x.x....."}},
+    {"id":"ab-10","num":10,"nome":"Groove 10","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....xx.....x..xx","bd":"xx......x.x....."}},
+    {"id":"ab-11","num":11,"nome":"Groove 11","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....xx...x..xx..","bd":"xx......x.x....."}},
+    {"id":"ab-12","num":12,"nome":"Groove 12","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....xx...x..xx.x","bd":"xx......x.x....."}},
+    {"id":"ab-13","num":13,"nome":"Groove 13","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....x......x....","bd":"x.x.....xx......"}},
+    {"id":"ab-14","num":14,"nome":"Groove 14","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....x......x.x..","bd":"x.x.....xx......"}},
+    {"id":"ab-15","num":15,"nome":"Groove 15","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"...x........x...","bd":"x.x.....xx......"}},
+    {"id":"ab-16","num":16,"nome":"Groove 16","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"...x........xx..","bd":"x.x.....xx......"}},
+    {"id":"ab-17","num":17,"nome":"Groove 17","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....xx......x...","bd":"x.x.....xx......"}},
+    {"id":"ab-18","num":18,"nome":"Groove 18","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....xx.x..xx..xx","bd":"x.x.....xx..xx.."}}
+  ]
+}

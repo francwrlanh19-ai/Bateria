@@ -1,0 +1,20 @@
+{
+  "id": "acento-anda",
+  "categoria": "tecnica",
+  "ordem": 20,
+  "vozUnica": true,
+  "panMao": true,
+  "andamento": {
+    "inicio": 60,
+    "fim": 110,
+    "reps": 4
+  },
+  "titulo": "Acento que anda",
+  "descricao": "Toques simples com o acento passando pelo 1, pelo e, pelo & e pelo a. Ligue Tocar a folha inteira para ouvir o acento andar de um exercício para o outro.",
+  "exercicios": [
+    {"id":"aa-1","num":1,"nome":"Acento no 1","compasso":[4,4],"sub":4,"mao":"DedeDedeDedeDede","trilhas":{"sn":"XxxxXxxxXxxxXxxx"}},
+    {"id":"aa-2","num":2,"nome":"Acento no e","compasso":[4,4],"sub":4,"mao":"dEdedEdedEdedEde","trilhas":{"sn":"xXxxxXxxxXxxxXxx"}},
+    {"id":"aa-3","num":3,"nome":"Acento no &","compasso":[4,4],"sub":4,"mao":"deDedeDedeDedeDe","trilhas":{"sn":"xxXxxxXxxxXxxxXx"}},
+    {"id":"aa-4","num":4,"nome":"Acento no a","compasso":[4,4],"sub":4,"mao":"dedEdedEdedEdedE","trilhas":{"sn":"xxxXxxxXxxxXxxxX"}}
+  ]
+}

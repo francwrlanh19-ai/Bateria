@@ -1,0 +1,25 @@
+{
+  "id": "figuras-escada",
+  "categoria": "figuras",
+  "ordem": 10,
+  "vozUnica": true,
+  "panMao": true,
+  "andamento": {
+    "inicio": 50,
+    "fim": 90,
+    "passo": 5,
+    "reps": 4
+  },
+  "titulo": "Escada de figuras",
+  "descricao": "Da semínima à fusa: 1, 2, 3, 4, 5, 6, 7 e 8 notas por tempo, sempre com acento no tempo. Ligue Tocar a folha inteira para subir a escada.",
+  "exercicios": [
+    {"id":"fg-1","num":1,"nome":"Semínimas","compasso":[4,4],"sub":1,"subs":[1,1,1,1],"mao":"DEDE","trilhas":{"sn":"XXXX"}},
+    {"id":"fg-2","num":2,"nome":"Colcheias","compasso":[4,4],"sub":1,"subs":[2,2,2,2],"mao":"DEDEDEDE","trilhas":{"sn":"XxXxXxXx"}},
+    {"id":"fg-3","num":3,"nome":"Tercinas","compasso":[4,4],"sub":1,"subs":[3,3,3,3],"mao":"DEDEDEDEDEDE","trilhas":{"sn":"XxxXxxXxxXxx"}},
+    {"id":"fg-4","num":4,"nome":"Semicolcheias","compasso":[4,4],"sub":1,"subs":[4,4,4,4],"mao":"DEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxXxxxXxxxXxxx"}},
+    {"id":"fg-5","num":5,"nome":"Quintinas","compasso":[4,4],"sub":1,"subs":[5,5,5,5],"mao":"DEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxXxxxxXxxxxXxxxx"}},
+    {"id":"fg-6","num":6,"nome":"Sextinas","compasso":[4,4],"sub":1,"subs":[6,6,6,6],"mao":"DEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxXxxxxxXxxxxxXxxxxx"}},
+    {"id":"fg-7","num":7,"nome":"Septinas","compasso":[4,4],"sub":1,"subs":[7,7,7,7],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxXxxxxxxXxxxxxxXxxxxxx"}},
+    {"id":"fg-8","num":8,"nome":"Fusas","compasso":[4,4],"sub":1,"subs":[8,8,8,8],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxxXxxxxxxxXxxxxxxxXxxxxxxx"}}
+  ]
+}

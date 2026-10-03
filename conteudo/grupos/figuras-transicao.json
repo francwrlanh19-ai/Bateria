@@ -1,0 +1,21 @@
+{
+  "id": "figuras-transicao",
+  "categoria": "figuras",
+  "ordem": 20,
+  "vozUnica": true,
+  "panMao": true,
+  "andamento": {
+    "inicio": 45,
+    "fim": 80,
+    "passo": 5,
+    "reps": 4
+  },
+  "titulo": "Transições",
+  "descricao": "A figura muda a cada tempo, subindo e descendo. O tempo continua o mesmo; só cabem mais ou menos notas dentro dele.",
+  "exercicios": [
+    {"id":"ft-1","num":1,"nome":"Subindo de 1 a 4","compasso":[4,4],"sub":1,"subs":[1,2,3,4],"mao":"DEDEDEDEDE","trilhas":{"sn":"XXxXxxXxxx"}},
+    {"id":"ft-2","num":2,"nome":"Subindo de 5 a 8","compasso":[4,4],"sub":1,"subs":[5,6,7,8],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxXxxxxxXxxxxxxXxxxxxxx"}},
+    {"id":"ft-3","num":3,"nome":"Descendo de 8 a 5","compasso":[4,4],"sub":1,"subs":[8,7,6,5],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxxXxxxxxxXxxxxxXxxxx"}},
+    {"id":"ft-4","num":4,"nome":"Descendo de 4 a 1","compasso":[4,4],"sub":1,"subs":[4,3,2,1],"mao":"DEDEDEDEDE","trilhas":{"sn":"XxxxXxxXxX"}}
+  ]
+}

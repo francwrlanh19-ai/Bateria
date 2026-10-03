@@ -1,0 +1,13 @@
+{
+  "id": "folha-1",
+  "categoria": "grooves",
+  "ordem": 10,
+  "titulo": "Folha 1",
+  "descricao": "Chimbal em colcheias, bumbo e caixa em semicolcheias.",
+  "exercicios": [
+    {"id":"f1-e1","nome":"Exercício 1","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":".x..x..x....x...","bd":"x..x....xx.x...."}},
+    {"id":"f1-e2","nome":"Exercício 2","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x..x....x...","bd":"x.xx.x..x.x..x.."}},
+    {"id":"f1-e3","nome":"Exercício 3","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x....x..x...","bd":"x......x..x..x.."}},
+    {"id":"f1-e4","nome":"Exercício 4","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":".x..x.......x..x","bd":"x......xx......."}}
+  ]
+}
