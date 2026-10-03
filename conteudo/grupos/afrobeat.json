@@ -2,6 +2,7 @@
   "id": "afrobeat",
   "categoria": "afrobeat",
   "ordem": 10,
+  "nivel": 3,
   "andamento": {
     "inicio": 70,
     "fim": 110

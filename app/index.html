@@ -86,7 +86,8 @@ h1,h2,h3,p{margin:0}
 .chip.novo:hover{color:var(--ink);border-color:var(--muted)}
 
 /* Partitura */
-.partitura{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:14px;min-width:0}
+.partitura{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;min-width:0}
+.part-topo>div:first-child{min-width:0}
 .part-topo{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .part-topo h2{font-family:var(--f-display);font-weight:800;font-size:28px;line-height:1}
 .part-topo p{color:var(--muted);font-size:14px;margin-top:3px}
@@ -273,14 +274,26 @@ h1,h2,h3,p{margin:0}
 .hub-card .seta-hub{justify-self:start;margin-top:6px;font-size:14px;font-weight:700;color:var(--brass)}
 .hub-card.rotina-card .seta-hub{color:var(--sn)}
 .hub-tit{font-size:18px;font-weight:700}
-.hub-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px}
-.cat{appearance:none;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 14px 12px;display:grid;gap:6px;align-content:start;min-height:138px;position:relative;overflow:hidden}
-.cat::before{content:"";position:absolute;left:0;top:0;right:0;height:5px;background:var(--c)}
-.cat h3{font-family:var(--f-display);font-weight:800;font-size:25px;line-height:1;margin:4px 0 0}
-.cat p{font-size:13.5px;color:var(--muted);line-height:1.3}
-.cat-meta{font-size:12.5px;color:var(--muted);margin-top:auto;font-variant-numeric:tabular-nums}
-.cat-barra{display:block;height:4px;border-radius:2px;background:var(--cell-2);overflow:hidden}
+.areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:14px;align-items:start}
+.area{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px 2px;min-width:0}
+.area-topo{display:grid;gap:4px;padding:2px 0 10px}
+.area-topo h2{font-family:var(--f-display);font-weight:800;font-size:27px;line-height:1;display:flex;align-items:center;gap:9px}
+.area-topo h2::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--c);flex:0 0 auto}
+.area-topo p{font-size:14px;color:var(--muted)}
+.cat{appearance:none;width:100%;display:grid;grid-template-columns:5px minmax(0,1fr) auto;column-gap:12px;row-gap:3px;align-items:center;text-align:left;background:none;border:0;border-top:1px solid var(--line);border-radius:0;padding:12px 2px;min-height:68px}
+.cat::before{content:"";grid-column:1;grid-row:1 / span 2;align-self:stretch;border-radius:3px;background:var(--c)}
+.cat h3{grid-column:2;grid-row:1;font-family:var(--f-display);font-weight:800;font-size:23px;line-height:1.05;margin:0;overflow-wrap:anywhere}
+.cat p{grid-column:2;grid-row:2;font-size:13.5px;color:var(--muted);line-height:1.3}
+.cat-meta{grid-column:3;grid-row:1;justify-self:end;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.cat-barra{grid-column:3;grid-row:2;justify-self:end;display:block;width:56px;height:5px;border-radius:3px;background:var(--cell-2);background:color-mix(in srgb,var(--muted) 24%,transparent);overflow:hidden}
 .cat-barra i{display:block;height:100%;background:var(--c)}
+.copia{display:grid;gap:10px;border-top:1px solid var(--line);padding:12px 2px 14px}
+.copia>p{font-size:14px;color:var(--muted);line-height:1.4}
+.copia-acoes{display:flex;flex-wrap:wrap;gap:8px}
+.copia-msg{display:grid;gap:10px;background:var(--bg);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.4}
+.copia-msg.erro{box-shadow:inset 4px 0 0 var(--bd)}
+.nivel{font-size:12.5px;font-weight:600;color:var(--muted);border:1.5px solid var(--line);border-radius:999px;padding:1px 9px;white-space:nowrap;align-self:center}
+.lista-topo .fonte{flex-basis:100%;font-size:13px}
 .cat:active,.hub-card:active,.ex-linha:active{transform:scale(.98)}
 .cat,.hub-card,.ex-linha{transition:transform .08s ease-out}
 .ex-lista{display:grid;gap:8px}
@@ -303,7 +316,7 @@ body.tela-treino .lista-topo{display:none}
 @media (orientation:landscape) and (max-height:560px){
   body:not(.tela-treino) .app{padding-right:16px;grid-template-columns:minmax(0,1fr)}
 }
-@media (max-width:420px){.nav-tit{font-size:24px}.cat h3{font-size:23px}}
+@media (max-width:420px){.nav-tit{font-size:24px}.cat h3{font-size:21px}.area-topo h2{font-size:25px}}
 
 /* Régua de figuras rítmicas */
 .regua{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
@@ -544,7 +557,8 @@ body.foco .partitura{gap:10px}
 
       <section class="bloco" aria-labelledby="hDados">
         <h3 id="hDados">Seus dados</h3>
-        <p class="nota">Recordes, edições e exercícios criados ficam salvos neste aparelho. </p>
+        <p class="nota">Recordes, rotina, edições e exercícios criados ficam salvos só neste aparelho. Salve uma cópia de vez em quando: ela também serve para passar tudo para outro celular.</p>
+        <div class="copia-acoes"><button type="button" class="btn-linha" id="btnSalvaCopia">Salvar cópia</button><button type="button" class="btn-linha" id="btnRestauraCopia">Restaurar cópia</button></div>
         <button type="button" class="btn-perigo" id="btnApagar">Apagar recordes</button>
       </section>
     </div>
@@ -577,9 +591,11 @@ const el=(tag,cls)=>{const e=document.createElement(tag);if(cls)e.className=cls;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 
+/* congelado: ligado enquanto uma cópia é restaurada, para nada sobrescrever os dados recém-gravados */
+let congelado=false;
 const LS={
   get(k,d){try{const v=localStorage.getItem('bateria.'+k);return v==null?d:JSON.parse(v);}catch(e){return d;}},
-  set(k,v){try{localStorage.setItem('bateria.'+k,JSON.stringify(v));}catch(e){}}
+  set(k,v){if(congelado)return;try{localStorage.setItem('bateria.'+k,JSON.stringify(v));}catch(e){}}
 };
 
 /* ---------- Instrumentos e exercícios ---------- */
@@ -636,6 +652,21 @@ function listas(){
 function lista(id){const ls=listas();return ls.find(l=>l.id===id)||ls[0];}
 function exDe(lid,i){const l=lista(lid);return l.exercicios[clamp(i,0,l.exercicios.length-1)];}
 function exAtual(){return exDe(sel.lista,sel.ex);}
+/* Onde está um exercício pelo código fixo (id). A lista e a posição podem mudar quando o conteúdo é reorganizado. */
+function ondeEsta(id){
+  if(!id)return null;
+  for(const l of listas()){const i=l.exercicios.findIndex(e=>e.id===id);if(i>=0)return {lista:l.id,ex:i};}
+  return null;
+}
+/* Acha o exercício de uma referência salva: pelo id; nas referências antigas, sem id, pela lista e posição */
+function resolve(r){
+  if(!r||typeof r!=='object')return null;
+  if(r.id)return ondeEsta(r.id);
+  const l=listas().find(x=>x.id===r.lista);
+  return l&&Number.isInteger(r.ex)&&l.exercicios[r.ex]?{lista:l.id,ex:r.ex}:null;
+}
+function comId(lid,i){return {lista:lid,ex:i,id:(exDe(lid,i)||{}).id};}
+function salvaSel(){LS.set('sel',comId(sel.lista,sel.ex));}
 const cacheTr=new Map();
 function trilhas(ex){
   if(edicoes[ex.id])return edicoes[ex.id];
@@ -659,7 +690,7 @@ function gradeVar(ex){
 const NOME_FIG={1:'Semínima',2:'Colcheias',3:'Tercina',4:'Semicolch.',5:'Quintina',6:'Sextina',7:'Septina',8:'Fusas'};
 function fimBpm(){return Math.max(cfg.fim,cfg.inicio);}
 function precisa(){return cfg.reps*(cfg.ouvir?2:1);}
-(function validaSel(){const l=lista(sel.lista);if(!l||l.id!==sel.lista||sel.ex>=l.exercicios.length){sel={lista:FOLHAS[0].id,ex:0};}})();
+(function validaSel(){sel=resolve(sel)||{lista:FOLHAS[0].id,ex:0};salvaSel();})();
 const abaDe=l=>l.aba||'meus';
 let abaAtiva=abaDe(lista(sel.lista));
 let memoAba=LS.get('memoAba',{});
@@ -909,6 +940,7 @@ function tocaLevada(p,sub,t,crash){
 }
 function registra(ex,bpm){
   if(!recordes[ex.id]||bpm>recordes[ex.id]){recordes[ex.id]=bpm;LS.set('recordes',recordes);renderColecao();}
+  const e=noDiario(ex.id);if(e&&!(e.bpm>=bpm)){e.bpm=bpm;LS.set('diario',diario);}
 }
 
 /* Laço visual: aplica os eventos quando o som acontece */
@@ -925,7 +957,7 @@ function aplica(ev){
     const av=$('#aviso');av.textContent=ev.fimRotina?`Rotina concluída: ${rotina.length} ${rotina.length===1?'exercício':'exercícios'}, ${rotina.reduce((a,b)=>a+b.min,0)} minutos.`:cfg.lista?`Meta concluída: a folha inteira a ${ev.bpm} BPM.`:`Meta concluída: ${ex.nome} a ${ev.bpm} BPM.`;av.hidden=false;
     return;
   }
-  if(ev.troca){sel={lista:ev.troca.lista,ex:ev.troca.ex};LS.set('sel',sel);if(ev.rotina==null||abaAtiva!=='rotina')abaAtiva=abaDe(lista(sel.lista));listaAnd=sel.lista;renderColecao();if(typeof atualizaNav==='function')atualizaNav();renderPartitura();renderPulsos();renderAjustes();renderAndamento();return;}
+  if(ev.troca){sel={lista:ev.troca.lista,ex:ev.troca.ex};salvaSel();if(ev.rotina==null||abaAtiva!=='rotina')abaAtiva=abaDe(lista(sel.lista));listaAnd=sel.lista;renderColecao();if(typeof atualizaNav==='function')atualizaNav();renderPartitura();renderPulsos();renderAjustes();renderAndamento();return;}
   const nb=ev.nbt!=null?ev.nbt:Math.floor(ev.passo/ev.sub)%exDe(ev.lista,ev.ex).compasso[0];
   if(ev.ini!=null?ev.ini:ev.passo%ev.sub===0){
     acendePulso(nb);
@@ -1306,7 +1338,7 @@ function renderColecao(){
     let sec,row;
     if(l&&tela==='categoria'){
       sec=el('div','lista');
-      sec.innerHTML=`<div class="lista-topo"><h2>${esc(l.titulo)}</h2>${l.descricao?`<p>${esc(l.descricao)}</p>`:''}</div>`;
+      sec.innerHTML=topoLista(l);
       if(l.modoAcento)sec.append(segAcento());
       const ul=el('div','ex-lista');
       l.exercicios.forEach((ex,i)=>{
@@ -1351,6 +1383,9 @@ function renderColecao(){
   });
   if(abaAtiva==='meus'&&formNovo)box.append(montaFormNovo());
 }
+function topoLista(l){
+  return `<div class="lista-topo"><h2>${esc(l.titulo)}</h2>${l.nivel?`<span class="nivel" title="Dificuldade, de 1 (mais fácil) a 5">Nível ${esc(l.nivel)} de 5</span>`:''}${l.descricao?`<p>${esc(l.descricao)}</p>`:''}${l.fonte?`<p class="fonte">Fonte: ${esc(l.fonte)}</p>`:''}</div>`;
+}
 function segAcento(){
   const sg=el('div','seg seg-mini seg-acento');sg.setAttribute('role','group');sg.setAttribute('aria-label','Onde ficam os acentos');
   [['grupo','Acento no grupo'],['tempo','Acento no tempo']].forEach(([v,t])=>{
@@ -1367,7 +1402,7 @@ function botaoNovoLinha(){
 }
 function trocaAba(id){
   abaAtiva=id;
-  const m=memoAba[id],ls=listas().filter(l=>abaDe(l)===id&&l.exercicios.length);
+  const m=resolve(memoAba[id]),ls=listas().filter(l=>abaDe(l)===id&&l.exercicios.length);
   const ok=m&&ls.some(l=>l.id===m.lista&&m.ex<l.exercicios.length);
   if(abaDe(lista(sel.lista))===id){renderColecao();return;}
   if(ok)escolhe(m.lista,m.ex);else if(ls.length)escolhe(ls[0].id,0);else renderColecao();
@@ -1380,8 +1415,8 @@ $('#abas').addEventListener('keydown',e=>{
 });
 function escolhe(lid,i,manterAba){
   const mudouLista=lid!==listaAnd;
-  sel={lista:lid,ex:i};LS.set('sel',sel);
-  if(!manterAba){abaAtiva=abaDe(lista(lid));memoAba[abaAtiva]={lista:lid,ex:i};LS.set('memoAba',memoAba);}
+  sel={lista:lid,ex:i};salvaSel();
+  if(!manterAba){abaAtiva=abaDe(lista(lid));memoAba[abaAtiva]=comId(lid,i);LS.set('memoAba',memoAba);}
   if(mudouLista)carregaAndamento(lid);
   if(eng)eng.pend={lista:lid,ex:i};
   renderColecao();renderPartitura();renderPulsos();renderAjustes();
@@ -1551,6 +1586,8 @@ let tela='hub';
 const CAT_INFO=Object.fromEntries(CONTEUDO.categorias.map(c=>[c.id,c.descricao||'']));
 const CAT_COR=Object.fromEntries(CONTEUDO.categorias.map(c=>[c.id,c.cor||'--muted']));
 const nomeAba=id=>(ABAS.find(a=>a.id===id)||{}).nome||'';
+const AREAS=(CONTEUDO.areas||[]).filter(a=>a&&a.id);
+const nomeArea=catId=>{const c=CONTEUDO.categorias.find(x=>x.id===catId),a=c&&AREAS.find(x=>x.id===c.area);return a?a.nome:'';};
 function aplicaTela(t){
   if(tela==='treino'&&t!=='treino'&&eng)parar();
   if(t!=='treino'&&document.body.classList.contains('foco'))mostraFoco(false);
@@ -1558,7 +1595,7 @@ function aplicaTela(t){
   document.body.classList.remove('tela-hub','tela-categoria','tela-treino');document.body.classList.add('tela-'+t);
   $('#barraNav').hidden=t==='hub';
   if(t==='hub')renderHub();
-  if(t==='categoria'){$('#navSup').textContent='Início';$('#navTit').textContent=nomeAba(abaAtiva);renderColecao();}
+  if(t==='categoria'){$('#navSup').textContent=nomeArea(abaAtiva)||'Início';$('#navTit').textContent=nomeAba(abaAtiva);renderColecao();}
   if(t==='treino'){
     atualizaNav();
     renderColecao();renderPartitura();renderPulsos();renderAjustes();if(!eng)renderAndamento();
@@ -1595,18 +1632,40 @@ function renderHub(){
   r.innerHTML=`<span class="hub-rot">Rotina do dia</span><strong>${vale.length?vale.length+(vale.length===1?' exercício':' exercícios'):'Monte a sua'}</strong><span class="hub-sub">${vale.length?min+' min no total':'Junte exercícios de várias categorias numa sequência'}</span><span class="seta-hub">${vale.length?'Ver e começar':'Montar rotina'}</span>`;
   r.addEventListener('click',()=>{abaAtiva='rotina';mudaTela('categoria');});
   d.append(r);h.append(d);
-  const t=el('h2','hub-tit');t.textContent='Categorias';h.append(t);
-  const g=el('div','hub-cards');
-  ABAS.filter(a=>a.id!=='rotina').forEach(a=>{
-    const exs=listas().filter(x=>abaDe(x)===a.id).flatMap(x=>x.exercicios),com=exs.filter(e=>recordes[e.id]).length;
-    const b=el('button','cat');b.type='button';b.style.setProperty('--c',`var(${CAT_COR[a.id]||'--muted'})`);
-    const meta=exs.length?exs.length+(exs.length===1?' exercício':' exercícios')+(com?`, ${com} com recorde`:''):'Nenhum ainda';
-    b.innerHTML=`<h3>${esc(a.nome)}</h3><p>${esc(CAT_INFO[a.id]||'')}</p><span class="cat-meta">${meta}</span>${exs.length?`<span class="cat-barra" aria-hidden="true"><i style="width:${Math.round(com/exs.length*100)}%"></i></span>`:''}`;
-    b.setAttribute('aria-label',`${a.nome}. ${meta}`);
-    b.addEventListener('click',()=>{abaAtiva=a.id;mudaTela('categoria');});
-    g.append(b);
+  /* Áreas na ordem de um treino: mãos, ritmo e leitura, coordenação, levadas e viradas */
+  const caixa=el('div','areas');
+  const cats=CONTEUDO.categorias.filter(c=>!c.especial);
+  const grupos=AREAS.length?AREAS:[{id:'',nome:'Categorias'}];
+  grupos.forEach(ar=>{
+    const cs=cats.filter(c=>!ar.id||c.area===ar.id);if(!cs.length)return;
+    const sec=el('section','area');sec.style.setProperty('--c',`var(${ar.cor||'--muted'})`);
+    const hid='area-'+(ar.id||'todas');sec.setAttribute('aria-labelledby',hid);
+    sec.innerHTML=`<div class="area-topo"><h2 id="${esc(hid)}">${esc(ar.nome)}</h2>${ar.descricao?`<p>${esc(ar.descricao)}</p>`:''}</div>`;
+    cs.forEach(c=>sec.append(linhaCat(c)));
+    caixa.append(sec);
   });
-  h.append(g);
+  /* Neste celular: exercícios criados e a cópia dos dados */
+  const cel=el('section','area area-celular');cel.style.setProperty('--c','var(--muted)');cel.setAttribute('aria-labelledby','area-celular');
+  cel.innerHTML='<div class="area-topo"><h2 id="area-celular">Neste celular</h2><p>Seus exercícios e uma cópia dos seus dados</p></div>';
+  const bm=el('button','cat');bm.type='button';bm.style.setProperty('--c','var(--muted)');
+  bm.innerHTML=`<h3>Meus exercícios</h3><p>${meus.length?'Criados por você neste aparelho':'Crie um exercício e marque as notas na grade'}</p><span class="cat-meta">${meus.length?meus.length+(meus.length===1?' exercício':' exercícios'):''}</span>`;
+  bm.addEventListener('click',()=>{abaAtiva='meus';mudaTela('categoria');});
+  const cp=el('div','copia');
+  const info=el('p');info.id='copiaInfo';info.textContent=infoCopia();
+  const acs=el('div','copia-acoes');
+  const b1=el('button','btn-linha');b1.type='button';b1.textContent='Salvar cópia';b1.addEventListener('click',()=>salvaCopia(cp));
+  const b2=el('button','btn-linha');b2.type='button';b2.textContent='Restaurar cópia';b2.addEventListener('click',()=>pedeCopia(cp));
+  acs.append(b1,b2);cp.append(info,acs);cel.append(bm,cp);caixa.append(cel);
+  h.append(caixa);
+}
+function linhaCat(c){
+  const exs=listas().filter(x=>abaDe(x)===c.id).flatMap(x=>x.exercicios),n=exs.length,com=exs.filter(e=>recordes[e.id]).length;
+  const b=el('button','cat');b.type='button';b.style.setProperty('--c',`var(${c.cor||'--muted'})`);
+  const meta=!n?'Nenhum ainda':com?`${com} de ${n}`:`${n} ${n===1?'exercício':'exercícios'}`;
+  b.innerHTML=`<h3>${esc(c.nome)}</h3><p>${esc(c.descricao||'')}</p><span class="cat-meta">${meta}</span>${n?`<span class="cat-barra" aria-hidden="true"><i style="width:${Math.round(com/n*100)}%"></i></span>`:''}`;
+  b.setAttribute('aria-label',`${c.nome}. ${n} ${n===1?'exercício':'exercícios'}${com?`, ${com} com recorde`:''}`);
+  b.addEventListener('click',()=>{abaAtiva=c.id;mudaTela('categoria');});
+  return b;
 }
 /* ---------- Android: folha de ajustes, modo foco e botão voltar ---------- */
 const camadas=[];
@@ -1689,9 +1748,10 @@ $('#nomeEx').addEventListener('input',e=>{
 duploToque($('#btnExcluir'),'Toque de novo para excluir',()=>{
   const ex=exAtual();if(!ex.meu)return;
   meus.splice(meus.indexOf(ex),1);LS.set('meus',meus);delete recordes[ex.id];LS.set('recordes',recordes);
+  acertaRotina();salvaRotina();
   editando=false;
   if(eng)parar();
-  sel=meus.length?{lista:'meus',ex:Math.max(0,sel.ex-1)}:{lista:FOLHAS[0].id,ex:0};LS.set('sel',sel);if(meus.length)abaAtiva='meus';
+  sel=meus.length?{lista:'meus',ex:Math.max(0,sel.ex-1)}:{lista:FOLHAS[0].id,ex:0};salvaSel();if(meus.length)abaAtiva='meus';
   renderColecao();renderPartitura();renderAndamento();
 });
 duploToque($('#btnApagar'),'Toque de novo para apagar',()=>{recordes={};LS.set('recordes',recordes);renderColecao();});
@@ -1703,6 +1763,78 @@ function duploToque(btn,aviso,fn){
     t=setTimeout(()=>{btn.classList.remove('confirmar');btn.textContent=orig;},3500);
   });
 }
+/* ---------- Cópia dos dados (backup) ---------- */
+const MARCA_COPIA='estudo-de-bateria';
+const fmtDia=k=>{const [a,m,d]=String(k).split('-');return d&&m&&a?`${d}/${m}/${a}`:String(k);};
+function infoCopia(){
+  const u=LS.get('copia',null);
+  return 'Recordes, rotina e exercícios criados ficam só neste aparelho. '+(u?`Última cópia salva em ${fmtDia(u)}.`:'Salve uma cópia de vez em quando: ela também serve para passar tudo para outro celular.');
+}
+function msgCopia(caixa,html,erro){
+  const v=caixa.querySelector('.copia-msg');if(v)v.remove();
+  const m=el('div','copia-msg'+(erro?' erro':''));m.setAttribute('role','status');
+  const p=el('p');p.innerHTML=html;m.append(p);caixa.append(m);
+  requestAnimationFrame(()=>m.scrollIntoView({block:'nearest',behavior:'smooth'}));
+  return m;
+}
+function salvaCopia(caixa){
+  guardaEstudo();salvaCfg();
+  const antes=LS.get('copia',null);LS.set('copia',diaHoje());
+  const dados={};
+  try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.indexOf('bateria.')===0)dados[k.slice(8)]=localStorage.getItem(k);}}catch(e){}
+  const nome='bateria-dados-'+diaHoje()+'.json';
+  try{
+    const txt=JSON.stringify({app:MARCA_COPIA,formato:1,criado:new Date().toISOString(),dados});
+    const url=URL.createObjectURL(new Blob([txt],{type:'application/json'}));
+    const a=el('a');a.href=url;a.download=nome;a.hidden=true;document.body.append(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},5000);
+    const inf=$('#copiaInfo');if(inf)inf.textContent=infoCopia();
+    msgCopia(caixa,`Cópia salva: <b>${esc(nome)}</b>, na pasta Downloads. Guarde no Google Drive ou mande para você mesmo no WhatsApp.`);
+  }catch(e){LS.set('copia',antes);msgCopia(caixa,'Não consegui salvar a cópia neste navegador.',true);}
+}
+const arqCopia=el('input');arqCopia.type='file';arqCopia.accept='.json,application/json';arqCopia.hidden=true;document.body.append(arqCopia);
+let caixaCopia=null;
+function pedeCopia(caixa){caixaCopia=caixa;arqCopia.value='';arqCopia.click();}
+arqCopia.addEventListener('change',()=>{
+  const f=arqCopia.files&&arqCopia.files[0],caixa=caixaCopia;if(!f||!caixa)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    let c=null;try{c=JSON.parse(r.result);}catch(e){}
+    if(!c||c.app!==MARCA_COPIA||!c.dados||typeof c.dados!=='object'){msgCopia(caixa,'Esse arquivo não é uma cópia do Estudo de bateria.',true);return;}
+    confirmaCopia(caixa,c);
+  };
+  r.onerror=()=>msgCopia(caixa,'Não consegui ler esse arquivo.',true);
+  r.readAsText(f);
+});
+function contaCopia(c,k){try{const v=JSON.parse(c.dados[k]);return Array.isArray(v)?v.length:v&&typeof v==='object'?Object.keys(v).length:0;}catch(e){return 0;}}
+function confirmaCopia(caixa,c){
+  const d=new Date(c.criado),quando=isNaN(d)?'':' de '+d.toLocaleDateString('pt-BR');
+  const nr=contaCopia(c,'recordes'),nt=contaCopia(c,'rotina'),nm=contaCopia(c,'meus');
+  const m=msgCopia(caixa,`<b>Restaurar a cópia${esc(quando)}?</b> Ela tem ${nr} ${nr===1?'recorde':'recordes'}, ${nt} ${nt===1?'exercício':'exercícios'} na rotina e ${nm} ${nm===1?'exercício seu':'exercícios seus'}. Os dados de agora, neste aparelho, serão trocados pelos da cópia.`);
+  const ac=el('div','copia-acoes');
+  const ok=el('button','btn-linha primario');ok.type='button';ok.textContent='Restaurar';
+  const no=el('button','btn-linha');no.type='button';no.textContent='Cancelar';
+  ok.addEventListener('click',()=>restauraCopia(c,caixa));
+  no.addEventListener('click',()=>m.remove());
+  ac.append(ok,no);m.append(ac);
+}
+function restauraCopia(c,caixa){
+  if(eng)parar();
+  congelado=true;
+  const chaves=()=>{const ks=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.indexOf('bateria.')===0)ks.push(k);}return ks;};
+  const antes={};
+  try{
+    chaves().forEach(k=>{antes[k]=localStorage.getItem(k);});
+    chaves().forEach(k=>localStorage.removeItem(k));
+    Object.entries(c.dados).forEach(([k,v])=>{if(typeof v==='string'&&/^[A-Za-z0-9_.-]+$/.test(k))localStorage.setItem('bateria.'+k,v);});
+  }catch(e){
+    try{chaves().forEach(k=>localStorage.removeItem(k));Object.entries(antes).forEach(([k,v])=>localStorage.setItem(k,v));}catch(e2){}
+    congelado=false;msgCopia(caixa,'Não consegui restaurar: o navegador não deixou gravar os dados. Nada foi mudado.',true);return;
+  }
+  location.reload();
+}
+$('#btnSalvaCopia').addEventListener('click',()=>salvaCopia($('#hDados').parentElement));
+$('#btnRestauraCopia').addEventListener('click',()=>pedeCopia($('#hDados').parentElement));
 const FORMATOS={'44-16':{compasso:[4,4],sub:4,barras:1},'44-3':{compasso:[4,4],sub:3,barras:1},'44-16-2':{compasso:[4,4],sub:4,barras:2},'68':{compasso:[6,8],sub:2,barras:1}};
 function formatoDe(ex){return Object.keys(FORMATOS).find(k=>{const f=FORMATOS[k];return f.compasso[0]===ex.compasso[0]&&f.compasso[1]===ex.compasso[1]&&f.sub===ex.sub&&f.barras===(ex.barras||1);})||'44-16';}
 function trilhasBase(ex){
@@ -1765,8 +1897,17 @@ function criaNovo(){
 
 /* ---------- Rotina do dia ---------- */
 let rotina=LS.get('rotina',[]);
-const itemOk=it=>{const l=listas().find(x=>x.id===it.lista);return !!(l&&l.exercicios[it.ex]);};
-function salvaRotina(){LS.set('rotina',rotina);}
+if(!Array.isArray(rotina))rotina=[];
+/* Cada item guarda o id do exercício; a lista e a posição são recalculadas ao abrir o app e ao excluir um exercício seu */
+function acertaRotina(){
+  rotina=rotina.map(it=>{
+    const p=resolve(it);if(!p)return null;
+    return {id:exDe(p.lista,p.ex).id,lista:p.lista,ex:p.ex,min:clamp(Math.round(+it.min)||5,1,60)};
+  }).filter(Boolean);
+}
+const itemOk=it=>{const l=listas().find(x=>x.id===it.lista),e=l&&l.exercicios[it.ex];return !!(e&&(!it.id||e.id===it.id));};
+function salvaRotina(){LS.set('rotina',rotina.map(it=>({id:it.id,lista:it.lista,ex:it.ex,min:it.min})));}
+acertaRotina();salvaRotina();
 function renderRotina(box){
   rotina=rotina.filter(itemOk);
   const total=rotina.reduce((a,b)=>a+b.min,0),sec=el('div','lista');
@@ -1800,7 +1941,7 @@ function renderRotina(box){
 function iniciarRotina(){
   rotina=rotina.filter(itemOk);if(!rotina.length)return;
   if(eng)parar();
-  const it=rotina[0];sel={lista:it.lista,ex:it.ex};LS.set('sel',sel);carregaAndamento(it.lista);
+  const it=rotina[0];sel={lista:it.lista,ex:it.ex};salvaSel();carregaAndamento(it.lista);
   renderPartitura();renderPulsos();renderAjustes();renderAndamento();
   if(tela!=='treino')mudaTela('treino');
   iniciar({rotina:true});
@@ -1811,7 +1952,7 @@ function atualizaBtnRotina(){
   b.textContent=n?`Adicionar à rotina (já está ${n===1?'1 vez':n+' vezes'})`:'Adicionar à rotina';
 }
 $('#btnRotina').addEventListener('click',()=>{
-  rotina.push({lista:sel.lista,ex:sel.ex,min:5});salvaRotina();
+  rotina.push({id:exAtual().id,lista:sel.lista,ex:sel.ex,min:5});salvaRotina();
   const b=$('#btnRotina');b.textContent='Adicionado à rotina';b.dataset.fixo='1';
   setTimeout(()=>{delete b.dataset.fixo;atualizaBtnRotina();},1600);
   if(abaAtiva==='rotina')renderColecao();
@@ -1825,13 +1966,31 @@ function renderHoje(){
   const m=Math.floor(estudo.seg/60);
   $('#hoje').textContent=`Estudo hoje: ${m} min`;
 }
+/* Diário: segundos de estudo por dia e, dentro do dia, por exercício (id), com o melhor BPM.
+   É a base para dias seguidos, semana e revisão. Fica guardado por pouco mais de um ano. */
+let diario=LS.get('diario',{});
+if(!diario||typeof diario!=='object'||Array.isArray(diario))diario={};
+(function iniciaDiario(){
+  if(estudo&&estudo.dia&&estudo.seg>0){const d=diario[estudo.dia]||(diario[estudo.dia]={seg:0,ex:{}});d.seg=Math.max(d.seg||0,estudo.seg);}
+  const lim=new Date();lim.setDate(lim.getDate()-400);
+  const corte=lim.getFullYear()+'-'+String(lim.getMonth()+1).padStart(2,'0')+'-'+String(lim.getDate()).padStart(2,'0');
+  Object.keys(diario).forEach(k=>{if(k<corte)delete diario[k];});
+  LS.set('diario',diario);
+})();
+function diaDoDiario(){const k=diaHoje(),d=diario[k]||(diario[k]={seg:0,ex:{}});if(!d.ex)d.ex={};return d;}
+function noDiario(id){if(!id)return null;const d=diaDoDiario();return d.ex[id]||(d.ex[id]={seg:0});}
+function guardaEstudo(){LS.set('estudo',estudo);LS.set('diario',diario);}
 setInterval(()=>{
   if(!eng)return;
   if(estudo.dia!==diaHoje())estudo={dia:diaHoje(),seg:0};
-  estudo.seg++;if(estudo.seg%10===0)LS.set('estudo',estudo);
+  estudo.seg++;
+  const d=diaDoDiario();d.seg=(d.seg||0)+1;
+  const e=noDiario((exDe(eng.lista,eng.ex)||{}).id);if(e)e.seg=(e.seg||0)+1;
+  if(estudo.seg%10===0)guardaEstudo();
   if(estudo.seg%15===0)renderHoje();
 },1000);
-window.addEventListener('pagehide',()=>LS.set('estudo',estudo));
+window.addEventListener('pagehide',guardaEstudo);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')guardaEstudo();});
 
 /* ---------- Início ---------- */
 edicoesMao=LS.get('edicoesMao',{});

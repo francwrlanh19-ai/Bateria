@@ -2,14 +2,15 @@
   "id": "figuras-5e7",
   "categoria": "figuras",
   "ordem": 30,
-  "vozUnica": true,
-  "panMao": true,
+  "nivel": 4,
   "andamento": {
     "inicio": 40,
     "fim": 80,
     "passo": 4,
     "reps": 8
   },
+  "vozUnica": true,
+  "panMao": true,
   "titulo": "Foco em 5 e 7",
   "descricao": "Quintinas e septinas ao lado de figuras que você já domina. Os exercícios com respiro dão um tempo de semínima para você se reorganizar.",
   "exercicios": [

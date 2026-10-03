@@ -9,7 +9,8 @@ Site: https://francwrlanh19-ai.github.io/Bateria/
 ## Como funciona
 
 - `app/` é o aplicativo (interface, metrônomo, sons e partituras).
-- `conteudo/categorias.json` lista as categorias do início do app.
+- `conteudo/areas.json` lista as áreas do início, na ordem de um treino: Mãos, Ritmo e leitura, Coordenação, Levadas e viradas.
+- `conteudo/categorias.json` lista as categorias; cada uma fica dentro de uma área (`area`).
 - `conteudo/grupos/*.json` tem um arquivo por lista de exercícios.
 - A cada envio para a branch `main`, o GitHub Actions valida os JSON, monta o site e publica no GitHub Pages. Se a validação falhar, nada é publicado e o site continua na versão anterior.
 
@@ -20,8 +21,10 @@ Site: https://francwrlanh19-ai.github.io/Bateria/
   "id": "rock-beats-2",
   "categoria": "rock",
   "ordem": 10,
+  "nivel": 2,
   "titulo": "Rock Beats 2",
   "descricao": "Texto curto que aparece acima dos exercícios.",
+  "fonte": "Livro ou autor de onde veio o material (opcional)",
   "andamento": { "inicio": 70, "fim": 120, "passo": 5, "reps": 4 },
   "exercicios": [
     {"id":"rk-1","num":1,"nome":"Levada 1","compasso":[4,4],"sub":4,
@@ -30,6 +33,8 @@ Site: https://francwrlanh19-ai.github.io/Bateria/
 }
 ```
 
+- `nivel`: dificuldade da lista, de 1 (mais fácil) a 5. Aparece ao lado do título.
+- `fonte` (opcional): crédito do material, mostrado embaixo da descrição.
 - `sub`: casas por tempo (2 colcheias, 3 tercinas, 4 semicolcheias, 8 fusas). Em 6/8, casas por colcheia.
 - `subs`: no lugar de `sub`, uma lista com quantas notas há em cada tempo (para quintinas, septinas etc.).
 - `barras`: quantos compassos o exercício tem (padrão 1).
@@ -45,7 +50,7 @@ npm run validar   # confere os JSON
 npm run previa    # monta e abre em http://localhost:8080
 ```
 
-Cada aparelho guarda os próprios recordes, rotina e exercícios criados.
+Cada aparelho guarda os próprios recordes, rotina, diário de estudo e exercícios criados. No início, em **Neste celular**, dá para salvar uma cópia desses dados (um arquivo `.json`) e restaurá-la, inclusive em outro celular.
 
 ## Skill do Claude
 

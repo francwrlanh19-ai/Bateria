@@ -2,14 +2,15 @@
   "id": "figuras-escada",
   "categoria": "figuras",
   "ordem": 10,
-  "vozUnica": true,
-  "panMao": true,
+  "nivel": 2,
   "andamento": {
     "inicio": 50,
     "fim": 90,
     "passo": 5,
     "reps": 4
   },
+  "vozUnica": true,
+  "panMao": true,
   "titulo": "Escada de figuras",
   "descricao": "Da semínima à fusa: 1, 2, 3, 4, 5, 6, 7 e 8 notas por tempo, sempre com acento no tempo. Ligue Tocar a folha inteira para subir a escada.",
   "exercicios": [

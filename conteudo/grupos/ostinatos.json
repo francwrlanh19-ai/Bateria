@@ -1,7 +1,8 @@
 {
   "id": "ostinatos",
-  "categoria": "ostinato",
+  "categoria": "independencia",
   "ordem": 10,
+  "nivel": 3,
   "andamento": {
     "inicio": 50,
     "fim": 90

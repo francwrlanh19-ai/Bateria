@@ -2,12 +2,13 @@
   "id": "worship-68",
   "categoria": "worship",
   "ordem": 30,
-  "vozUnica": true,
+  "nivel": 1,
   "andamento": {
     "inicio": 100,
     "fim": 160,
     "bpmFixo": 120
   },
+  "vozUnica": true,
   "titulo": "Levadas em 6/8",
   "descricao": "Comum nas baladas. Aqui o andamento conta colcheias: o metrônomo clica 6 vezes por compasso, mais forte no 1 e no 4.",
   "exercicios": [

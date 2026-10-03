@@ -7,10 +7,14 @@
   - `conteudo.js`: **gerado** por `scripts/montar.mjs`. Não edite.
   - `manifest.webmanifest` e os ícones `icon-*.png`, para instalar como app.
 - `dist/sw.js` é gerado na montagem, com uma versão calculada pelo conteúdo, e guarda o app para uso sem internet.
-- Tudo o que é de cada pessoa fica no `localStorage` do aparelho, com o prefixo `bateria.`: `cfg`, `recordes`, `edicoes`, `edicoesMao`, `meus`, `mudo`, `sel`, `memoAba`, `rotina`, `estudo`. Não renomeie essas chaves sem migração.
+- Tudo o que é de cada pessoa fica no `localStorage` do aparelho, com o prefixo `bateria.`: `cfg`, `recordes`, `edicoes`, `edicoesMao`, `meus`, `mudo`, `sel`, `memoAba`, `rotina`, `estudo`, `diario`, `copia`. Não renomeie essas chaves sem migração.
+- `sel`, `memoAba` e cada item da `rotina` guardam o `id` do exercício junto com lista e posição. Ao abrir, `resolve()` acha o exercício pelo id (`acertaRotina()` faz isso na rotina); referências antigas, sem id, são resolvidas pela posição uma vez e ganham o id. Por isso mover grupos de categoria ou reordenar exercícios não estraga a rotina de ninguém.
+- `diario`: `{ "AAAA-MM-DD": { seg, ex: { <id>: { seg, bpm } } } }`, com os segundos tocados por dia e por exercício e o melhor BPM do dia (gravado em `registra`). Guarda cerca de 400 dias. É a base para dias seguidos, semana e revisão.
+- Cópia dos dados: `salvaCopia()` baixa `bateria-dados-AAAA-MM-DD.json` no formato `{ app: "estudo-de-bateria", formato: 1, criado, dados: { <chave>: <texto JSON> } }`; `pedeCopia()` e `confirmaCopia()` leem o arquivo e pedem confirmação; `restauraCopia()` liga `congelado` (que bloqueia `LS.set`), troca as chaves e recarrega. `copia` guarda a data da última cópia.
 
 ## Telas
-- **Hub** (`renderHub`): cartões "Continuar de onde parou", "Rotina do dia" e categorias.
+- **Hub** (`renderHub`): cartões "Continuar de onde parou" e "Rotina do dia"; depois as áreas (`CONTEUDO.areas`), cada uma com uma linha por categoria (`linhaCat`, botão `.cat` com `h3`); por fim o cartão "Neste celular", com "Meus exercícios" e a cópia dos dados.
+- **Categoria**: o texto de cima mostra a área; cada lista mostra título, nível (`nivel`), descrição e fonte (`topoLista`).
 - **Categoria** (`renderColecao` com `tela==='categoria'`): grupos e exercícios em linhas.
 - **Treino**: partitura (foto ou redesenhada), grade, painel de andamento e barra de controles.
 - Navegação: `mudaTela(t)` empilha no histórico, para o botão voltar do Android funcionar; `aplicaTela(t)` desenha a tela. Ao sair do treino, o som para.
@@ -35,5 +39,6 @@
 ## Testar mudanças
 1. `node scripts/montar.mjs`
 2. `python3 <dir-da-skill>/scripts/conferir.py /home/claude/Bateria/dist`, que precisa passar sem problemas.
-3. Para mudanças visuais, tire capturas com Playwright em 390×844 (celular), 780×360 (celular deitado) e 1280×860 (computador), e olhe as imagens.
-4. Publique com `repo.py publicar`.
+3. Para mudanças visuais, tire capturas com Playwright em 390×844 (celular), 780×360 (celular deitado) e 1280×860 (computador), e olhe as imagens. Confira também se `document.documentElement.scrollWidth` não passa da largura da tela.
+4. Para testar dados salvos (migração, cópia), grave o `localStorage` a partir de outra página do mesmo site, como `manifest.webmanifest`: a página do app grava `estudo` e `diario` ao sair e sobrescreveria o que você injetou.
+5. Publique com `repo.py publicar`.

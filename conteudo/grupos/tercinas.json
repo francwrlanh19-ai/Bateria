@@ -2,13 +2,14 @@
   "id": "tercinas",
   "categoria": "tecnica",
   "ordem": 30,
-  "vozUnica": true,
-  "panMao": true,
+  "nivel": 2,
   "andamento": {
     "inicio": 50,
     "fim": 100,
     "reps": 8
   },
+  "vozUnica": true,
+  "panMao": true,
   "titulo": "Tercinas",
   "descricao": "Três notas por tempo, com acento no tempo. Conte 1 & a, 2 & a.",
   "exercicios": [

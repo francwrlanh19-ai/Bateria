@@ -2,6 +2,7 @@
   "id": "rock-beats-2",
   "categoria": "rock",
   "ordem": 10,
+  "nivel": 2,
   "andamento": {
     "inicio": 70,
     "fim": 120

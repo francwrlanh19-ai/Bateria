@@ -2,6 +2,13 @@
   "id": "paradiddle-levadas",
   "categoria": "paradiddle",
   "ordem": 10,
+  "nivel": 3,
+  "andamento": {
+    "inicio": 50,
+    "fim": 90,
+    "passo": 5,
+    "reps": 4
+  },
   "vozUnica": true,
   "titulo": "Aplicando em levadas",
   "descricao": "Paradiddle dividido entre as mãos: D é a direita, no chimbal; E é a esquerda, na caixa. Pratique devagar, sempre com o metrônomo.",

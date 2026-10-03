@@ -1,57 +1,66 @@
 [
   {
-    "id": "grooves",
-    "nome": "Grooves",
-    "descricao": "Grooves com semicolcheias no bumbo e na caixa",
-    "cor": "--sn"
+    "id": "tecnica",
+    "area": "maos",
+    "nome": "Técnica",
+    "descricao": "Controle de baqueta, acento que anda e tercinas",
+    "cor": "--hp"
   },
   {
-    "id": "samba",
-    "nome": "Samba",
-    "descricao": "Independência e grooves de samba",
-    "cor": "--hh"
+    "id": "figuras",
+    "area": "leitura",
+    "nome": "Figuras",
+    "descricao": "Da semínima à fusa, com quintinas e septinas",
+    "cor": "--brass"
+  },
+  {
+    "id": "independencia",
+    "area": "coordenacao",
+    "nome": "Independência",
+    "descricao": "Pés fixos, mãos livres: ostinato e samba",
+    "cor": "--rd"
   },
   {
     "id": "paradiddle",
-    "nome": "Paradiddle",
-    "descricao": "Paradiddle aplicado em levadas",
+    "area": "coordenacao",
+    "nome": "Paradiddle aplicado",
+    "descricao": "Paradiddle entre o chimbal e a caixa, com bumbo",
     "cor": "--tom"
   },
   {
     "id": "worship",
+    "area": "levadas",
     "nome": "Worship",
     "descricao": "Viradas, levadas e 6/8",
     "cor": "--cym"
   },
   {
-    "id": "afrobeat",
-    "nome": "Afrobeat",
-    "descricao": "Levadas de afrobeat",
-    "cor": "--bd"
-  },
-  {
     "id": "rock",
+    "area": "levadas",
     "nome": "Rock",
     "descricao": "Levadas de rock e shuffle",
     "cor": "--ft"
   },
   {
-    "id": "ostinato",
-    "nome": "Ostinato",
-    "descricao": "Pés fixos, mãos livres",
-    "cor": "--rd"
+    "id": "samba",
+    "area": "levadas",
+    "nome": "Samba",
+    "descricao": "Grooves de samba",
+    "cor": "--hh"
   },
   {
-    "id": "tecnica",
-    "nome": "Técnica",
-    "descricao": "Controle de baqueta, acentos e tercinas",
-    "cor": "--hp"
+    "id": "afrobeat",
+    "area": "levadas",
+    "nome": "Afrobeat",
+    "descricao": "Levadas de afrobeat",
+    "cor": "--bd"
   },
   {
-    "id": "figuras",
-    "nome": "Figuras",
-    "descricao": "Da semínima à fusa, com foco em quintinas e septinas",
-    "cor": "--brass"
+    "id": "grooves",
+    "area": "levadas",
+    "nome": "Grooves de semicolcheia",
+    "descricao": "Chimbal em colcheias, bumbo e caixa em semicolcheias",
+    "cor": "--sn"
   },
   {
     "id": "rotina",

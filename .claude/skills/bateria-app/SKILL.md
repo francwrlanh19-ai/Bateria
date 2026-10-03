@@ -14,7 +14,8 @@ description: Mantém e publica o app "Estudo de bateria" (repositório GitHub fr
 
 ```
 app/                    o aplicativo (index.html, amostras.js com os sons, vendor/vexflow, ícones, manifest)
-conteudo/categorias.json   categorias do hub (id, nome, descrição, cor; "rotina" e "meus" são especiais)
+conteudo/areas.json        áreas do início (Mãos, Ritmo e leitura, Coordenação, Levadas e viradas)
+conteudo/categorias.json   categorias (id, area, nome, descrição, cor; "rotina" e "meus" são especiais)
 conteudo/grupos/<id>.json  um arquivo por lista de exercícios
 scripts/validar.mjs     confere os JSON
 scripts/montar.mjs      valida, gera dist/ (conteudo.js + sw.js com versão automática)
@@ -33,11 +34,12 @@ scripts/previa.mjs      serve dist/ na porta 8080
 ## Fluxo principal: partitura nova → exercícios publicados
 
 1. **Leia a folha com cuidado.** Anote o título, a quantidade de exercícios e compassos, a fórmula de compasso, as figuras, a manulação (D/E), os acentos, os flams e as notas fantasmas. Veja também se os dois compassos de cada linha são iguais. Siga `references/transcricao.md`: ele traz os métodos que funcionaram (linhas da pauta, faixas por instrumento, grade pelo chimbal, zoom anotado) e as armadilhas comuns. Erros de transcrição são o maior risco do projeto: confira cada compasso visualmente.
-2. **Decida onde o conteúdo entra.** Pode ser uma categoria existente em `conteudo/categorias.json` ou uma nova. O usuário costuma dizer "coloca no worship" ou "faça uma aba para...". Se não estiver claro, pergunte.
+2. **Decida onde o conteúdo entra:** área › categoria › grupo. Pode ser uma categoria existente em `conteudo/categorias.json` ou uma nova; categoria nova precisa de `area` (uma das de `conteudo/areas.json`). O usuário costuma dizer "coloca no worship" ou "faça uma aba para...". Se não estiver claro, pergunte.
 3. **Escreva o JSON** seguindo `references/formato-json.md`.
    - IDs novos, curtos e únicos.
    - **Nunca mude IDs existentes:** os recordes dos músicos ficam presos a eles.
    - Defina um `andamento` sugerido coerente com a dificuldade.
+   - Defina o `nivel` (1 a 5) e, quando souber de onde veio o material, a `fonte`.
 4. **Valide e monte**, dentro do repositório: `node scripts/validar.mjs` e depois `node scripts/montar.mjs`.
 5. **Confira no navegador:** `python3 <dir-da-skill>/scripts/conferir.py /home/claude/Bateria/dist`. O script abre todas as categorias e exercícios e aponta os que não renderizam.
 6. **Resuma a leitura para o usuário:** o que cada exercício toca e as dúvidas reais, por exemplo "a caixa cai no tempo 1, o que é incomum; conferi e está assim na folha".
@@ -57,7 +59,7 @@ O site é público. Não publique fotos ou recortes de partituras de terceiros (
 - O código fica em `app/index.html`. Leia `references/app.md` antes de mexer: ele descreve as telas, o motor de áudio, a notação e onde ficam os dados de cada pessoa.
 - Para ideias amplas de melhoria, **proponha e pergunte antes de aplicar**. O usuário pediu isso, e as opções com botões funcionam bem no celular.
 - Para pedidos diretos ("faça um hub", "melhore para Android"), aplique, teste e publique.
-- Não quebre os dados salvos dos usuários: chaves `bateria.*` do localStorage e IDs de exercício.
+- Não quebre os dados salvos dos usuários: chaves `bateria.*` do localStorage e IDs de exercício. Rotina, "continuar" e memória de cada aba guardam o id do exercício, então mover grupos de categoria ou reordenar é seguro; trocar um id não é.
 - Teste sempre com `montar.mjs` e `conferir.py` antes de publicar.
 
 ## Problemas comuns

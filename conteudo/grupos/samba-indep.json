@@ -1,14 +1,15 @@
 {
   "id": "samba-indep",
-  "categoria": "samba",
-  "ordem": 10,
+  "categoria": "independencia",
+  "ordem": 20,
+  "nivel": 4,
   "andamento": {
     "inicio": 60,
     "fim": 100
   },
   "maosPes": true,
   "titulo": "Samba Independence, parte 2",
-  "descricao": "Pés sempre iguais: bumbo no 1 e no \"a\" de cada tempo, chimbal com o pé no \"&\". As mãos mudam.",
+  "descricao": "Pés sempre iguais: bumbo no 1 e no \"a\" de cada tempo, chimbal com o pé no \"&\". As mãos mudam. A numeração segue o material original: esta é a parte 2, do 17 ao 27.",
   "exercicios": [
     {"id":"si2-17","num":17,"nome":"Exercício 17","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":"....xx......xx..","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},
     {"id":"si2-18","num":18,"nome":"Exercício 18","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.xxx.xxx.xxx.xx","sn":".xx..xx..xx..xx.","bd":"x..xx..xx..xx..x","hp":"..x...x...x...x."}},

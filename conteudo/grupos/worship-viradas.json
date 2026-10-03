@@ -2,14 +2,15 @@
   "id": "worship-viradas",
   "categoria": "worship",
   "ordem": 10,
+  "nivel": 2,
   "andamento": {
     "inicio": 50,
     "fim": 90
   },
   "vozUnica": true,
   "virada": true,
-  "titulo": "12 viradas simples para worship",
-  "descricao": "Viradas de um compasso: as pausas do começo são o lugar da levada. Aqui estão as viradas 1 a 9.",
+  "titulo": "Viradas simples para worship",
+  "descricao": "Viradas de um compasso: as pausas do começo são o lugar da levada. O material original tem 12 viradas; aqui estão da 1 à 9.",
   "exercicios": [
     {"id":"wv-1","num":1,"nome":"Virada 1","compasso":[4,4],"sub":8,"mao":["","","","","","","","","","","","","","","","","","","","","","","e","e","D","","E","","D","","",""],"trilhas":{"sn":"......................ggx.......","t1":"..........................x.....","ft":"............................x..."}},
     {"id":"wv-2","num":2,"nome":"Virada 2","compasso":[4,4],"sub":4,"mao":["","","","","","","","","","","","","D","E","D","E"],"trilhas":{"sn":"............xxx.","cr":"...............x","bd":"...............x"}},

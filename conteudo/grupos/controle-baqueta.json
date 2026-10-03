@@ -2,15 +2,16 @@
   "id": "controle-baqueta",
   "categoria": "tecnica",
   "ordem": 10,
-  "vozUnica": true,
-  "panMao": true,
-  "modoAcento": true,
+  "nivel": 1,
   "andamento": {
     "inicio": 60,
     "fim": 120,
     "passo": 4,
     "reps": 8
   },
+  "vozUnica": true,
+  "panMao": true,
+  "modoAcento": true,
   "titulo": "Controle de baqueta",
   "descricao": "Exercícios de mãos no estilo do Stick Control. Escolha onde ficam os acentos: no início de cada grupo da manulação ou em cada tempo. Com fone, a direita soa do lado direito e a esquerda do esquerdo.",
   "exercicios": [

@@ -2,6 +2,7 @@
   "id": "samba-grooves",
   "categoria": "samba",
   "ordem": 20,
+  "nivel": 3,
   "andamento": {
     "inicio": 60,
     "fim": 100

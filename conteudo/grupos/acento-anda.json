@@ -2,13 +2,14 @@
   "id": "acento-anda",
   "categoria": "tecnica",
   "ordem": 20,
-  "vozUnica": true,
-  "panMao": true,
+  "nivel": 2,
   "andamento": {
     "inicio": 60,
     "fim": 110,
     "reps": 4
   },
+  "vozUnica": true,
+  "panMao": true,
   "titulo": "Acento que anda",
   "descricao": "Toques simples com o acento passando pelo 1, pelo e, pelo & e pelo a. Ligue Tocar a folha inteira para ouvir o acento andar de um exercício para o outro.",
   "exercicios": [

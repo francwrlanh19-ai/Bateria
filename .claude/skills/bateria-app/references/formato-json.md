@@ -1,7 +1,7 @@
 # Formato dos JSON de conteúdo
 
 ## Sumário
-1. categorias.json
+1. areas.json e categorias.json
 2. Grupo (arquivo em conteudo/grupos)
 3. Exercício
 4. Trilhas e símbolos
@@ -9,12 +9,19 @@
 6. Recursos especiais (exemplos)
 7. Checklist antes de publicar
 
-## 1. categorias.json
+## 1. areas.json e categorias.json
 
-Lista em ordem de exibição no hub:
+`conteudo/areas.json` lista as áreas do início, na ordem de um treino:
 ```json
-{ "id": "worship", "nome": "Worship", "descricao": "Viradas, levadas e 6/8", "cor": "--cym" }
+{ "id": "levadas", "nome": "Levadas e viradas", "descricao": "Para tocar no culto", "cor": "--cym" }
 ```
+As áreas atuais são `maos`, `leitura`, `coordenacao` e `levadas`. Mude só se o usuário pedir.
+
+`conteudo/categorias.json` lista as categorias em ordem de exibição; cada uma pertence a uma área:
+```json
+{ "id": "worship", "area": "levadas", "nome": "Worship", "descricao": "Viradas, levadas e 6/8", "cor": "--cym" }
+```
+- `area` é obrigatória (exceto em `rotina` e `meus`). O validador recusa categoria sem área ou com área desconhecida.
 - `cor` usa as variáveis do app: `--sn` azul, `--hh` dourado, `--tom` verde, `--cym` roxo, `--bd` vermelho, `--ft` marrom, `--rd` turquesa, `--hp` cinza, `--brass` latão, `--muted`.
 - `rotina` e `meus` têm `"especial": true`. Não remova essas duas.
 - Para criar categoria nova, acrescente na posição desejada. O `id` não pode ter espaço.
@@ -35,6 +42,8 @@ Arquivo `conteudo/grupos/<id>.json`, com o nome do arquivo igual ao `id`:
 }
 ```
 - `ordem`: posição do grupo dentro da categoria (10, 20, 30…).
+- `nivel`: dificuldade de 1 a 5, mostrada como "Nível 2 de 5". Referência: 1 figuras e levadas básicas; 2 técnica de base e levadas comuns; 3 semicolcheias no bumbo e na caixa, independência leve; 4 independência completa, quintinas e septinas; 5 avançado. Um exercício também pode ter o próprio `nivel`.
+- `fonte` (opcional): crédito do material (livro, autor, curso). Use quando a origem for conhecida; não invente.
 - `andamento` (opcional): faixa sugerida da progressão. Cada lista guarda a sua no aparelho do usuário.
 - Opções de escrita e treino:
   - `vozUnica`: todas as hastes para cima, numa voz, como nas folhas em que chimbal, caixa e bumbo dividem a haste.
@@ -94,7 +103,8 @@ Em cada casa: `.` pausa · `x` nota · `X` acento · `g` nota fantasma (parênte
 
 ## 7. Checklist antes de publicar
 
-- O nome do arquivo é igual ao `id` do grupo, e a `categoria` existe.
+- O nome do arquivo é igual ao `id` do grupo, e a `categoria` existe e tem `area`.
+- O grupo tem `nivel` e, se a origem for conhecida, `fonte`.
 - Cada trilha tem o tamanho certo; a soma das figuras de cada tempo bate.
 - Os IDs são novos e nenhum ID antigo foi alterado.
 - `node scripts/validar.mjs` passa e `conferir.py` não aponta problemas.

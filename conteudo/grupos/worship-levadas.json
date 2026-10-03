@@ -2,6 +2,7 @@
   "id": "worship-levadas",
   "categoria": "worship",
   "ordem": 20,
+  "nivel": 2,
   "andamento": {
     "inicio": 100,
     "fim": 150,

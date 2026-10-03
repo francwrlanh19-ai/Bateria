@@ -2,14 +2,15 @@
   "id": "figuras-transicao",
   "categoria": "figuras",
   "ordem": 20,
-  "vozUnica": true,
-  "panMao": true,
+  "nivel": 3,
   "andamento": {
     "inicio": 45,
     "fim": 80,
     "passo": 5,
     "reps": 4
   },
+  "vozUnica": true,
+  "panMao": true,
   "titulo": "Transições",
   "descricao": "A figura muda a cada tempo, subindo e descendo. O tempo continua o mesmo; só cabem mais ou menos notas dentro dele.",
   "exercicios": [
