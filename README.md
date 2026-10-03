@@ -47,4 +47,8 @@ npm run previa    # monta e abre em http://localhost:8080
 
 Cada aparelho guarda os próprios recordes, rotina e exercícios criados.
 
+## Skill do Claude
+
+A pasta `.claude/skills/bateria-app/` tem as instruções para o Claude manter este projeto: formato dos JSON, como transcrever partituras e como publicar. O Claude Code no Codespace usa essa pasta automaticamente. No claude.ai, instale o arquivo `bateria-app.skill` em Configurações › Capacidades › Skills.
+
 Créditos: sons de Virtuosity Drums (Versilian Studios, CC0); partituras desenhadas com VexFlow (MIT). Alguns exercícios foram transcritos de materiais didáticos de outros autores, a quem pertencem os créditos.
