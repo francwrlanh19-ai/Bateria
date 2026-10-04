@@ -1,168 +1,48 @@
 {
   "nome": "Trilha de estudo",
-  "descricao": "Sete etapas, do primeiro toque às quiálteras. Cada exercício tem uma meta de andamento; quando você chega nela, o exercício fica concluído. O Treino de hoje escolhe os exercícios da sua etapa.",
+  "descricao": "Sete etapas, do primeiro toque às quiálteras. Um exercício fica dominado quando você chega no andamento final da lista dele. A etapa avança sozinha quando todos os exercícios dela estão dominados, e o treino de hoje pega os exercícios novos na ordem da trilha.",
   "etapas": [
     {
       "id": "primeiros-passos",
       "nome": "Primeiros passos",
       "objetivo": "Tocar junto com o metrônomo: toques simples e duplos, semínimas e colcheias, a primeira levada de rock, o 6/8 das baladas e a primeira virada.",
-      "itens": [
-        { "ex": "mc-1", "meta": 90 },
-        { "ex": "mc-2", "meta": 80 },
-        { "ex": "fg-1", "meta": 80 },
-        { "ex": "fg-2", "meta": 80 },
-        { "ex": "rk-1", "meta": 100 },
-        { "ex": "wv-2", "meta": 70 },
-        { "ex": "w68-1", "meta": 140 },
-        { "ex": "w68-2", "meta": 140 }
-      ]
+      "itens": ["mc-1", "mc-2", "fg-1", "fg-2", "rk-1", "wv-2", "w68-1", "w68-2"]
     },
     {
       "id": "levadas-do-culto",
       "nome": "Levadas do culto",
       "objetivo": "Levadas de worship com o bumbo no contratempo, o balanço do shuffle e as primeiras coordenações em colcheias. Nas mãos, acento e tercinas; duas viradas novas.",
-      "itens": [
-        { "ex": "mc-3", "meta": 90 },
-        { "ex": "aa-1", "meta": 90 },
-        { "ex": "tc-1", "meta": 80 },
-        { "ex": "fg-3", "meta": 80 },
-        { "ex": "fg-4", "meta": 80 },
-        { "ex": "ft-1", "meta": 70 },
-        { "ex": "ft-4", "meta": 70 },
-        { "ex": "wl-A", "meta": 120 },
-        { "ex": "wv-9", "meta": 75 },
-        { "ex": "sh-1", "meta": 90 },
-        { "ex": "rk-2", "meta": 100 },
-        { "ex": "wl-B", "meta": 120 },
-        { "ex": "w68-3", "meta": 140 },
-        { "ex": "wv-7", "meta": 75 },
-        { "ex": "sh-2", "meta": 90 },
-        { "ex": "rk-3", "meta": 100 },
-        { "ex": "rk-4", "meta": 100 }
-      ]
+      "itens": ["mc-3", "aa-1", "tc-1", "fg-3", "fg-4", "ft-1", "ft-4", "wl-A", "wv-9", "sh-1", "rk-2", "wl-B", "w68-3", "wv-7", "sh-2", "rk-3", "rk-4"]
     },
     {
       "id": "semicolcheias",
       "nome": "Semicolcheias no bumbo e na caixa",
       "objetivo": "O bumbo e a caixa passam a cair nas semicolcheias, e as levadas de worship ficam mais cheias. Nas mãos, acentos fora do tempo; no ritmo, as fusas que aparecem nas viradas.",
-      "itens": [
-        { "ex": "mc-4", "meta": 100 },
-        { "ex": "aa-2", "meta": 90 },
-        { "ex": "mc-5", "meta": 100 },
-        { "ex": "aa-3", "meta": 90 },
-        { "ex": "fg-8", "meta": 60 },
-        { "ex": "rk-5", "meta": 100 },
-        { "ex": "wl-C", "meta": 130 },
-        { "ex": "wv-4", "meta": 70 },
-        { "ex": "rk-6", "meta": 100 },
-        { "ex": "wl-D", "meta": 130 },
-        { "ex": "rk-7", "meta": 100 },
-        { "ex": "wv-1", "meta": 70 },
-        { "ex": "rk-8", "meta": 100 },
-        { "ex": "wl-E", "meta": 130 },
-        { "ex": "rk-9", "meta": 100 },
-        { "ex": "rk-10", "meta": 100 }
-      ]
+      "itens": ["mc-4", "aa-2", "mc-5", "aa-3", "fg-8", "rk-5", "wl-C", "wv-4", "rk-6", "wl-D", "rk-7", "wv-1", "rk-8", "wl-E", "rk-9", "rk-10"]
     },
     {
       "id": "grooves-e-paradiddle",
       "nome": "Grooves e paradiddle",
       "objetivo": "Levadas de rock mais cheias, os grooves de semicolcheia e o paradiddle dividido entre chimbal e caixa. No ritmo, quintinas e sextinas.",
-      "itens": [
-        { "ex": "mc-6", "meta": 100 },
-        { "ex": "aa-4", "meta": 90 },
-        { "ex": "fg-5", "meta": 70 },
-        { "ex": "fg-6", "meta": 70 },
-        { "ex": "pd-1", "meta": 80 },
-        { "ex": "pd-2", "meta": 80 },
-        { "ex": "pd-3", "meta": 80 },
-        { "ex": "pd-4", "meta": 80 },
-        { "ex": "pd-5", "meta": 80 },
-        { "ex": "rk-11", "meta": 100 },
-        { "ex": "f1-e1", "meta": 90 },
-        { "ex": "wv-3", "meta": 75 },
-        { "ex": "rk-12", "meta": 100 },
-        { "ex": "f1-e2", "meta": 90 },
-        { "ex": "rk-13", "meta": 100 },
-        { "ex": "f1-e3", "meta": 90 },
-        { "ex": "wv-6", "meta": 75 },
-        { "ex": "rk-14", "meta": 100 },
-        { "ex": "f1-e4", "meta": 90 },
-        { "ex": "rk-15", "meta": 100 },
-        { "ex": "rk-16", "meta": 100 }
-      ]
+      "itens": ["mc-6", "aa-4", "fg-5", "fg-6", "pd-1", "pd-2", "pd-3", "pd-4", "pd-5", "rk-11", "f1-e1", "wv-3", "rk-12", "f1-e2", "rk-13", "f1-e3", "wv-6", "rk-14", "f1-e4", "rk-15", "rk-16"]
     },
     {
       "id": "pes-fixos",
       "nome": "Pés fixos, mãos livres",
       "objetivo": "Independência: os pés repetem o padrão do samba enquanto as mãos mudam. Começa o afrobeat, com o chimbal em colcheia e duas semicolcheias.",
-      "itens": [
-        { "ex": "tc-2", "meta": 80 },
-        { "ex": "tc-3", "meta": 80 },
-        { "ex": "fg-7", "meta": 60 },
-        { "ex": "ft-2", "meta": 60 },
-        { "ex": "ost-1", "meta": 70 },
-        { "ex": "si2-17", "meta": 80 },
-        { "ex": "si2-18", "meta": 80 },
-        { "ex": "si2-19", "meta": 80 },
-        { "ex": "si2-20", "meta": 80 },
-        { "ex": "si2-21", "meta": 80 },
-        { "ex": "si2-22", "meta": 80 },
-        { "ex": "ab-1", "meta": 90 },
-        { "ex": "ab-2", "meta": 90 },
-        { "ex": "wv-5", "meta": 75 },
-        { "ex": "ab-3", "meta": 90 },
-        { "ex": "ab-4", "meta": 90 },
-        { "ex": "ab-5", "meta": 90 },
-        { "ex": "ab-6", "meta": 90 }
-      ]
+      "itens": ["tc-2", "tc-3", "fg-7", "ft-2", "ost-1", "si2-17", "si2-18", "si2-19", "si2-20", "si2-21", "si2-22", "ab-1", "ab-2", "wv-5", "ab-3", "ab-4", "ab-5", "ab-6"]
     },
     {
       "id": "samba-e-afrobeat",
       "nome": "Samba e afrobeat",
       "objetivo": "O resto do Samba Independence, os primeiros grooves de samba e mais afrobeat. No ritmo, a descida de 8 a 5 notas e as quintinas e septinas com respiro.",
-      "itens": [
-        { "ex": "ft-3", "meta": 60 },
-        { "ex": "f57-1", "meta": 60 },
-        { "ex": "f57-4", "meta": 55 },
-        { "ex": "si2-23", "meta": 85 },
-        { "ex": "si2-24", "meta": 85 },
-        { "ex": "si2-25", "meta": 85 },
-        { "ex": "si2-26", "meta": 85 },
-        { "ex": "si2-27", "meta": 85 },
-        { "ex": "sg-4", "meta": 85 },
-        { "ex": "ab-7", "meta": 95 },
-        { "ex": "sg-5", "meta": 85 },
-        { "ex": "ab-8", "meta": 95 },
-        { "ex": "sg-6", "meta": 85 },
-        { "ex": "ab-9", "meta": 95 },
-        { "ex": "sg-2", "meta": 85 },
-        { "ex": "ab-10", "meta": 95 },
-        { "ex": "ab-11", "meta": 95 },
-        { "ex": "ab-12", "meta": 95 }
-      ]
+      "itens": ["ft-3", "f57-1", "f57-4", "si2-23", "si2-24", "si2-25", "si2-26", "si2-27", "sg-4", "ab-7", "sg-5", "ab-8", "sg-6", "ab-9", "sg-2", "ab-10", "ab-11", "ab-12"]
     },
     {
       "id": "desafios",
       "nome": "Desafios",
       "objetivo": "Os grooves de samba e de afrobeat mais cheios, a virada mais rápida e as quiálteras combinadas, como quintina com septina e septina com fusa.",
-      "itens": [
-        { "ex": "f57-2", "meta": 60 },
-        { "ex": "f57-3", "meta": 60 },
-        { "ex": "f57-5", "meta": 55 },
-        { "ex": "f57-6", "meta": 55 },
-        { "ex": "f57-7", "meta": 55 },
-        { "ex": "sg-7", "meta": 85 },
-        { "ex": "ab-13", "meta": 100 },
-        { "ex": "sg-1", "meta": 85 },
-        { "ex": "ab-14", "meta": 100 },
-        { "ex": "wv-8", "meta": 75 },
-        { "ex": "sg-3", "meta": 85 },
-        { "ex": "ab-15", "meta": 100 },
-        { "ex": "ab-16", "meta": 100 },
-        { "ex": "ab-17", "meta": 100 },
-        { "ex": "ab-18", "meta": 100 }
-      ]
+      "itens": ["f57-2", "f57-3", "f57-5", "f57-6", "f57-7", "sg-7", "ab-13", "sg-1", "ab-14", "wv-8", "sg-3", "ab-15", "ab-16", "ab-17", "ab-18"]
     }
   ]
 }

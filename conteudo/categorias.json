@@ -64,14 +64,14 @@
   },
   {
     "id": "trilha",
-    "nome": "Trilha",
-    "descricao": "Plano de estudo em etapas",
+    "nome": "Trilha de estudo",
+    "descricao": "Os exercícios em sete etapas",
     "cor": "--muted",
     "especial": true
   },
   {
     "id": "rotina",
-    "nome": "Minha rotina",
+    "nome": "Minhas rotinas",
     "descricao": "",
     "cor": "--muted",
     "especial": true

@@ -12,7 +12,7 @@ Site: https://francwrlanh19-ai.github.io/Bateria/
 - `conteudo/areas.json` lista as áreas do início, na ordem de um treino: Mãos, Ritmo e leitura, Coordenação, Levadas e viradas.
 - `conteudo/categorias.json` lista as categorias; cada uma fica dentro de uma área (`area`).
 - `conteudo/grupos/*.json` tem um arquivo por lista de exercícios.
-- `conteudo/trilha.json` é a trilha de estudo: etapas com exercícios e uma meta de BPM para cada um. O botão **Treino de hoje**, no início, monta treinos de 5, 15 ou 30 minutos com os exercícios da etapa em que a pessoa está.
+- `conteudo/trilha.json` é a trilha de estudo: os exercícios em sete etapas, na ordem em que vale estudá-los. Exercício novo precisa entrar numa etapa (o validador avisa quando algum fica de fora).
 - A cada envio para a branch `main`, o GitHub Actions valida os JSON, monta o site e publica no GitHub Pages. Se a validação falhar, nada é publicado e o site continua na versão anterior.
 
 ## Formato de um grupo
@@ -51,7 +51,15 @@ npm run validar   # confere os JSON
 npm run previa    # monta e abre em http://localhost:8080
 ```
 
-Cada aparelho guarda os próprios recordes, rotina, diário de estudo e exercícios criados. No início, em **Neste celular**, dá para salvar uma cópia desses dados (um arquivo `.json`) e restaurá-la, inclusive em outro celular.
+Cada aparelho guarda os próprios recordes, rotinas, favoritos, diário de estudo e exercícios criados. No início, em **Neste celular**, dá para salvar uma cópia desses dados (um arquivo `.json`) e restaurá-la, inclusive em outro celular.
+
+## Uso diário
+
+- **Treino de hoje** (15, 30 ou 45 minutos): um exercício de cada área. Primeiro o que você está treinando, depois o que pede revisão, depois o próximo novo na ordem da trilha. Cada exercício começa perto do seu recorde e sobe até a meta da lista.
+- **Estados**: cada exercício fica *novo*, *treinando*, *dominado* (chegou no andamento final da lista) ou *revisar* (dominado e parado há 7 dias ou mais).
+- **Últimos 7 dias**, dias seguidos e meta diária; **busca**; **filtros** e **favoritos** nas categorias.
+- **Minhas rotinas**: várias, com nome. O botão *Enviar link* gera um link para mandar no WhatsApp; quem abre o link guarda a rotina no próprio app.
+- **Trilha de estudo**: as sete etapas, com o objetivo de cada uma. A etapa avança sozinha, ou você escolhe uma à mão.
 
 ## Skill do Claude
 

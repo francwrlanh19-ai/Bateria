@@ -114,15 +114,15 @@ export function validar() {
       }
     });
   }
-  // Trilha de estudo: etapas com exercícios e metas de andamento
+  // Trilha de estudo: etapas com os exercícios na ordem de estudo (cada exercício entra uma vez só)
   const avisos = [];
-  const trilha = lerJson('conteudo/trilha.json', null);
   let nEtapas = 0;
-  if (trilha) {
+  if (fs.existsSync(path.join(raiz, 'conteudo/trilha.json'))) {
+    const trilha = lerJson('conteudo/trilha.json', null);
     const T = m => erros.push(`trilha.json: ${m}`);
-    if (!Array.isArray(trilha.etapas) || !trilha.etapas.length) T('precisa de "etapas" com pelo menos uma etapa');
+    if (!trilha || !Array.isArray(trilha.etapas) || !trilha.etapas.length) T('precisa de "etapas" com pelo menos uma etapa');
     else {
-      const idsEtapa = new Set(), metaAntes = new Map(), naTrilha = new Set();
+      const idsEtapa = new Set(), naTrilha = new Set();
       trilha.etapas.forEach((e, i) => {
         const P = `etapa ${e.id || '#' + (i + 1)}`;
         if (!e.id || /\s/.test(e.id)) T(`${P}: "id" vazio ou com espaço`);
@@ -130,20 +130,16 @@ export function validar() {
         else idsEtapa.add(e.id);
         if (!e.nome) T(`${P}: falta "nome"`);
         if (!Array.isArray(e.itens) || !e.itens.length) { T(`${P}: não tem itens`); return; }
-        const nesta = new Set();
-        e.itens.forEach((it, j) => {
+        e.itens.forEach((id, j) => {
           const Q = `${P}, item ${j + 1}`;
-          if (!it || !idsExercicio.has(it.ex)) { T(`${Q}: exercício desconhecido "${it && it.ex}"`); return; }
-          if (!(Number.isInteger(it.meta) && it.meta >= 30 && it.meta <= 300)) T(`${Q} (${it.ex}): "meta" precisa ser um número inteiro de 30 a 300`);
-          if (nesta.has(it.ex)) T(`${Q}: ${it.ex} aparece duas vezes na mesma etapa`);
-          nesta.add(it.ex);
-          if (metaAntes.has(it.ex) && !(it.meta > metaAntes.get(it.ex))) T(`${Q}: ${it.ex} já apareceu numa etapa anterior; para repetir, a meta precisa ser maior (${metaAntes.get(it.ex)})`);
-          metaAntes.set(it.ex, it.meta); naTrilha.add(it.ex);
+          if (typeof id !== 'string' || !idsExercicio.has(id)) T(`${Q}: exercício desconhecido ${JSON.stringify(id)} (use o id do exercício, como "mc-1")`);
+          else if (naTrilha.has(id)) T(`${Q}: "${id}" já está na trilha; cada exercício entra uma vez só`);
+          else naTrilha.add(id);
         });
       });
       nEtapas = idsEtapa.size;
       const fora = [...idsExercicio].filter(id => !naTrilha.has(id));
-      if (fora.length) avisos.push(`${fora.length} exercício(s) fora da trilha (decida em que etapa entram): ${fora.join(', ')}`);
+      if (fora.length) avisos.push(`${fora.length} exercício(s) fora da trilha; decida em que etapa de conteudo/trilha.json eles entram: ${fora.join(', ')}`);
     }
   }
   return { erros, avisos, areas: idsArea.size, etapas: nEtapas, grupos: idsGrupo.size, exercicios: idsExercicio.size };
@@ -156,5 +152,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exit(1);
   }
   for (const a of r.avisos) console.log('Aviso: ' + a);
-  console.log(`Tudo certo: ${r.areas} áreas, ${r.grupos} grupos, ${r.exercicios} exercícios, trilha com ${r.etapas} etapas.`);
+  console.log(`Tudo certo: ${r.areas} áreas, ${r.grupos} grupos, ${r.exercicios} exercícios` + (r.etapas ? `, trilha com ${r.etapas} etapas.` : '.'));
 }

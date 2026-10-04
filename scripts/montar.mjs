@@ -20,7 +20,8 @@ fs.cpSync(path.join(raiz, 'app'), dist, { recursive: true });
 
 const areas = JSON.parse(fs.readFileSync(path.join(raiz, 'conteudo/areas.json'), 'utf8'));
 const categorias = JSON.parse(fs.readFileSync(path.join(raiz, 'conteudo/categorias.json'), 'utf8'));
-const trilha = JSON.parse(fs.readFileSync(path.join(raiz, 'conteudo/trilha.json'), 'utf8'));
+const arqTrilha = path.join(raiz, 'conteudo/trilha.json');
+const trilha = fs.existsSync(arqTrilha) ? JSON.parse(fs.readFileSync(arqTrilha, 'utf8')) : null;
 const ordemCat = Object.fromEntries(categorias.map((c, i) => [c.id, i]));
 const dirG = path.join(raiz, 'conteudo/grupos');
 const grupos = fs.readdirSync(dirG).filter(f => f.endsWith('.json'))
