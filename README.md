@@ -12,6 +12,7 @@ Site: https://francwrlanh19-ai.github.io/Bateria/
 - `conteudo/areas.json` lista as áreas do início, na ordem de um treino: Mãos, Ritmo e leitura, Coordenação, Levadas e viradas.
 - `conteudo/categorias.json` lista as categorias; cada uma fica dentro de uma área (`area`).
 - `conteudo/grupos/*.json` tem um arquivo por lista de exercícios.
+- `conteudo/trilha.json` é a trilha de estudo: etapas com exercícios e uma meta de BPM para cada um. O botão **Treino de hoje**, no início, monta treinos de 5, 15 ou 30 minutos com os exercícios da etapa em que a pessoa está.
 - A cada envio para a branch `main`, o GitHub Actions valida os JSON, monta o site e publica no GitHub Pages. Se a validação falhar, nada é publicado e o site continua na versão anterior.
 
 ## Formato de um grupo

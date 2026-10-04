@@ -17,6 +17,7 @@ app/                    o aplicativo (index.html, amostras.js com os sons, vendo
 conteudo/areas.json        áreas do início (Mãos, Ritmo e leitura, Coordenação, Levadas e viradas)
 conteudo/categorias.json   categorias (id, area, nome, descrição, cor; "rotina" e "meus" são especiais)
 conteudo/grupos/<id>.json  um arquivo por lista de exercícios
+conteudo/trilha.json       trilha de estudo: etapas, exercícios e metas de BPM (usada pelo Treino de hoje)
 scripts/validar.mjs     confere os JSON
 scripts/montar.mjs      valida, gera dist/ (conteudo.js + sw.js com versão automática)
 scripts/previa.mjs      serve dist/ na porta 8080
@@ -40,6 +41,7 @@ scripts/previa.mjs      serve dist/ na porta 8080
    - **Nunca mude IDs existentes:** os recordes dos músicos ficam presos a eles.
    - Defina um `andamento` sugerido coerente com a dificuldade.
    - Defina o `nivel` (1 a 5) e, quando souber de onde veio o material, a `fonte`.
+   - **Ponha os exercícios novos na trilha** (`conteudo/trilha.json`): escolha a etapa pelo que o exercício exige e defina uma meta de BPM dentro do andamento da lista. O validador avisa quais exercícios estão fora da trilha. Diga ao usuário em que etapa cada um entrou.
 4. **Valide e monte**, dentro do repositório: `node scripts/validar.mjs` e depois `node scripts/montar.mjs`.
 5. **Confira no navegador:** `python3 <dir-da-skill>/scripts/conferir.py /home/claude/Bateria/dist`. O script abre todas as categorias e exercícios e aponta os que não renderizam.
 6. **Resuma a leitura para o usuário:** o que cada exercício toca e as dúvidas reais, por exemplo "a caixa cai no tempo 1, o que é incomum; conferi e está assim na folha".

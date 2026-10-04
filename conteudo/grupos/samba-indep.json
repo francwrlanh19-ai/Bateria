@@ -2,7 +2,7 @@
   "id": "samba-indep",
   "categoria": "independencia",
   "ordem": 20,
-  "nivel": 4,
+  "nivel": 3,
   "andamento": {
     "inicio": 60,
     "fim": 100

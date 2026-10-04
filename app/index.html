@@ -318,6 +318,59 @@ body.tela-treino .lista-topo{display:none}
 }
 @media (max-width:420px){.nav-tit{font-size:24px}.cat h3{font-size:21px}.area-topo h2{font-size:25px}}
 
+/* Treino de hoje */
+.treino{background:var(--painel);color:var(--painel-txt);border-radius:18px;padding:16px 16px 10px;display:grid;gap:12px;min-width:0}
+.tr-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.tr-cab>div{min-width:0}
+.tr-rot{font-size:13.5px;font-weight:600;opacity:.75}
+.tr-cab h2{font-family:var(--f-display);font-weight:800;font-size:29px;line-height:1.02;margin-top:3px}
+.tr-etapa{font-size:13.5px;opacity:.75;margin-top:4px}
+.tr-seq{flex:0 0 auto;font-size:13px;font-weight:700;color:var(--brass);background:var(--painel-fraco);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.tr-dur{border-color:var(--painel-fraco)}
+.tr-dur button{color:var(--painel-txt)}
+.tr-dur button+button{border-left-color:var(--painel-fraco)}
+.tr-dur button[aria-pressed="true"]{background:var(--painel-txt);color:var(--painel)}
+.tr-itens{list-style:none;margin:0;padding:0}
+.tr-item{appearance:none;width:100%;display:grid;grid-template-columns:5.6rem minmax(0,1fr) auto;column-gap:10px;align-items:center;text-align:left;background:none;border:0;border-top:1px solid var(--painel-fraco);padding:9px 0;min-height:54px;color:inherit}
+.tr-papel{font-size:12.5px;font-weight:700;line-height:1.15;border-left:3px solid var(--c);padding-left:7px;opacity:.9}
+.tr-nome{display:grid;gap:1px;min-width:0}
+.tr-nome b{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tr-nome small{font-size:12.5px;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tr-min{font-size:14px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tr-ir{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--brass);color:#1A1406}
+.tr-ir svg{width:20px;height:20px}
+.tr-rodape{display:flex;justify-content:space-between;align-items:center;gap:4px 12px;flex-wrap:wrap;font-size:13.5px}
+.tr-rodape span{opacity:.75}
+.tr-link{appearance:none;background:none;border:0;padding:8px 0;color:var(--brass);font-weight:700;font-size:15px;min-height:42px}
+/* Atalhos do início */
+.atalhos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.atalho{appearance:none;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:11px 13px;display:grid;gap:1px;align-content:start;min-width:0;color:inherit}
+.at-rot{font-size:12.5px;font-weight:600;color:var(--muted)}
+.atalho b{font-family:var(--f-display);font-weight:800;font-size:22px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.atalho small{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.atalho:active,.tr-item:active{transform:scale(.98)}
+.atalho,.tr-item{transition:transform .08s ease-out}
+/* Trilha de estudo */
+.trilha-topo{display:grid;gap:10px}
+.trilha-topo>.btn-linha,.etapa-corpo>.btn-linha{justify-self:start}
+.etapa{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:0 14px}
+.etapa-atual{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.etapa-cab{appearance:none;width:100%;display:grid;grid-template-columns:44px minmax(0,1fr) 20px;gap:12px;align-items:center;text-align:left;background:none;border:0;padding:12px 0;color:inherit}
+.etapa-n{width:44px;height:44px;border-radius:12px;background:var(--bg);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:24px}
+.etapa-atual .etapa-n{background:var(--ink);color:var(--surface)}
+.etapa-feita .etapa-n{background:var(--tom);color:var(--surface)}
+.etapa-txt{display:grid;gap:4px;min-width:0}
+.etapa-txt h2{font-family:var(--f-display);font-weight:800;font-size:23px;line-height:1.05}
+.etapa-txt small{font-size:13px;color:var(--muted)}
+.etapa-barra{display:block;height:5px;border-radius:3px;background:var(--cell-2);background:color-mix(in srgb,var(--muted) 24%,transparent);overflow:hidden}
+.etapa-barra i{display:block;height:100%;background:var(--tom)}
+.etapa-seta{font-size:26px;line-height:1;color:var(--muted);justify-self:center;transition:transform .15s}
+.etapa-cab[aria-expanded="true"] .etapa-seta{transform:rotate(90deg)}
+.etapa-corpo{display:grid;gap:12px;padding:0 0 14px}
+.etapa-obj{font-size:14px;color:var(--muted);line-height:1.4}
+.ex-nome small{display:block;font-weight:400;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ex-linha.tr-ok .ex-num{background:var(--tom);color:var(--surface)}
+
 /* Régua de figuras rítmicas */
 .regua{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 @media (max-width:560px){.regua{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -838,7 +891,7 @@ function iniciar(op){
   audio();novaSessao();chokeAberto=null;
   eng={lista:sel.lista,ex:sel.ex,passo:0,t:ac.currentTime+0.1,bpm:cfg.progressao?cfg.inicio:cfg.bpmFixo,
        noDegrau:0,contagem:cfg.contagem,tipo:'contagem',ouvindo:true,fim:false,pend:null,fase:0,crashProx:true,crashAgora:false};
-  if(op&&op.rotina)eng.rotina={i:0,inicioT:eng.t};
+  if(op&&op.sessao)eng.rotina=Object.assign({i:0,inicioT:eng.t},op.sessao);
   fila.length=0;$('#aviso').hidden=true;
   $('#estado').textContent=cfg.contagem?'Contagem':'Tocando';$('#rep').textContent='';
   relogio=setInterval(agenda,25);agenda();
@@ -847,9 +900,10 @@ function iniciar(op){
 }
 function parar(){
   if(!eng)return;
+  const eraSessao=!!eng.rotina;
   clearInterval(relogio);relogio=null;eng=null;fila.length=0;
   if(sessao)sessao.gain.setTargetAtTime(0,ac.currentTime,0.012);
-  marcaPasso(-1);acendePulso(-1);soltarTela();atualizaPlay();renderAndamento();
+  marcaPasso(-1);acendePulso(-1);soltarTela();atualizaPlay();if(eraSessao){carregaAndamento(sel.lista);renderAjustes();}renderAndamento();
   if(abaAtiva==='rotina')renderColecao();
 }
 function agenda(){
@@ -877,12 +931,12 @@ function agendaPasso(){
       }
     }
   }
-  fila.push({t,passo:p,sub,ini:tempo,nbt:nb,tipo:eng.tipo,ouvindo:eng.ouvindo,lista:eng.lista,ex:eng.ex,bpm:eng.bpm,noDegrau:eng.noDegrau,fase:eng.fase,nl:nLevada(eng.lista),rt:eng.rotina&&rotina[eng.rotina.i]?{i:eng.rotina.i,n:rotina.length,resta:Math.max(0,rotina[eng.rotina.i].min*60-(t-eng.rotina.inicioT))}:null});
+  fila.push({t,passo:p,sub,ini:tempo,nbt:nb,tipo:eng.tipo,ouvindo:eng.ouvindo,lista:eng.lista,ex:eng.ex,bpm:eng.bpm,noDegrau:eng.noDegrau,fase:eng.fase,nl:nLevada(eng.lista),rt:eng.rotina&&eng.rotina.itens[eng.rotina.i]?{i:eng.rotina.i,n:eng.rotina.itens.length,tipo:eng.rotina.tipo,resta:Math.max(0,eng.rotina.itens[eng.rotina.i].min*60-(t-eng.rotina.inicioT))}:null});
   eng.t+=60/eng.bpm/sub;
   eng.passo++;
   if(eng.passo>=n){
     eng.passo=0;fimCompasso();
-    if(eng.fim)fila.push({t:eng.t,fim:true,fimRotina:!!eng.fimRotina,bpm:eng.bpm,lista:eng.lista,ex:eng.ex});
+    if(eng.fim)fila.push({t:eng.t,fim:true,fimRotina:!!eng.fimRotina,sessao:eng.rotina?{tipo:eng.rotina.tipo,n:eng.rotina.itens.length,min:eng.rotina.min}:null,bpm:eng.bpm,lista:eng.lista,ex:eng.ex});
   }
 }
 function inicioCompasso(){
@@ -895,12 +949,12 @@ function inicioCompasso(){
 function fimCompasso(){
   if(eng.tipo==='contagem')return;
   if(eng.rotina){
-    const it=rotina[eng.rotina.i];
+    const itens=eng.rotina.itens,it=itens[eng.rotina.i];
     if(!it||eng.t-eng.rotina.inicioT>=it.min*60){
       const prox=eng.rotina.i+1;
-      if(prox>=rotina.length){eng.fim=true;eng.fimRotina=true;return;}
-      const n=rotina[prox];eng.rotina.i=prox;eng.rotina.inicioT=eng.t;
-      carregaAndamento(n.lista);
+      if(prox>=itens.length){eng.fim=true;eng.fimRotina=true;return;}
+      const n=itens[prox];eng.rotina.i=prox;eng.rotina.inicioT=eng.t;
+      aplicaFaixa(n);
       eng.lista=n.lista;eng.ex=n.ex;eng.noDegrau=0;eng.fase=0;eng.crashProx=true;eng.contagem=1;
       eng.bpm=cfg.progressao?cfg.inicio:cfg.bpmFixo;
       fila.push({t:eng.t,troca:{lista:n.lista,ex:n.ex},rotina:prox});
@@ -954,7 +1008,11 @@ function laco(){
 function aplica(ev){
   if(ev.fim){
     const ex=exDe(ev.lista,ev.ex);parar();
-    const av=$('#aviso');av.textContent=ev.fimRotina?`Rotina concluída: ${rotina.length} ${rotina.length===1?'exercício':'exercícios'}, ${rotina.reduce((a,b)=>a+b.min,0)} minutos.`:cfg.lista?`Meta concluída: a folha inteira a ${ev.bpm} BPM.`:`Meta concluída: ${ex.nome} a ${ev.bpm} BPM.`;av.hidden=false;
+    const av=$('#aviso'),ss=ev.sessao;
+    if(ev.fimRotina&&ss&&ss.tipo==='treino'){registraTreino(ss.min);av.textContent=`Treino concluído: ${ss.n} ${ss.n===1?'exercício':'exercícios'} em ${ss.min} minutos. Amanhã o app escolhe os próximos.`;}
+    else if(ev.fimRotina&&ss)av.textContent=`Rotina concluída: ${ss.n} ${ss.n===1?'exercício':'exercícios'}, ${ss.min} minutos.`;
+    else av.textContent=cfg.lista?`Meta concluída: a folha inteira a ${ev.bpm} BPM.`:`Meta concluída: ${ex.nome} a ${ev.bpm} BPM.`;
+    av.hidden=false;
     return;
   }
   if(ev.troca){sel={lista:ev.troca.lista,ex:ev.troca.ex};salvaSel();if(ev.rotina==null||abaAtiva!=='rotina')abaAtiva=abaDe(lista(sel.lista));listaAnd=sel.lista;renderColecao();if(typeof atualizaNav==='function')atualizaNav();renderPartitura();renderPulsos();renderAjustes();renderAndamento();return;}
@@ -980,7 +1038,7 @@ function aplica(ev){
       const r=cfg.ouvir?Math.floor(ev.noDegrau/2)+1:ev.noDegrau+1;
       const vir=!!lista(ev.lista).virada;
       $('#estado').textContent=cfg.ouvir?(ev.ouvindo?'Ouça':'Sua vez'):(vir?'Virada':'Tocando');
-      $('#rep').textContent=ev.rt?`Rotina ${ev.rt.i+1} de ${ev.rt.n}, faltam ${Math.floor(ev.rt.resta/60)}:${String(Math.floor(ev.rt.resta%60)).padStart(2,'0')}`:`Repetição ${r} de ${cfg.reps}`;
+      $('#rep').textContent=ev.rt?`${ev.rt.tipo==='treino'?'Treino':'Rotina'} ${ev.rt.i+1} de ${ev.rt.n}, faltam ${Math.floor(ev.rt.resta/60)}:${String(Math.floor(ev.rt.resta%60)).padStart(2,'0')}`:`Repetição ${r} de ${cfg.reps}`;
     }
   }
 }
@@ -1328,6 +1386,7 @@ function renderColecao(){
   if(typeof marcaRolagem==='function')marcaRolagem(abas);
   const box=$('#listas');box.innerHTML='';
   if(abaAtiva==='rotina'){renderRotina(box);return;}
+  if(abaAtiva==='trilha'){renderTrilha(box);return;}
   const ls=listas().filter(l=>abaDe(l)===abaAtiva);
   if(abaAtiva==='meus'&&!meus.length){
     const sec=el('div','lista');
@@ -1610,7 +1669,7 @@ function atualizaNav(){
 function mudaTela(t){
   if(t===tela)return;
   const de=tela;
-  try{history.pushState({tela:t},'');camadas.push({tela:de});}catch(e){}
+  try{history.pushState({tela:t},'');camadas.push({tela:de,aba:abaAtiva});}catch(e){}
   aplicaTela(t);
 }
 function voltaTela(){
@@ -1621,17 +1680,17 @@ function voltaTela(){
 $('#btnVoltar').addEventListener('click',voltaTela);
 function renderHub(){
   const h=$('#hub');h.innerHTML='';
-  const d=el('div','hub-destaque');
+  const tr=cartaoTreino();if(tr)h.append(tr);
+  const at=el('div','atalhos');
   const ex=exAtual(),l=lista(sel.lista);
-  const c=el('button','hub-card continuar');c.type='button';
-  c.innerHTML=`<span class="hub-rot">Continuar de onde parou</span><strong>${esc(ex.nome)}</strong><span class="hub-sub">${esc(nomeAba(abaDe(l)))}, ${esc(l.titulo)}</span><span class="seta-hub">Abrir treino</span>`;
+  const c=el('button','atalho continuar');c.type='button';
+  c.innerHTML=`<span class="at-rot">Continuar de onde parou</span><b>${esc(ex.nome)}</b><small>${esc(l.titulo)}</small>`;
   c.addEventListener('click',()=>mudaTela('treino'));
-  d.append(c);
   const vale=rotina.filter(itemOk),min=vale.reduce((a,it)=>a+(it.min||0),0);
-  const r=el('button','hub-card rotina-card');r.type='button';
-  r.innerHTML=`<span class="hub-rot">Rotina do dia</span><strong>${vale.length?vale.length+(vale.length===1?' exercício':' exercícios'):'Monte a sua'}</strong><span class="hub-sub">${vale.length?min+' min no total':'Junte exercícios de várias categorias numa sequência'}</span><span class="seta-hub">${vale.length?'Ver e começar':'Montar rotina'}</span>`;
+  const r=el('button','atalho rotina-card');r.type='button';
+  r.innerHTML=`<span class="at-rot">Minha rotina</span><b>${vale.length?vale.length+(vale.length===1?' exercício':' exercícios'):'Monte a sua'}</b><small>${vale.length?min+' min no total':'Exercícios que você escolhe'}</small>`;
   r.addEventListener('click',()=>{abaAtiva='rotina';mudaTela('categoria');});
-  d.append(r);h.append(d);
+  at.append(c,r);h.append(at);
   /* Áreas na ordem de um treino: mãos, ritmo e leitura, coordenação, levadas e viradas */
   const caixa=el('div','areas');
   const cats=CONTEUDO.categorias.filter(c=>!c.especial);
@@ -1675,7 +1734,7 @@ window.addEventListener('popstate',()=>{
   const n=camadas.pop();
   if(n==='ajustes')mostraAjustes(false);
   else if(n==='foco')mostraFoco(false);
-  else if(n&&n.tela)aplicaTela(n.tela);
+  else if(n&&n.tela){if(n.aba)abaAtiva=n.aba;aplicaTela(n.tela);}
 });
 const telaPequena=()=>window.matchMedia('(max-width:959px)').matches;
 function mostraAjustes(on){
@@ -1911,11 +1970,11 @@ acertaRotina();salvaRotina();
 function renderRotina(box){
   rotina=rotina.filter(itemOk);
   const total=rotina.reduce((a,b)=>a+b.min,0),sec=el('div','lista');
-  sec.innerHTML=`<div class="lista-topo"><h2>Rotina do dia</h2><p>${rotina.length?`${rotina.length} ${rotina.length===1?'exercício':'exercícios'}, ${total} min no total. Cada um usa o andamento da sua lista.`:'Ainda vazia. Abra um exercício em qualquer aba e toque em "Adicionar à rotina".'}</p></div>`;
+  sec.innerHTML=`<div class="lista-topo"><h2>Minha rotina</h2><p>${rotina.length?`${rotina.length} ${rotina.length===1?'exercício':'exercícios'}, ${total} min no total. Cada um usa o andamento da sua lista.`:'Ainda vazia. Abra um exercício em qualquer aba e toque em "Adicionar à rotina".'}</p></div>`;
   const ol=el('ol','rotina');
   rotina.forEach((it,i)=>{
     const l=lista(it.lista),ex=l.exercicios[it.ex];
-    const li=el('li','ri'+(eng&&eng.rotina&&eng.rotina.i===i?' atual':'')+(sel.lista===it.lista&&sel.ex===it.ex?' visto':''));
+    const li=el('li','ri'+(eng&&eng.rotina&&eng.rotina.tipo==='rotina'&&eng.rotina.i===i?' atual':'')+(sel.lista===it.lista&&sel.ex===it.ex?' visto':''));
     li.innerHTML=`<button type="button" class="ri-nome"><b>${esc(ex.nome)}</b><small>${esc(l.titulo)}</small></button>
       <div class="ri-min"><button type="button" data-a="menos" aria-label="Menos um minuto">−</button><output>${it.min} min</output><button type="button" data-a="mais" aria-label="Mais um minuto">+</button></div>
       <div class="ri-ord"><button type="button" data-a="sobe" aria-label="Subir" ${i===0?'disabled':''}>↑</button><button type="button" data-a="desce" aria-label="Descer" ${i===rotina.length-1?'disabled':''}>↓</button><button type="button" data-a="tira" aria-label="Tirar da rotina">✕</button></div>`;
@@ -1934,18 +1993,16 @@ function renderRotina(box){
   sec.append(ol);
   const acoes=el('div','rotina-acoes');
   const b=el('button','btn-primario');b.type='button';b.disabled=!rotina.length;
-  b.textContent=eng&&eng.rotina?'Parar rotina':'Começar rotina';
-  b.addEventListener('click',()=>{if(eng&&eng.rotina)parar();else iniciarRotina();});
+  const tocando=eng&&eng.rotina&&eng.rotina.tipo==='rotina';
+  b.textContent=tocando?'Parar rotina':'Começar rotina';
+  b.addEventListener('click',()=>{if(tocando)parar();else iniciarRotina();});
   acoes.append(b);sec.append(acoes);box.append(sec);
 }
 function iniciarRotina(){
   rotina=rotina.filter(itemOk);if(!rotina.length)return;
-  if(eng)parar();
-  const it=rotina[0];sel={lista:it.lista,ex:it.ex};salvaSel();carregaAndamento(it.lista);
-  renderPartitura();renderPulsos();renderAjustes();renderAndamento();
-  if(tela!=='treino')mudaTela('treino');
-  iniciar({rotina:true});
+  iniciarSessao({tipo:'rotina',itens:rotina.map(x=>Object.assign({},x))});
 }
+
 function atualizaBtnRotina(){
   const b=$('#btnRotina');if(!b||b.dataset.fixo)return;
   const n=rotina.filter(it=>it.lista===sel.lista&&it.ex===sel.ex).length;
@@ -1958,12 +2015,176 @@ $('#btnRotina').addEventListener('click',()=>{
   if(abaAtiva==='rotina')renderColecao();
 });
 
+/* ---------- Trilha de estudo e treino de hoje ----------
+   A trilha (conteudo/trilha.json) divide os exercícios em etapas, cada um com uma meta de BPM.
+   Um exercício fica concluído quando o recorde chega na meta. A etapa atual é a primeira com algo
+   por concluir (ou a escolhida pela pessoa). O treino de hoje monta uma sessão de 5, 15 ou 30 minutos
+   com exercícios dessa etapa e toca tudo em sequência, com o mesmo motor da rotina. */
+const TRILHA=CONTEUDO.trilha&&Array.isArray(CONTEUDO.trilha.etapas)?CONTEUDO.trilha:{etapas:[]};
+const AREA_DA_CAT=Object.fromEntries(CONTEUDO.categorias.map(c=>[c.id,c.area]));
+const POS=new Map();FOLHAS.forEach(l=>l.exercicios.forEach((e,i)=>POS.set(e.id,{lista:l.id,pos:i,area:AREA_DA_CAT[l.aba]})));
+const ETAPAS=TRILHA.etapas.map((et,n)=>Object.assign({},et,{n:n+1,itens:(et.itens||[]).filter(it=>POS.has(it.ex)).map(it=>Object.assign({id:it.ex,meta:it.meta,etapa:et.id},POS.get(it.ex)))})).filter(et=>et.itens.length);
+const DURACOES=[5,15,30];
+/* blocos de cada duração: área da trilha, "foco" (o próximo exercício novo) e "revisao" (algo já concluído) */
+const MODELOS_TREINO={5:[['maos',2],['foco',3]],15:[['maos',3],['leitura',3],['foco',5],['revisao',4]],30:[['maos',5],['leitura',5],['coordenacao',7],['levadas',8],['revisao',5]]};
+const recDe=id=>recordes[id]||0;
+function estadoItem(it){const r=recDe(it.id);return r>=it.meta?'ok':r>0?'andamento':'novo';}
+function feitosEtapa(et){return et.itens.filter(it=>estadoItem(it)==='ok').length;}
+function etapaAtual(){
+  if(!ETAPAS.length)return null;
+  let i0=0;if(cfg.etapa){const i=ETAPAS.findIndex(e=>e.id===cfg.etapa);if(i>=0)i0=i;}
+  for(let i=i0;i<ETAPAS.length;i++)if(feitosEtapa(ETAPAS[i])<ETAPAS[i].itens.length)return ETAPAS[i];
+  return ETAPAS[ETAPAS.length-1];
+}
+function minTreino(){return DURACOES.includes(cfg.treinoMin)?cfg.treinoMin:15;}
+function ultimosDias(){const u={};Object.keys(diario).sort().forEach(d=>{const ex=(diario[d]||{}).ex||{};for(const id in ex)if((ex[id].seg||0)>0)u[id]=d;});return u;}
+function montaTreino(min){
+  const et=etapaAtual();if(!et)return null;
+  const ate=ETAPAS.slice(0,ETAPAS.indexOf(et)+1).flatMap(e=>e.itens);
+  const ult=ultimosDias(),usados=new Set(),areasNoTreino=new Set(),saida=[];
+  const antigo=(a,b)=>(ult[a.id]||'').localeCompare(ult[b.id]||'');
+  const livre=it=>!usados.has(it.id);
+  const pega=c=>{const it=c.find(livre)||null;if(it){usados.add(it.id);areasNoTreino.add(it.area);}return it;};
+  /* novo: entre os dois próximos exercícios por concluir da área, o que foi tocado há mais tempo */
+  const nova=a=>pega(et.itens.filter(it=>(!a||it.area===a)&&livre(it)&&estadoItem(it)!=='ok').slice(0,2).sort(antigo));
+  const revisa=a=>pega(ate.filter(it=>(!a||it.area===a)&&livre(it)&&estadoItem(it)==='ok').sort(antigo));
+  const pendente=a=>pega(ate.filter(it=>it.area===a&&livre(it)&&estadoItem(it)!=='ok'));
+  /* foco: o próximo exercício novo, alternando entre levadas e coordenação (a área tocada há mais tempo nesta etapa vem primeiro);
+     mãos e ritmo só entram no foco quando as duas acabam */
+  const recente=a=>et.itens.reduce((m,it)=>it.area===a&&(ult[it.id]||'')>m?ult[it.id]:m,'');
+  const foco=()=>{
+    for(const grupo of [['levadas','coordenacao'],['leitura','maos']]){
+      const cand=grupo.filter(a=>et.itens.some(it=>it.area===a&&livre(it)&&estadoItem(it)!=='ok'));
+      cand.sort((a,b)=>(areasNoTreino.has(a)-areasNoTreino.has(b))||recente(a).localeCompare(recente(b)));
+      for(const a of cand){const it=nova(a);if(it)return it;}
+    }
+    return null;
+  };
+  let sobra=0;
+  (MODELOS_TREINO[min]||MODELOS_TREINO[15]).forEach(([papel,m])=>{
+    let it;
+    if(papel==='foco')it=foco()||revisa();
+    else if(papel==='revisao')it=revisa()||foco();
+    else it=nova(papel)||revisa(papel)||pendente(papel)||foco()||revisa();
+    if(!it){sobra+=m;return;}
+    saida.push({item:it,papel,min:m+sobra});sobra=0;
+  });
+  if(sobra&&saida.length)saida[saida.length-1].min+=sobra;
+  return {etapa:et,itens:saida.map(itemDeTreino)};
+}
+/* faixa de andamento de cada item: começa perto do seu recorde e vai até a meta; na revisão, passa um pouco do recorde */
+function itemDeTreino(s){
+  const it=s.item,est=estadoItem(it),l=lista(it.lista),rec=recDe(it.id);
+  const and=Object.assign({},AND_PADRAO,l.andamento||{},cfg.porLista[l.id]||{});
+  let ini,fim;
+  if(est==='ok'){fim=Math.min(300,Math.max(it.meta,rec)+5);ini=Math.min(fim,Math.max(and.inicio,it.meta-15));}
+  else{fim=it.meta;ini=Math.min(fim,rec?Math.max(and.inicio,rec-10):and.inicio);}
+  return {id:it.id,lista:it.lista,ex:it.pos,min:s.min,ini,fim,meta:it.meta,area:it.area,papel:s.papel,tipo:est==='ok'?'revisao':est};
+}
+function aplicaFaixa(it){carregaAndamento(it.lista);if(it.ini!=null&&it.fim!=null){cfg.inicio=it.ini;cfg.fim=Math.max(it.fim,it.ini);}}
+function iniciarSessao(s){
+  const itens=s.itens.filter(itemOk);if(!itens.length)return;
+  if(eng)parar();
+  const it=itens[0];sel={lista:it.lista,ex:it.ex};salvaSel();aplicaFaixa(it);
+  renderPartitura();renderPulsos();renderAjustes();renderAndamento();
+  if(tela!=='treino')mudaTela('treino');
+  iniciar({sessao:{tipo:s.tipo,itens,min:itens.reduce((a,b)=>a+b.min,0)}});
+}
+function comecaTreino(){const pl=montaTreino(minTreino());if(pl&&pl.itens.length)iniciarSessao({tipo:'treino',itens:pl.itens});}
+function registraTreino(min){const d=diaDoDiario();d.treinos=(d.treinos||0)+1;d.treinoMin=(d.treinoMin||0)+min;LS.set('diario',diario);}
+function chaveDia(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+/* dias seguidos com pelo menos 1 minuto de estudo; hoje só entra na conta depois de estudar */
+function diasSeguidos(){
+  const d=new Date(),ok=k=>((diario[k]||{}).seg||0)>=60;
+  if(!ok(chaveDia(d)))d.setDate(d.getDate()-1);
+  let n=0;while(n<2000&&ok(chaveDia(d))){n++;d.setDate(d.getDate()-1);}
+  return n;
+}
+const nomeAreaCurto=id=>{const a=AREAS.find(x=>x.id===id)||{};return a.curto||a.nome||'';};
+const corArea=id=>(AREAS.find(x=>x.id===id)||{}).cor||'--muted';
+function cartaoTreino(){
+  const min=minTreino(),pl=montaTreino(min);if(!pl||!pl.itens.length)return null;
+  const et=pl.etapa,feitos=feitosEtapa(et),tot=et.itens.length,seq=diasSeguidos();
+  const c=el('section','treino');c.setAttribute('aria-labelledby','tTreino');
+  c.innerHTML=`<div class="tr-cab"><div><p class="tr-rot">Treino de hoje</p><h2 id="tTreino">${esc(et.nome)}</h2><p class="tr-etapa">Etapa ${et.n} de ${ETAPAS.length} · ${feitos} de ${tot} concluídos</p></div>${seq?`<span class="tr-seq">${seq} ${seq===1?'dia':'dias'} seguidos</span>`:''}</div>`;
+  const dur=el('div','seg tr-dur');dur.setAttribute('role','group');dur.setAttribute('aria-label','Duração do treino');
+  DURACOES.forEach(m=>{
+    const b=el('button');b.type='button';b.textContent=m+' min';b.setAttribute('aria-pressed',m===min?'true':'false');
+    b.addEventListener('click',()=>{if(m===minTreino())return;cfg.treinoMin=m;salvaCfg();renderHub();const n=$('.tr-dur [aria-pressed="true"]');if(n)n.focus({preventScroll:true});});
+    dur.append(b);
+  });
+  const ol=el('ol','tr-itens');
+  pl.itens.forEach(it=>{
+    const l=lista(it.lista),ex=l.exercicios[it.ex],rec=recDe(it.id);
+    const rot=it.tipo==='revisao'?'Revisão':nomeAreaCurto(it.area);
+    const det=(it.tipo==='revisao'?`recorde ${rec}`:rec?`${rec} de ${it.meta} BPM`:`meta ${it.meta} BPM`)+` · ${l.titulo}`;
+    const li=el('li'),b=el('button','tr-item');b.type='button';b.style.setProperty('--c',`var(${corArea(it.area)})`);
+    b.innerHTML=`<span class="tr-papel">${esc(rot)}</span><span class="tr-nome"><b>${esc(ex.nome)}</b><small>${esc(det)}</small></span><span class="tr-min">${it.min} min</span>`;
+    b.setAttribute('aria-label',`${rot}, ${it.min} minutos: ${ex.nome}, ${det}. Abrir exercício`);
+    b.addEventListener('click',()=>{escolhe(it.lista,it.ex);mudaTela('treino');});
+    li.append(b);ol.append(li);
+  });
+  const ir=el('button','btn-primario tr-ir');ir.type='button';
+  ir.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z" fill="currentColor"/></svg><span>Começar treino de ${min} min</span>`;
+  ir.addEventListener('click',comecaTreino);
+  const rod=el('div','tr-rodape'),feito=(diario[diaHoje()]||{}).treinoMin||0;
+  const txt=el('span');txt.textContent=feito?`Hoje você já treinou ${feito} min.`:'O treino muda conforme você chega nas metas.';
+  const vt=el('button','tr-link');vt.type='button';vt.textContent='Ver a trilha';
+  vt.addEventListener('click',()=>{abaAtiva='trilha';mudaTela('categoria');});
+  rod.append(txt,vt);c.append(dur,ol,ir,rod);
+  return c;
+}
+let trilhaAberta=null;
+function renderTrilha(box){
+  const atual=etapaAtual(),manual=!!(cfg.etapa&&ETAPAS.some(e=>e.id===cfg.etapa));
+  if(!trilhaAberta)trilhaAberta=new Set(atual?[atual.id]:[]);
+  const topo=el('div','lista trilha-topo');
+  topo.innerHTML=`<div class="lista-topo"><h2>${esc(TRILHA.nome||'Trilha de estudo')}</h2>${TRILHA.descricao?`<p>${esc(TRILHA.descricao)}</p>`:''}</div>`;
+  if(atual){
+    const nota=el('p','nota');
+    nota.textContent=`Você está na etapa ${atual.n}, ${atual.nome}. `+(manual?'Foi você quem escolheu esta etapa.':'Ela avança sozinha quando todos os exercícios chegam na meta.');
+    topo.append(nota);
+  }
+  if(manual){const b=el('button','btn-linha');b.type='button';b.textContent='Voltar ao automático';b.addEventListener('click',()=>{delete cfg.etapa;salvaCfg();trilhaAberta=null;renderColecao();});topo.append(b);}
+  box.append(topo);
+  ETAPAS.forEach(et=>{
+    const feitos=feitosEtapa(et),tot=et.itens.length,feita=feitos===tot,ehAtual=!!atual&&et.id===atual.id,aberta=trilhaAberta.has(et.id);
+    const sec=el('section','lista etapa'+(ehAtual?' etapa-atual':'')+(feita?' etapa-feita':''));
+    const cab=el('button','etapa-cab');cab.type='button';cab.setAttribute('aria-expanded',aberta?'true':'false');
+    cab.innerHTML=`<span class="etapa-n" aria-hidden="true">${feita?'✓':et.n}</span><span class="etapa-txt"><h2>${esc(et.nome)}</h2><small>Etapa ${et.n} · ${feitos} de ${tot} concluídos${ehAtual?' · você está aqui':''}</small><span class="etapa-barra" aria-hidden="true"><i style="width:${Math.round(feitos/tot*100)}%"></i></span></span><span class="etapa-seta" aria-hidden="true">›</span>`;
+    cab.addEventListener('click',()=>{if(aberta)trilhaAberta.delete(et.id);else trilhaAberta.add(et.id);renderColecao();});
+    sec.append(cab);
+    if(aberta){
+      const corpo=el('div','etapa-corpo');
+      if(et.objetivo){const p=el('p','etapa-obj');p.textContent=et.objetivo;corpo.append(p);}
+      const ul=el('div','ex-lista');
+      et.itens.forEach((it,k)=>{
+        const st=estadoItem(it),l=lista(it.lista),ex=l.exercicios[it.pos],rec=recDe(it.id);
+        const b=el('button','ex-linha'+(st==='ok'?' tr-ok':''));b.type='button';
+        const dir=st==='ok'?`recorde ${rec}`:st==='andamento'?`${rec} de ${it.meta}`:`meta ${it.meta}`;
+        b.innerHTML=`<span class="ex-num">${st==='ok'?'✓':k+1}</span><span class="ex-nome">${esc(ex.nome)}<small>${esc(l.titulo)} · ${esc(nomeAreaCurto(it.area))}</small></span><span class="ex-rec">${dir}</span>`;
+        b.setAttribute('aria-label',`${ex.nome}, ${l.titulo}. `+(st==='ok'?`Concluído, recorde ${rec} BPM`:st==='andamento'?`Recorde ${rec} de ${it.meta} BPM`:`Meta ${it.meta} BPM`));
+        b.addEventListener('click',()=>{escolhe(it.lista,it.pos,true);mudaTela('treino');});
+        ul.append(b);
+      });
+      corpo.append(ul);
+      if(!ehAtual&&!feita){
+        const b=el('button','btn-linha');b.type='button';b.textContent='Treinar esta etapa';
+        b.addEventListener('click',()=>{cfg.etapa=et.id;salvaCfg();trilhaAberta=new Set([et.id]);renderColecao();window.scrollTo({top:0,behavior:'smooth'});});
+        corpo.append(b);
+      }
+      sec.append(corpo);
+    }
+    box.append(sec);
+  });
+}
+
 /* ---------- Tempo de estudo ---------- */
 function diaHoje(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 let estudo=LS.get('estudo',{dia:diaHoje(),seg:0});
 function renderHoje(){
   if(estudo.dia!==diaHoje())estudo={dia:diaHoje(),seg:0};
-  const m=Math.floor(estudo.seg/60);
+  const m=Math.floor(Math.max(estudo.seg,(diario[diaHoje()]||{}).seg||0)/60);
   $('#hoje').textContent=`Estudo hoje: ${m} min`;
 }
 /* Diário: segundos de estudo por dia e, dentro do dia, por exercício (id), com o melhor BPM.

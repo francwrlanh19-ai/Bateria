@@ -63,8 +63,15 @@
     "cor": "--sn"
   },
   {
+    "id": "trilha",
+    "nome": "Trilha",
+    "descricao": "Plano de estudo em etapas",
+    "cor": "--muted",
+    "especial": true
+  },
+  {
     "id": "rotina",
-    "nome": "Rotina",
+    "nome": "Minha rotina",
     "descricao": "",
     "cor": "--muted",
     "especial": true

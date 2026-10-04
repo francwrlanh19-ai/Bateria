@@ -15,6 +15,10 @@
 ## Telas
 - **Hub** (`renderHub`): cartões "Continuar de onde parou" e "Rotina do dia"; depois as áreas (`CONTEUDO.areas`), cada uma com uma linha por categoria (`linhaCat`, botão `.cat` com `h3`); por fim o cartão "Neste celular", com "Meus exercícios" e a cópia dos dados.
 - **Categoria**: o texto de cima mostra a área; cada lista mostra título, nível (`nivel`), descrição e fonte (`topoLista`).
+- **Treino de hoje** (`cartaoTreino`, no topo do início): etapa atual, dias seguidos, duração 5, 15 ou 30 min (`cfg.treinoMin`), os exercícios escolhidos e o botão Começar. `montaTreino(min)` escolhe pelos blocos de `MODELOS_TREINO`: em cada área, entre os dois próximos exercícios não concluídos da etapa, o tocado há mais tempo (pelo `diario`); o "foco" alterna entre levadas e coordenação; a "revisao" pega um concluído antigo. `itemDeTreino` define a faixa de cada item: começa em recorde − 10 (ou no início da lista) e vai até a meta; na revisão, até recorde + 5.
+- **Trilha** (`renderTrilha`, aba especial `trilha` na tela das categorias): etapas abertas e fechadas, progresso, "você está aqui" e "Treinar esta etapa" (`cfg.etapa`; sem ele, a etapa atual é a primeira com algo por concluir). Concluído = recorde ≥ meta.
+- **Sessões**: rotina manual e treino usam o mesmo motor. `iniciarSessao({tipo,itens})` guarda em `eng.rotina` `{i, inicioT, tipo, itens, min}`; ao trocar de item, `aplicaFaixa(item)` carrega o andamento da lista e aplica a faixa do item. Ao parar, o andamento normal da lista volta. Treino concluído soma `treinos` e `treinoMin` no dia do `diario`.
+- O botão voltar lembra a aba de onde a pessoa veio (`camadas` guarda `{tela, aba}`).
 - **Categoria** (`renderColecao` com `tela==='categoria'`): grupos e exercícios em linhas.
 - **Treino**: partitura (foto ou redesenhada), grade, painel de andamento e barra de controles.
 - Navegação: `mudaTela(t)` empilha no histórico, para o botão voltar do Android funcionar; `aplicaTela(t)` desenha a tela. Ao sair do treino, o som para.
@@ -40,5 +44,6 @@
 1. `node scripts/montar.mjs`
 2. `python3 <dir-da-skill>/scripts/conferir.py /home/claude/Bateria/dist`, que precisa passar sem problemas.
 3. Para mudanças visuais, tire capturas com Playwright em 390×844 (celular), 780×360 (celular deitado) e 1280×860 (computador), e olhe as imagens. Confira também se `document.documentElement.scrollWidth` não passa da largura da tela.
-4. Para testar dados salvos (migração, cópia), grave o `localStorage` a partir de outra página do mesmo site, como `manifest.webmanifest`: a página do app grava `estudo` e `diario` ao sair e sobrescreveria o que você injetou.
-5. Publique com `repo.py publicar`.
+4. Para testar o treino sem esperar minutos, copie `dist/` para outra pasta e troque, só na cópia, os minutos de `MODELOS_TREINO` por 0.25.
+5. Para testar dados salvos (migração, cópia), grave o `localStorage` a partir de outra página do mesmo site, como `manifest.webmanifest`: a página do app grava `estudo` e `diario` ao sair e sobrescreveria o que você injetou.
+6. Publique com `repo.py publicar`.

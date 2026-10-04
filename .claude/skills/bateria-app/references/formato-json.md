@@ -1,6 +1,7 @@
 # Formato dos JSON de conteúdo
 
 ## Sumário
+0. trilha.json (no fim deste arquivo)
 1. areas.json e categorias.json
 2. Grupo (arquivo em conteudo/grupos)
 3. Exercício
@@ -21,7 +22,8 @@ As áreas atuais são `maos`, `leitura`, `coordenacao` e `levadas`. Mude só se 
 ```json
 { "id": "worship", "area": "levadas", "nome": "Worship", "descricao": "Viradas, levadas e 6/8", "cor": "--cym" }
 ```
-- `area` é obrigatória (exceto em `rotina` e `meus`). O validador recusa categoria sem área ou com área desconhecida.
+- `area` é obrigatória (exceto nas especiais `trilha`, `rotina` e `meus`). O validador recusa categoria sem área ou com área desconhecida.
+- Cada área tem também `curto`, o nome curto que aparece no cartão do Treino de hoje (Mãos, Ritmo, Coordenação, Levadas).
 - `cor` usa as variáveis do app: `--sn` azul, `--hh` dourado, `--tom` verde, `--cym` roxo, `--bd` vermelho, `--ft` marrom, `--rd` turquesa, `--hp` cinza, `--brass` latão, `--muted`.
 - `rotina` e `meus` têm `"especial": true`. Não remova essas duas.
 - Para criar categoria nova, acrescente na posição desejada. O `id` não pode ter espaço.
@@ -109,3 +111,23 @@ Em cada casa: `.` pausa · `x` nota · `X` acento · `g` nota fantasma (parênte
 - Os IDs são novos e nenhum ID antigo foi alterado.
 - `node scripts/validar.mjs` passa e `conferir.py` não aponta problemas.
 - A leitura foi conferida visualmente contra a imagem original.
+
+## 8. trilha.json
+
+A trilha de estudo divide os exercícios em etapas, como um plano de curso:
+```json
+{
+  "nome": "Trilha de estudo",
+  "descricao": "Texto que aparece no topo da tela da trilha.",
+  "etapas": [
+    { "id": "primeiros-passos", "nome": "Primeiros passos", "objetivo": "O que a etapa ensina.",
+      "itens": [ { "ex": "mc-1", "meta": 90 }, { "ex": "rk-1", "meta": 100 } ] }
+  ]
+}
+```
+- `ex` é o id do exercício; `meta` é o BPM (inteiro de 30 a 300) em que ele conta como concluído. Use uma meta dentro do andamento da lista.
+- Cada exercício aparece uma vez. Para repetir em etapa posterior (por exemplo, mais velocidade), a meta tem de ser maior que a anterior.
+- A ordem dos itens importa: em cada área o Treino de hoje escolhe entre os **dois primeiros** exercícios ainda não concluídos. Intercale levadas e viradas para dar variedade.
+- A área de cada item vem da categoria do exercício. As sessões têm blocos por área: 5 min = mãos 2 + foco 3; 15 min = mãos 3 + ritmo 3 + foco 5 + revisão 4; 30 min = mãos 5 + ritmo 5 + coordenação 7 + levadas 8 + revisão 5 (`MODELOS_TREINO` no app).
+- O validador recusa exercício desconhecido, meta fora da faixa e repetição sem meta maior, e **avisa** (sem bloquear) quais exercícios estão fora da trilha.
+

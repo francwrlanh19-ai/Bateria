@@ -20,6 +20,7 @@ fs.cpSync(path.join(raiz, 'app'), dist, { recursive: true });
 
 const areas = JSON.parse(fs.readFileSync(path.join(raiz, 'conteudo/areas.json'), 'utf8'));
 const categorias = JSON.parse(fs.readFileSync(path.join(raiz, 'conteudo/categorias.json'), 'utf8'));
+const trilha = JSON.parse(fs.readFileSync(path.join(raiz, 'conteudo/trilha.json'), 'utf8'));
 const ordemCat = Object.fromEntries(categorias.map((c, i) => [c.id, i]));
 const dirG = path.join(raiz, 'conteudo/grupos');
 const grupos = fs.readdirSync(dirG).filter(f => f.endsWith('.json'))
@@ -27,7 +28,7 @@ const grupos = fs.readdirSync(dirG).filter(f => f.endsWith('.json'))
   .sort((a, b) => (ordemCat[a.categoria] - ordemCat[b.categoria]) || ((a.ordem ?? 999) - (b.ordem ?? 999)) || a.id.localeCompare(b.id));
 fs.writeFileSync(path.join(dist, 'conteudo.js'),
   '/* Gerado por scripts/montar.mjs a partir de conteudo/. Não edite à mão. */\n' +
-  'window.CONTEUDO=' + JSON.stringify({ areas, categorias, grupos }) + ';\n');
+  'window.CONTEUDO=' + JSON.stringify({ areas, categorias, grupos, trilha }) + ';\n');
 
 // sw.js com versão calculada pelo conteúdo: os celulares atualizam sozinhos quando algo muda
 const listar = d => fs.readdirSync(d, { withFileTypes: true }).flatMap(e =>
@@ -41,4 +42,5 @@ fs.writeFileSync(path.join(dist, 'sw.js'), modelo
   .replace('__VERSAO__', versao)
   .replace('__ARQUIVOS__', JSON.stringify(['./', ...arquivos.map(a => './' + a)])));
 
+for (const a of r.avisos || []) console.log('Aviso: ' + a);
 console.log(`Site montado em dist/ (${r.grupos} grupos, ${r.exercicios} exercícios, versão ${versao}).`);
