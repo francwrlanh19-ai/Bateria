@@ -10,6 +10,11 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
+<script>
+/* Guarda o pedido de instalação assim que o navegador oferece; o início mostra o botão "Instalar o app" */
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.pedidoInstalar=e;document.dispatchEvent(new Event('instalavel'));});
+window.addEventListener('appinstalled',function(){window.pedidoInstalar=null;document.dispatchEvent(new Event('instalou'));});
+</script>
 <meta name="description" content="Treino de bateria: grooves, viradas, técnica e figuras rítmicas, com metrônomo e progressão de andamento.">
 <title>Estudo de bateria</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -393,6 +398,15 @@ h1,h2,h3,p{margin:0}
 .etapa-cab[aria-expanded="true"] .etapa-seta{transform:rotate(90deg)}
 .etapa-corpo{display:grid;gap:12px;padding:0 0 14px}
 .etapa-obj{font-size:14px;color:var(--muted);line-height:1.4}
+/* Convite para instalar o app */
+.instalar{background:var(--surface);border:2px solid var(--brass);border-radius:16px;padding:14px;display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px 12px;align-items:center}
+.instalar img{width:52px;height:52px;border-radius:12px}
+.inst-txt{min-width:0}
+.inst-txt h2{font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1.05}
+.inst-txt p{font-size:14px;color:var(--muted);line-height:1.35;margin-top:3px}
+.inst-acoes{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:8px}
+.inst-acoes .btn-primario{flex:1 1 auto}
+.inst-passos{grid-column:1 / -1;font-size:14.5px;line-height:1.45;background:var(--bg);border-radius:10px;padding:10px 12px}
 .cat:active,.hub-card:active,.ex-linha:active{transform:scale(.98)}
 .cat,.hub-card,.ex-linha{transition:transform .08s ease-out}
 .ex-lista{display:grid;gap:8px}
@@ -1728,6 +1742,7 @@ $('#btnVoltar').addEventListener('click',voltaTela);
 function renderHub(){
   const h=$('#hub');h.innerHTML='';
   const rec=cartaoRecebida();if(rec)h.append(rec);
+  const inst=cartaoInstalar();if(inst)h.append(inst);
   /* Treino de hoje, últimos 7 dias e continuar */
   const topo=el('div','hub-topo'),par=el('div','hub-par');
   par.append(cartaoSemana(),cartaoContinuar());
@@ -1757,7 +1772,9 @@ function renderHub(){
   const acs=el('div','copia-acoes');
   const b1=el('button','btn-linha');b1.type='button';b1.textContent='Salvar cópia';b1.addEventListener('click',()=>salvaCopia(cp));
   const b2=el('button','btn-linha');b2.type='button';b2.textContent='Restaurar cópia';b2.addEventListener('click',()=>pedeCopia(cp));
-  acs.append(b1,b2);cp.append(info,acs);cel.append(cp);caixa.append(cel);
+  acs.append(b1,b2);cp.append(info,acs);
+  const li=linhaInstalar();if(li)cel.append(li);
+  cel.append(cp);caixa.append(cel);
   h.append(caixa);
   aplicaBusca();
 }
@@ -2521,6 +2538,92 @@ function cartaoRecebida(){
   const no=el('button','btn-linha');no.type='button';no.textContent='Agora não';no.addEventListener('click',fecha);
   ac.append(ok,no);sec.append(ac);
   return sec;
+}
+
+/* ---------- Instalar o app (web app na tela inicial) ----------
+   O pedido de instalação do navegador é guardado no <head> (window.pedidoInstalar, evento "instalavel").
+   O cartão aparece no topo do início na primeira entrada; "Agora não" esconde por 7 dias.
+   Sem o pedido do navegador (iPhone, navegador dentro de outro app ou antes de o Chrome liberar), o botão mostra o passo a passo. */
+const UA=navigator.userAgent||'';
+const NO_IOS=/iPad|iPhone|iPod/.test(UA)||(/Macintosh/.test(UA)&&navigator.maxTouchPoints>1);
+const NO_ANDROID=/Android/i.test(UA);
+const DENTRO_DE_APP=/; wv\)|FBAN|FBAV|Instagram|Line\//i.test(UA);
+const SAMSUNG=/SamsungBrowser/i.test(UA);
+const FIREFOX=/Firefox|FxiOS/i.test(UA);
+const CELULAR=NO_IOS||NO_ANDROID;
+let instalarCfg=LS.get('instalar',{})||{};
+let jaInstalado=false;
+function rodandoComoApp(){
+  try{if(['standalone','fullscreen','minimal-ui'].some(m=>window.matchMedia(`(display-mode: ${m})`).matches))return true;}catch(e){}
+  return window.navigator.standalone===true;
+}
+const precisaInstalar=()=>!rodandoComoApp()&&!jaInstalado&&!instalarCfg.instalado;
+const ofereceInstalar=()=>precisaInstalar()&&(CELULAR||!!window.pedidoInstalar);
+function mostraConviteInstalar(){
+  if(!ofereceInstalar())return false;
+  if(instalarCfg.adiado){const d=diasDesde(instalarCfg.adiado);if(Number.isFinite(d)&&d>=0&&d<7)return false;}
+  return true;
+}
+function passosInstalar(){
+  if(DENTRO_DE_APP)return 'Este navegador, aberto de dentro de outro aplicativo, não instala o app. Toque nos três pontinhos (<b>⋮</b>) e escolha <b>Abrir no Chrome</b> (ou <b>Abrir no navegador</b>). Lá, toque em <b>Instalar o app</b> de novo.';
+  if(NO_IOS)return 'No iPhone: toque no botão <b>Compartilhar</b> (o quadrado com uma seta para cima, na barra do Safari), role a lista e toque em <b>Adicionar à Tela de Início</b>.';
+  if(SAMSUNG)return 'No Samsung Internet: toque no menu (<b>☰</b>, embaixo) e depois em <b>Adicionar página a</b> › <b>Tela inicial</b>.';
+  if(FIREFOX)return 'No Firefox: toque nos três pontinhos (<b>⋮</b>) e depois em <b>Instalar</b>.';
+  return 'No Chrome: toque nos três pontinhos (<b>⋮</b>), no canto de cima, e depois em <b>Instalar app</b> (ou <b>Adicionar à tela inicial</b>).';
+}
+function adiaInstalar(){instalarCfg={adiado:diaHoje()};LS.set('instalar',instalarCfg);}
+async function instalarAgora(sec){
+  const ev=window.pedidoInstalar;
+  if(ev){
+    let r=null;
+    try{ev.prompt();r=await ev.userChoice;}catch(e){}
+    window.pedidoInstalar=null;
+    if(r&&r.outcome==='accepted'){instalarCfg={instalado:true};LS.set('instalar',instalarCfg);atualizaConvite();return;}
+    if(r&&r.outcome==='dismissed'){adiaInstalar();atualizaConvite();return;}
+  }
+  let p=$('.inst-passos',sec);
+  if(!p){p=el('p','inst-passos');p.setAttribute('role','status');p.innerHTML=passosInstalar();sec.append(p);}
+  p.hidden=false;
+  requestAnimationFrame(()=>p.scrollIntoView({block:'nearest',behavior:'smooth'}));
+}
+function cartaoInstalar(){
+  if(!mostraConviteInstalar())return null;
+  const sec=el('section','instalar');sec.setAttribute('aria-labelledby','instTit');
+  sec.innerHTML='<img src="icon-192.png" alt="" width="52" height="52"><div class="inst-txt"><h2 id="instTit">Instale o app no celular</h2><p>Ele fica na tela inicial, abre em tela cheia e funciona sem internet.</p></div>';
+  const ac=el('div','inst-acoes');
+  const ok=el('button','btn-primario');ok.type='button';ok.textContent='Instalar o app';
+  ok.addEventListener('click',()=>instalarAgora(sec));
+  const no=el('button','btn-linha');no.type='button';no.textContent='Agora não';
+  no.addEventListener('click',()=>{adiaInstalar();atualizaConvite();});
+  ac.append(ok,no);sec.append(ac);
+  return sec;
+}
+/* opção fixa em "Neste celular", para quem tocou em "Agora não" */
+function linhaInstalar(){
+  if(!ofereceInstalar()||mostraConviteInstalar())return null;
+  const d=el('div','copia inst-linha');
+  d.innerHTML='<p>Coloque o app na tela inicial para abrir direto, em tela cheia e sem internet.</p>';
+  const w=el('div','copia-acoes'),b=el('button','btn-linha');b.type='button';b.textContent='Instalar o app';
+  b.addEventListener('click',()=>{instalarCfg={};LS.set('instalar',instalarCfg);renderHub();window.scrollTo({top:0,behavior:'smooth'});const s=$('.instalar');if(s)instalarAgora(s);});
+  w.append(b);d.append(w);
+  return d;
+}
+/* troca só o cartão e a opção fixa, sem redesenhar o início (não atrapalha quem está digitando na busca) */
+function atualizaConvite(){
+  if(tela!=='hub')return;
+  const h=$('#hub');if(!h)return;
+  const velho=$('.instalar',h),novo=cartaoInstalar();
+  if(velho&&novo)velho.replaceWith(novo);
+  else if(velho)velho.remove();
+  else if(novo){const rec=$('.recebida',h);if(rec)rec.after(novo);else h.prepend(novo);}
+  const lv=$('.inst-linha',h),ln=linhaInstalar();
+  if(lv&&ln)lv.replaceWith(ln);else if(lv)lv.remove();
+  else if(ln){const cp=$('.area-celular .copia:not(.inst-linha)',h);if(cp)cp.before(ln);}
+}
+document.addEventListener('instalavel',atualizaConvite);
+document.addEventListener('instalou',()=>{instalarCfg={instalado:true};LS.set('instalar',instalarCfg);atualizaConvite();});
+if(navigator.getInstalledRelatedApps&&!rodandoComoApp()){
+  navigator.getInstalledRelatedApps().then(apps=>{if(apps&&apps.length){jaInstalado=true;atualizaConvite();}}).catch(()=>{});
 }
 
 /* ---------- Início ---------- */

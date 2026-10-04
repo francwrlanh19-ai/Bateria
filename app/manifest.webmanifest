@@ -28,5 +28,11 @@
       "type": "image/png",
       "purpose": "maskable"
     }
+  ],
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://francwrlanh19-ai.github.io/Bateria/manifest.webmanifest"
+    }
   ]
 }

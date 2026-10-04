@@ -60,6 +60,7 @@ Cada aparelho guarda os próprios recordes, rotinas, favoritos, diário de estud
 - **Últimos 7 dias**, dias seguidos e meta diária; **busca**; **filtros** e **favoritos** nas categorias.
 - **Minhas rotinas**: várias, com nome. O botão *Enviar link* gera um link para mandar no WhatsApp; quem abre o link guarda a rotina no próprio app.
 - **Trilha de estudo**: as sete etapas, com o objetivo de cada uma. A etapa avança sozinha, ou você escolhe uma à mão.
+- **Instalar o app**: na primeira entrada pelo celular, o início convida a instalar. No Android, o botão abre a janela de instalação do próprio celular; no iPhone e em navegadores que não têm essa janela, ele mostra o passo a passo. Depois de instalado, o convite some.
 
 ## Skill do Claude
 
