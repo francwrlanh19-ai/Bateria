@@ -1,6 +1,6 @@
 [
-  { "id": "maos", "nome": "Mãos", "descricao": "Aquecer e controlar as baquetas", "cor": "--hp" },
-  { "id": "leitura", "nome": "Ritmo e leitura", "descricao": "Contar, subdividir e ler", "cor": "--brass" },
-  { "id": "coordenacao", "nome": "Coordenação", "descricao": "Os quatro membros juntos", "cor": "--rd" },
-  { "id": "levadas", "nome": "Levadas e viradas", "descricao": "Para tocar no culto", "cor": "--cym" }
+  { "id": "maos", "nome": "Mãos", "descricao": "Aquecer e controlar as baquetas", "cor": "--ft", "icone": "🥢" },
+  { "id": "leitura", "nome": "Ritmo e leitura", "descricao": "Contar, subdividir e ler", "cor": "--brass", "icone": "🎼" },
+  { "id": "coordenacao", "nome": "Coordenação", "descricao": "Os quatro membros juntos", "cor": "--rd", "icone": "🤹" },
+  { "id": "levadas", "nome": "Levadas e viradas", "descricao": "Para tocar no culto", "cor": "--cym", "icone": "🥁" }
 ]

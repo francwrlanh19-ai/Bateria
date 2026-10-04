@@ -14,9 +14,9 @@
 
 `conteudo/areas.json` lista as áreas do início, na ordem de um treino:
 ```json
-{ "id": "levadas", "nome": "Levadas e viradas", "descricao": "Para tocar no culto", "cor": "--cym" }
+{ "id": "levadas", "nome": "Levadas e viradas", "descricao": "Para tocar no culto", "cor": "--cym", "icone": "🥁" }
 ```
-As áreas atuais são `maos`, `leitura`, `coordenacao` e `levadas`. Mude só se o usuário pedir.
+As áreas atuais são `maos`, `leitura`, `coordenacao` e `levadas`. Mude só se o usuário pedir. O `icone` (um emoji) aparece no início, ao lado do nome da área e nos pads do treino de hoje.
 
 `conteudo/categorias.json` lista as categorias em ordem de exibição; cada uma pertence a uma área:
 ```json

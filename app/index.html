@@ -20,15 +20,14 @@ window.addEventListener('appinstalled',function(){window.pedidoInstalar=null;doc
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@700;800&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil:wght@700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap">
 <style>
 :root{
   --bg:#E3E7EB; --surface:#F7F8FA; --cell:#E8ECF0; --cell-2:#DDE3E9; --ink:#18212C; --muted:#566271; --line:#C5CDD6;
   --paper:#FDFDFB; --painel:#1A2430; --painel-txt:#EEF2F6; --painel-fraco:rgba(238,242,246,.15);
   --hh:#A87612; --sn:#2A5FA3; --bd:#B0233A; --tom:#2E7A58; --ft:#8A5A2B; --cym:#6C4E9E; --rd:#1B7C80; --hp:#66707D;
   --brass:#E2B24C; --now:rgba(168,118,18,.20); --foco:#2A5FA3;
-  --f-display:'Big Shoulders Stencil Display','Big Shoulders Stencil','Oswald','Arial Narrow',Impact,sans-serif;
+  --f-display:'Baloo 2','Fredoka','Nunito','Arial Rounded MT Bold','Segoe UI',Roboto,sans-serif;
   --f-body:'Barlow','Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   color-scheme:light;
   box-sizing:border-box;
@@ -519,13 +518,87 @@ body.foco .partitura{gap:10px}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition:none !important}
 }
+/* ===== Início descontraído =====
+   Linguagem dos apps de treino diário bem avaliados (botões que afundam ao tocar, formas redondas, sequência de dias),
+   com cara de bateria: o treino de hoje é uma trilha de pads, e o botão principal tem o dourado dos pratos. */
+:root{--pad:#F2B630;--pad-borda:#B98309;--pad-txt:#2B1C00;--fogo:#E8590C}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pad:#EDB12C;--pad-borda:#8A6206;--pad-txt:#1F1400;--fogo:#FF8A3D}}
+:root[data-theme="dark"]{--pad:#EDB12C;--pad-borda:#8A6206;--pad-txt:#1F1400;--fogo:#FF8A3D}
+.nav-tit{line-height:1.2}
+
+/* topo: nome do app e selos de hoje */
+.topo{align-items:center}
+.marca{font-size:32px;font-weight:800;line-height:1.1;letter-spacing:0}
+.chips-topo{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip-topo{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:14px;line-height:1.2;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:5px 12px}
+.chip-fogo{color:var(--fogo);border-color:color-mix(in srgb,var(--fogo) 45%,var(--line))}
+
+/* treino de hoje: o destaque do início */
+.hoje-card{border-radius:26px;border:2px solid var(--line);padding:16px 16px 20px;gap:12px}
+.hoje-cab h2{font-size:34px;line-height:1.05}
+.hoje-cab p{font-size:14.5px}
+.hoje-dur{border:0;background:var(--cell);border-radius:999px;padding:4px;gap:4px}
+.hoje-dur button{border:0 !important;border-radius:999px;font-weight:700}
+.hoje-dur button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.hoje-trilha{border-top:0;background:var(--cell);border-radius:16px;padding:8px 8px 8px 14px}
+.hoje-lista{position:relative;padding:2px 0}
+.hoje-lista::before{content:"";position:absolute;left:24px;top:40px;bottom:40px;border-left:3px dotted color-mix(in srgb,var(--muted) 55%,transparent)}
+.hoje-item{grid-template-columns:52px minmax(0,1fr) auto;column-gap:12px;border-top:0;padding:9px 0}
+.hoje-item::before{content:none}
+.hi-pad{grid-column:1;grid-row:1 / span 2;align-self:center;position:relative;z-index:1;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:25px;line-height:1;background:color-mix(in srgb,var(--c) 22%,var(--surface));border:3px solid var(--c);box-shadow:0 4px 0 color-mix(in srgb,var(--c) 70%,#000)}
+.hoje-item[data-est="dominado"] .hi-pad,.hoje-item[data-est="revisar"] .hi-pad{background:color-mix(in srgb,var(--c) 55%,var(--surface))}
+.hi-area{color:var(--c);color:color-mix(in srgb,var(--c) 80%,var(--ink))}
+.hi-abre b{font-family:var(--f-display);font-weight:700;font-size:20px;line-height:1.15}
+
+/* botões que afundam ao tocar */
+.hub .btn-primario{background:var(--pad);color:var(--pad-txt);border-radius:16px;box-shadow:0 5px 0 var(--pad-borda);font-family:var(--f-display);font-size:19px;font-weight:800;min-height:56px;margin-bottom:5px;transition:transform .06s ease-out,box-shadow .06s ease-out}
+.hub .btn-primario:active{transform:translateY(4px);box-shadow:0 1px 0 var(--pad-borda)}
+.hub .btn-primario:disabled{opacity:.55;box-shadow:none}
+.hub .btn-linha{border-radius:14px;border-width:2px;font-weight:700;box-shadow:0 3px 0 var(--line);margin-bottom:3px;transition:transform .06s ease-out,box-shadow .06s ease-out}
+.hub .btn-linha:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+
+/* semana e continuar */
+.hub-par{gap:12px}
+.mini{border-radius:22px;border:2px solid var(--line);padding:14px}
+.mini>b{font-size:30px;font-weight:800;line-height:1.05}
+.mini.continuar{border:0;box-shadow:0 5px 0 color-mix(in srgb,var(--painel) 70%,#000);margin-bottom:5px}
+.mini.continuar:active{transform:translateY(4px);box-shadow:0 1px 0 color-mix(in srgb,var(--painel) 70%,#000)}
+.semana>small{color:var(--fogo);font-weight:700}
+.sem-barras span{border-radius:5px 5px 2px 2px}
+
+/* busca */
+.busca input{height:54px;border-radius:999px;border:2px solid var(--line);padding:0 20px}
+
+/* áreas: fundo tingido com a cor de cada uma */
+.areas{gap:16px}
+.area{border:0;border-radius:26px;padding:14px 12px 14px;background:color-mix(in srgb,var(--c) 13%,var(--surface))}
+.area-topo{display:grid;grid-template-columns:46px minmax(0,1fr);column-gap:12px;row-gap:2px;align-items:center;padding:0 4px 12px}
+.area-ico{grid-row:1 / span 2;width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:25px;line-height:1;background:var(--surface);box-shadow:0 3px 0 color-mix(in srgb,var(--c) 45%,transparent)}
+.area-topo h2{font-size:27px;line-height:1.05}
+.area-topo h2::before{content:none}
+.area-topo p{grid-column:2}
+.cat{grid-template-columns:12px minmax(0,1fr) auto;background:var(--surface);border:0;border-radius:18px;padding:12px 14px;min-height:0;box-shadow:0 3px 0 color-mix(in srgb,var(--c) 45%,transparent)}
+.cat+.cat,.area-topo+.cat{margin-top:0}
+.area>.cat+.cat,.area>.cat+.copia,.area>.copia+.copia,.area>.cat+.inst-linha{margin-top:10px}
+.cat::before{grid-row:1;align-self:center;width:12px;height:12px;border-radius:50%}
+.cat h3{font-size:23px;font-weight:700;line-height:1.1}
+.cat-barra{width:64px;height:8px;border-radius:999px}
+.cat:active{transform:translateY(2px);box-shadow:0 1px 0 color-mix(in srgb,var(--c) 45%,transparent)}
+.area .copia{background:var(--surface);border-top:0;border-radius:18px;padding:12px 14px}
+
+/* convite para instalar e rotina recebida */
+.instalar{border-radius:22px;border:2px solid var(--pad);box-shadow:0 4px 0 var(--pad-borda)}
+.recebida{border-radius:22px}
+
+@media (max-width:420px){.marca{font-size:27px}.hoje-cab h2{font-size:30px}.cat h3{font-size:21px}.area-topo h2{font-size:25px}}
+@media (prefers-reduced-motion:reduce){.hub .btn-primario,.hub .btn-linha{transition:none}}
 </style>
 </head>
 <body>
 <div class="app">
   <header class="topo">
     <h1 class="marca">Estudo de bateria</h1>
-    <p class="hoje" id="hoje">Estudo hoje: 0 min</p>
+    <div class="chips-topo"><span class="chip-topo chip-fogo" id="seqTopo" hidden></span><p class="hoje chip-topo" id="hoje">Hoje: 0 min</p></div>
   </header>
   <div class="barra-nav" id="barraNav" hidden>
     <button type="button" class="btn-icone voltar" id="btnVoltar" aria-label="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></svg></button>
@@ -1741,6 +1814,8 @@ function voltaTela(){
 $('#btnVoltar').addEventListener('click',voltaTela);
 function renderHub(){
   const h=$('#hub');h.innerHTML='';
+  const sq=$('#seqTopo'),nsq=diasSeguidos();
+  if(sq){sq.hidden=!nsq;sq.textContent=`🔥 ${nsq}`;sq.title=`${nsq} ${nsq===1?'dia seguido':'dias seguidos'} de estudo`;sq.setAttribute('aria-label',sq.title);}
   const rec=cartaoRecebida();if(rec)h.append(rec);
   const inst=cartaoInstalar();if(inst)h.append(inst);
   /* Treino de hoje, últimos 7 dias e continuar */
@@ -1758,13 +1833,13 @@ function renderHub(){
     const cs=cats.filter(c=>!ar.id||c.area===ar.id);if(!cs.length)return;
     const sec=el('section','area');sec.style.setProperty('--c',`var(${ar.cor||'--muted'})`);
     const hid='area-'+(ar.id||'todas');sec.setAttribute('aria-labelledby',hid);
-    sec.innerHTML=`<div class="area-topo"><h2 id="${esc(hid)}">${esc(ar.nome)}</h2>${ar.descricao?`<p>${esc(ar.descricao)}</p>`:''}</div>`;
+    sec.innerHTML=`<div class="area-topo"><span class="area-ico" aria-hidden="true">${esc(ar.icone||'')}</span><h2 id="${esc(hid)}">${esc(ar.nome)}</h2>${ar.descricao?`<p>${esc(ar.descricao)}</p>`:''}</div>`;
     cs.forEach(c=>sec.append(linhaCat(c)));
     caixa.append(sec);
   });
   /* Neste celular: rotinas, exercícios criados e a cópia dos dados */
   const cel=el('section','area area-celular');cel.style.setProperty('--c','var(--muted)');cel.setAttribute('aria-labelledby','area-celular');
-  cel.innerHTML='<div class="area-topo"><h2 id="area-celular">Neste celular</h2><p>Suas rotinas, seus exercícios e uma cópia dos dados</p></div>';
+  cel.innerHTML='<div class="area-topo"><span class="area-ico" aria-hidden="true">📱</span><h2 id="area-celular">Neste celular</h2><p>Suas rotinas, seus exercícios e uma cópia dos dados</p></div>';
   cel.append(linhaEspecial('rotina','Minhas rotinas',`${rotinas.length} ${rotinas.length===1?'rotina':'rotinas'}. Monte, toque em sequência e envie por link.`));
   cel.append(linhaEspecial('meus','Meus exercícios',meus.length?`${meus.length} ${meus.length===1?'exercício criado':'exercícios criados'} por você`:'Crie um exercício e marque as notas na grade'));
   const cp=el('div','copia');
@@ -1791,7 +1866,7 @@ function linhaCat(c){
   if(dom)partes.push(`${dom} ${dom===1?'dominado':'dominados'}`);
   if(tre)partes.push(`${tre} em treino`);
   const b=el('button','cat');b.type='button';b.style.setProperty('--c',`var(${c.cor||'--muted'})`);
-  b.innerHTML=`<h3>${esc(c.nome)}</h3><p>${esc(c.descricao||'')}</p><small class="cat-info">${partes.join(' · ')}</small>${n?`<span class="cat-barra" aria-hidden="true"><i class="d" style="width:${(dom/n*100).toFixed(1)}%"></i><i class="t" style="width:${(tre/n*100).toFixed(1)}%"></i></span>`:''}`;
+  b.innerHTML=`<h3>${esc(c.nome)}</h3><p>${esc(c.descricao||'')}</p><small class="cat-info">${partes.join(', ')}</small>${n?`<span class="cat-barra" aria-hidden="true"><i class="d" style="width:${(dom/n*100).toFixed(1)}%"></i><i class="t" style="width:${(tre/n*100).toFixed(1)}%"></i></span>`:''}`;
   b.setAttribute('aria-label',`${c.nome}. ${partes.join(', ')}`);
   b.addEventListener('click',()=>{abaAtiva=c.id;filtroCat='todos';mudaTela('categoria');});
   return b;
@@ -2242,7 +2317,7 @@ function linhaEx(l,i,comLista){
   const ex=l.exercicios[i],s=estadoDe(ex,l),fav=favoritos.has(ex.id),bpm=bpmEstado(s);
   const b=el('button','ex-linha');b.type='button';b.dataset.est=s.est;
   if(sel.lista===l.id&&sel.ex===i)b.setAttribute('aria-current','true');
-  b.innerHTML=`<span class="ex-num">${esc(ex.num!=null?ex.num:i+1)}</span><span class="ex-nome">${fav?'<span class="ex-fav" title="Favorito">★</span> ':''}${esc(ex.nome)}${comLista?`<small>${esc(l.titulo)} · ${esc(nomeAba(abaDe(l)))}</small>`:''}</span><span class="ex-rec">${pilula(s)}${bpm?`<small>${esc(bpm)}</small>`:''}</span>`;
+  b.innerHTML=`<span class="ex-num">${esc(ex.num!=null?ex.num:i+1)}</span><span class="ex-nome">${fav?'<span class="ex-fav" title="Favorito">★</span> ':''}${esc(ex.nome)}${comLista?`<small>${esc(l.titulo)}, ${esc(nomeAba(abaDe(l)))}</small>`:''}</span><span class="ex-rec">${pilula(s)}${bpm?`<small>${esc(bpm)}</small>`:''}</span>`;
   b.setAttribute('aria-label',`${ex.nome}${comLista?', '+l.titulo:''}. ${detalheEstado(s)}${fav?', favorito':''}`);
   /* mantém a aba de origem (categoria, busca ou trilha) para o voltar trazer de volta para ela */
   b.addEventListener('click',()=>{escolhe(l.id,i,true);mudaTela('treino');});
@@ -2383,7 +2458,7 @@ function cartaoHoje(){
   const itens=itensHoje(),feito=!!(planoHoje&&planoHoje.feito),total=minDe(itens);
   const sec=el('section','hoje-card');sec.setAttribute('aria-labelledby','hojeTit');
   const cab=el('div','hoje-cab');
-  cab.innerHTML=`<div><h2 id="hojeTit">Treino de hoje</h2><p>${feito?'Concluído hoje. Se quiser, dá para repetir.':'Um exercício de cada área, na ordem do treino.'}</p></div>`;
+  cab.innerHTML=`<div><h2 id="hojeTit">Treino de hoje</h2><p>${saudacao()}! ${feito?'O treino de hoje está feito. Se quiser, dá para repetir.':'Um exercício de cada área, na ordem do treino.'}</p></div>`;
   const seg=el('div','seg seg-mini hoje-dur');seg.setAttribute('role','group');seg.setAttribute('aria-label','Duração do treino');
   [15,30,45].forEach(m=>{
     const b=el('button');b.type='button';b.textContent=m===45?'45 min':String(m);b.setAttribute('aria-label',m+' minutos');
@@ -2403,8 +2478,8 @@ function cartaoHoje(){
   const ol=el('ol','hoje-lista');
   itens.forEach(it=>{
     const l=lista(it.lista),ex=l.exercicios[it.ex],s=estadoDe(ex,l);
-    const li=el('li','hoje-item');li.style.setProperty('--c',`var(${it.area.cor||'--muted'})`);
-    li.innerHTML=`<button type="button" class="hi-abre"><span class="hi-area">${esc(it.area.nome)} · ${it.min} min · ${it.ini<it.fim?`${it.ini} a ${it.fim}`:it.fim} BPM</span><b>${esc(ex.nome)}</b><small>${esc(l.titulo)} · ${esc(detalheEstado(s))}</small></button>${pilula(s)}<button type="button" class="hi-troca" aria-label="Trocar o exercício de ${esc(it.area.nome)}">Trocar</button>`;
+    const li=el('li','hoje-item');li.style.setProperty('--c',`var(${it.area.cor||'--muted'})`);li.dataset.est=s.est;
+    li.innerHTML=`<span class="hi-pad" aria-hidden="true">${esc(it.area.icone||'')}</span><button type="button" class="hi-abre"><span class="hi-area">${esc(it.area.nome)}, ${it.min} min</span><b>${esc(ex.nome)}</b><small>${esc(l.titulo)}, ${it.ini<it.fim?`de ${it.ini} a ${it.fim}`:`a ${it.fim}`} BPM.${s.est==='revisar'?` ${esc(detalheEstado(s)).replace(/^./,c=>c.toUpperCase())}.`:''}</small></button>${pilula(s)}<button type="button" class="hi-troca" aria-label="Trocar o exercício de ${esc(it.area.nome)}">Trocar</button>`;
     $('.hi-abre',li).addEventListener('click',()=>{escolhe(it.lista,it.ex);mudaTela('treino');});
     $('.hi-troca',li).addEventListener('click',()=>{trocaHoje(it.area.id);renderHub();});
     ol.append(li);
@@ -2416,6 +2491,7 @@ function cartaoHoje(){
   sec.append(go);
   return sec;
 }
+function saudacao(){const h=new Date().getHours();return h>=5&&h<12?'Bom dia':h>=12&&h<18?'Boa tarde':'Boa noite';}
 function concluiHoje(){const p=planoDeHoje();p.feito=true;LS.set('hoje',p);const d=diaDoDiario();d.treinos=(d.treinos||0)+1;LS.set('diario',diario);}
 function novoPlanoHoje(){planoHoje=null;LS.set('hoje',null);}
 
@@ -2437,7 +2513,7 @@ function cartaoSemana(){
   sec.innerHTML=`<span class="mini-rot">Últimos 7 dias</span><b>${total} min</b>
     <div class="sem-barras" aria-hidden="true"><i class="sem-meta" style="bottom:${Math.round(meta/max*100)}%"></i>${dias.map(d=>`<span class="${d.min>=meta?'ok':d.min?'parcial':''}${d.key===hoje?' hj':''}" style="height:${Math.max(3,Math.round(d.min/max*100))}%"></span>`).join('')}</div>
     <div class="sem-dias" aria-hidden="true">${dias.map(d=>`<span${d.key===hoje?' class="hj"':''}>${INI[d.dow]}</span>`).join('')}</div>
-    <small>${seq?`${seq} ${seq===1?'dia seguido':'dias seguidos'}`:'Estude hoje para começar uma sequência'}</small>`;
+    <small>${seq?`🔥 ${seq} ${seq===1?'dia seguido':'dias seguidos'}`:'Estude hoje para começar uma sequência'}</small>`;
   const bm=el('button','sem-meta-btn');bm.type='button';bm.textContent=`Meta: ${meta} min por dia`;bm.setAttribute('aria-label',`Meta diária: ${meta} minutos. Toque para mudar.`);
   bm.addEventListener('click',()=>{const i=METAS.indexOf(meta);cfg.metaDia=METAS[(i+1)%METAS.length];salvaCfg();renderHoje();renderHub();});
   sec.append(bm);
@@ -2489,7 +2565,7 @@ function indiceBusca(){
 function caixaBusca(){
   const w=el('div','busca');
   const inp=el('input');inp.type='search';inp.id='busca';inp.value=buscaTxt;inp.autocomplete='off';inp.enterKeyHint='search';
-  inp.placeholder='Buscar: virada, 6/8, tercina, fantasma';inp.setAttribute('aria-label','Buscar exercício');
+  inp.placeholder='🔍 Buscar: virada, 6/8, tercina, fantasma';inp.setAttribute('aria-label','Buscar exercício');
   inp.addEventListener('input',()=>{buscaTxt=inp.value;aplicaBusca();});
   inp.addEventListener('keydown',e=>{if(e.key==='Enter')inp.blur();});
   w.append(inp);
