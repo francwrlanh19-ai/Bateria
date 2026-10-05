@@ -1,0 +1,24 @@
+{
+  "id": "sis-bumbo",
+  "categoria": "sistemas",
+  "ordem": 10,
+  "nivel": 2,
+  "titulo": "Bumbo lê",
+  "descricao": "A mão direita conduz no chimbal ou no prato, a esquerda faz a caixa no 2 e no 4, e o bumbo lê a linha nova. \"Pé\" é o chimbal tocado com o pé esquerdo. Toque primeiro só o sistema, cantando os tempos; depois ligue a leitura. Método inspirado no The New Breed, de Gary Chester.",
+  "andamento": {
+    "inicio": 50,
+    "fim": 90,
+    "passo": 5,
+    "reps": 4
+  },
+  "maosPes": true,
+  "exercicios": [
+    {"id": "lb-1", "num": 1, "nome": "Chimbal em semínimas", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"hh": "x...x...x...x...", "sn": "....x.......x..."}},
+    {"id": "lb-2", "num": 2, "nome": "Chimbal em colcheias", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"hh": "x.x.x.x.x.x.x.x.", "sn": "....x.......x..."}},
+    {"id": "lb-3", "num": 3, "nome": "Chimbal com acento no &", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"hh": "x.X.x.X.x.X.x.X.", "sn": "....x.......x..."}},
+    {"id": "lb-4", "num": 4, "nome": "Condução, pé no 2 e 4", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"rd": "x.x.x.x.x.x.x.x.", "sn": "....x.......x...", "hp": "....x.......x..."}},
+    {"id": "lb-5", "num": 5, "nome": "Condução, pé nos tempos", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"rd": "x.x.x.x.x.x.x.x.", "sn": "....x.......x...", "hp": "x...x...x...x..."}},
+    {"id": "lb-6", "num": 6, "nome": "Condução, pé no &", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"rd": "x.x.x.x.x.x.x.x.", "sn": "....x.......x...", "hp": "..x...x...x...x."}},
+    {"id": "lb-7", "num": 7, "nome": "Chimbal em semicolcheias", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"hh": "xxxxxxxxxxxxxxxx", "sn": "....x.......x..."}}
+  ]
+}

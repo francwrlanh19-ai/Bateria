@@ -1,0 +1,21 @@
+{
+  "id": "sis-chimbal",
+  "categoria": "sistemas",
+  "ordem": 60,
+  "nivel": 4,
+  "titulo": "Chimbal no pé lê",
+  "descricao": "Mãos e bumbo seguram o sistema e o pé esquerdo lê a linha nova no chimbal. É o membro mais difícil de soltar: comece bem devagar. Método inspirado no The New Breed, de Gary Chester.",
+  "andamento": {
+    "inicio": 45,
+    "fim": 75,
+    "passo": 5,
+    "reps": 4
+  },
+  "maosPes": true,
+  "exercicios": [
+    {"id": "lp-1", "num": 1, "nome": "Bumbo no 1 e 3", "compasso": [4, 4], "sub": 4, "leitura": "hp", "trilhas": {"rd": "x.x.x.x.x.x.x.x.", "sn": "....x.......x...", "bd": "x.......x......."}},
+    {"id": "lp-2", "num": 2, "nome": "Bumbo nos tempos", "compasso": [4, 4], "sub": 4, "leitura": "hp", "trilhas": {"rd": "x.x.x.x.x.x.x.x.", "sn": "....x.......x...", "bd": "x...x...x...x..."}},
+    {"id": "lp-3", "num": 3, "nome": "Condução em semínimas", "compasso": [4, 4], "sub": 4, "leitura": "hp", "trilhas": {"rd": "x...x...x...x...", "sn": "....x.......x...", "bd": "x.......x......."}},
+    {"id": "lp-4", "num": 4, "nome": "Bumbo de rock", "compasso": [4, 4], "sub": 4, "leitura": "hp", "trilhas": {"rd": "x.x.x.x.x.x.x.x.", "sn": "....x.......x...", "bd": "x.....x.x......."}}
+  ]
+}

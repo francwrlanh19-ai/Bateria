@@ -12,7 +12,7 @@ Site: https://francwrlanh19-ai.github.io/Bateria/
 - `conteudo/areas.json` lista as áreas do início, na ordem de um treino: Mãos, Ritmo e leitura, Coordenação, Levadas e viradas.
 - `conteudo/categorias.json` lista as categorias; cada uma fica dentro de uma área (`area`).
 - `conteudo/grupos/*.json` tem um arquivo por lista de exercícios.
-- `conteudo/trilha.json` é a trilha de estudo: os exercícios em sete etapas, na ordem em que vale estudá-los. Exercício novo precisa entrar numa etapa (o validador avisa quando algum fica de fora).
+- `conteudo/trilha.json` é a trilha de estudo: os exercícios em oito etapas, na ordem em que vale estudá-los. Exercício novo precisa entrar numa etapa (o validador avisa quando algum fica de fora).
 - A cada envio para a branch `main`, o GitHub Actions valida os JSON, monta o site e publica no GitHub Pages. Se a validação falhar, nada é publicado e o site continua na versão anterior.
 
 ## Formato de um grupo
@@ -42,6 +42,7 @@ Site: https://francwrlanh19-ai.github.io/Bateria/
 - Trilhas: `hh` chimbal, `ho` chimbal aberto, `hp` chimbal no pé, `sn` caixa, `bd` bumbo, `t1` e `t2` tons, `ft` surdo, `rd` condução, `cr` ataque.
 - Em cada casa: `.` pausa, `x` nota, `X` acento, `g` nota fantasma, `f` flam.
 - `mao` (opcional): uma letra por casa, `D` direita e `E` esquerda.
+- `leitura` (opcional): transforma o exercício num *sistema com leitura*. O valor é a peça que lê (`bd`, `sn`, `ft`, `hp`…), que precisa estar livre no sistema. O sistema tem 1 compasso, em 4/4 com `sub` 2 ou 4; o app repete o sistema por 1 ou 2 compassos e gera por cima uma linha de leitura nova, em 5 níveis (curso **Sistemas com leitura**, em Coordenação).
 - Os `id` de exercício nunca devem mudar: os recordes de cada pessoa ficam ligados a eles.
 
 ## Comandos (no Codespace)

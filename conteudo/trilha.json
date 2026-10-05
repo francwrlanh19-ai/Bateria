@@ -1,6 +1,6 @@
 {
   "nome": "Trilha de estudo",
-  "descricao": "Sete etapas, do primeiro toque às quiálteras. Um exercício fica dominado quando você chega no andamento final da lista dele. A etapa avança sozinha quando todos os exercícios dela estão dominados, e o treino de hoje pega os exercícios novos na ordem da trilha.",
+  "descricao": "Oito etapas, do primeiro toque às quiálteras e à leitura sobre sistemas. Um exercício fica dominado quando você chega no andamento final da lista dele. A etapa avança sozinha quando todos os exercícios dela estão dominados, e o treino de hoje pega os exercícios novos na ordem da trilha.",
   "etapas": [
     {
       "id": "primeiros-passos",
@@ -43,6 +43,12 @@
       "nome": "Desafios",
       "objetivo": "Os grooves de samba e de afrobeat mais cheios, a virada mais rápida e as quiálteras combinadas, como quintina com septina e septina com fusa.",
       "itens": ["f57-2", "f57-3", "f57-5", "f57-6", "f57-7", "sg-7", "ab-13", "sg-1", "ab-14", "wv-8", "sg-3", "ab-15", "ab-16", "ab-17", "ab-18"]
+    },
+    {
+      "id": "sistemas-com-leitura",
+      "nome": "Sistemas com leitura",
+      "objetivo": "Um padrão fixo nos quatro membros com uma linha de leitura nova por cima: primeiro no bumbo, depois na caixa, no surdo e no chimbal com o pé. Comece no nível 1 de leitura e suba quando a linha nova sair de primeira.",
+      "itens": ["lb-1", "lb-2", "lb-3", "lb-4", "lb-5", "lb-6", "lb-7", "lbe-1", "lbe-2", "lbe-3", "lc-1", "lc-2", "lc-3", "lc-4", "lce-1", "lce-2", "lce-3", "ls-1", "ls-2", "ls-3", "ls-4", "lp-1", "lp-2", "lp-3", "lp-4"]
     }
   ]
 }

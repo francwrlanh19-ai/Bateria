@@ -1,0 +1,21 @@
+{
+  "id": "sis-caixa",
+  "categoria": "sistemas",
+  "ordem": 30,
+  "nivel": 3,
+  "titulo": "Caixa lê",
+  "descricao": "A mão direita conduz no prato, os pés seguram o sistema e a mão esquerda lê a linha nova na caixa. Método inspirado no The New Breed, de Gary Chester.",
+  "andamento": {
+    "inicio": 50,
+    "fim": 85,
+    "passo": 5,
+    "reps": 4
+  },
+  "maosPes": true,
+  "exercicios": [
+    {"id": "lc-1", "num": 1, "nome": "Bumbo nos tempos", "compasso": [4, 4], "sub": 4, "leitura": "sn", "trilhas": {"rd": "x.x.x.x.x.x.x.x.", "bd": "x...x...x...x..."}},
+    {"id": "lc-2", "num": 2, "nome": "Bumbo no 1 e 3, pé no 2 e 4", "compasso": [4, 4], "sub": 4, "leitura": "sn", "trilhas": {"rd": "x.x.x.x.x.x.x.x.", "bd": "x.......x.......", "hp": "....x.......x..."}},
+    {"id": "lc-3", "num": 3, "nome": "Condução em semínimas", "compasso": [4, 4], "sub": 4, "leitura": "sn", "trilhas": {"rd": "x...x...x...x...", "bd": "x.......x.......", "hp": "....x.......x..."}},
+    {"id": "lc-4", "num": 4, "nome": "Bumbo nos tempos, pé no &", "compasso": [4, 4], "sub": 4, "leitura": "sn", "trilhas": {"rd": "x.x.x.x.x.x.x.x.", "bd": "x...x...x...x...", "hp": "..x...x...x...x."}}
+  ]
+}

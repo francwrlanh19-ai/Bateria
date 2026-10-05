@@ -1,0 +1,21 @@
+{
+  "id": "sis-surdo",
+  "categoria": "sistemas",
+  "ordem": 50,
+  "nivel": 3,
+  "titulo": "Surdo lê",
+  "descricao": "A mão esquerda faz a caixa no 2 e no 4, os pés seguram o sistema e a mão direita lê a linha nova no surdo. É a base das levadas de tom. Método inspirado no The New Breed, de Gary Chester.",
+  "andamento": {
+    "inicio": 50,
+    "fim": 90,
+    "passo": 5,
+    "reps": 4
+  },
+  "maosPes": true,
+  "exercicios": [
+    {"id": "ls-1", "num": 1, "nome": "Bumbo nos tempos", "compasso": [4, 4], "sub": 4, "leitura": "ft", "trilhas": {"sn": "....x.......x...", "bd": "x...x...x...x..."}},
+    {"id": "ls-2", "num": 2, "nome": "Bumbo no 1 e 3", "compasso": [4, 4], "sub": 4, "leitura": "ft", "trilhas": {"sn": "....x.......x...", "bd": "x.......x......."}},
+    {"id": "ls-3", "num": 3, "nome": "Chimbal no pé nos tempos", "compasso": [4, 4], "sub": 4, "leitura": "ft", "trilhas": {"sn": "....x.......x...", "hp": "x...x...x...x..."}},
+    {"id": "ls-4", "num": 4, "nome": "Bumbo no 1 e 3, pé no 2 e 4", "compasso": [4, 4], "sub": 4, "leitura": "ft", "trilhas": {"sn": "....x.......x...", "bd": "x.......x.......", "hp": "....x.......x..."}}
+  ]
+}

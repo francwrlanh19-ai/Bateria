@@ -1,0 +1,20 @@
+{
+  "id": "sis-caixa-esq",
+  "categoria": "sistemas",
+  "ordem": 40,
+  "nivel": 3,
+  "titulo": "Caixa lê, esquerda conduz",
+  "descricao": "A mão esquerda conduz no chimbal, o bumbo segura o sistema e a mão direita lê a linha nova na caixa.",
+  "andamento": {
+    "inicio": 45,
+    "fim": 80,
+    "passo": 5,
+    "reps": 4
+  },
+  "maosPes": true,
+  "exercicios": [
+    {"id": "lce-1", "num": 1, "nome": "Esquerda, bumbo nos tempos", "compasso": [4, 4], "sub": 4, "leitura": "sn", "trilhas": {"hh": "x.x.x.x.x.x.x.x.", "bd": "x...x...x...x..."}},
+    {"id": "lce-2", "num": 2, "nome": "Esquerda, bumbo no 1 e 3", "compasso": [4, 4], "sub": 4, "leitura": "sn", "trilhas": {"hh": "x.x.x.x.x.x.x.x.", "bd": "x.......x......."}},
+    {"id": "lce-3", "num": 3, "nome": "Esquerda em semínimas", "compasso": [4, 4], "sub": 4, "leitura": "sn", "trilhas": {"hh": "x...x...x...x...", "bd": "x...x...x...x..."}}
+  ]
+}

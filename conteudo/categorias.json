@@ -28,6 +28,13 @@
     "cor": "--tom"
   },
   {
+    "id": "sistemas",
+    "area": "coordenacao",
+    "nome": "Sistemas com leitura",
+    "descricao": "Curso: um padrão fixo nos quatro membros e uma leitura por cima",
+    "cor": "--sn"
+  },
+  {
     "id": "worship",
     "area": "levadas",
     "nome": "Worship",
@@ -65,7 +72,7 @@
   {
     "id": "trilha",
     "nome": "Trilha de estudo",
-    "descricao": "Os exercícios em sete etapas",
+    "descricao": "Os exercícios em oito etapas",
     "cor": "--muted",
     "especial": true
   },

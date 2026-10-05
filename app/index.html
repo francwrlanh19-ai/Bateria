@@ -115,6 +115,13 @@ h1,h2,h3,p{margin:0}
 .g-conta.g-fusa{opacity:.6}
 .g-cel.fl::before{content:"";position:absolute;left:3px;top:4px;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.55}
 .g-mao.duplo{font-size:12px;letter-spacing:-.02em}
+.leitura{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;background:var(--bg);border-radius:12px;padding:10px 12px}
+.leitura>.seg-mini{justify-self:start}
+.leitura .seg-mini button{white-space:nowrap}
+.leit-linha{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;min-width:0}
+.seg-nivel button{min-width:34px;padding:6px 0;font-variant-numeric:tabular-nums}
+.leit-linha .btn-linha{flex:none;min-height:40px}
+body.foco .leitura{display:none}
 .dica-leitura{display:grid;gap:6px;font-size:14px;line-height:1.4;background:var(--bg);border-radius:10px;padding:10px 12px}
 .g-conta{font-size:12px;text-align:center;color:var(--muted);border-radius:4px;padding:1px 0;font-variant-numeric:tabular-nums}
 .g-conta.g-tempo{color:var(--ink);font-weight:700}
@@ -623,6 +630,17 @@ body.foco .partitura{gap:10px}
           <button type="button" class="btn-linha" id="btnEditar" aria-pressed="false">Editar notas</button>
         </div>
       </div>
+      <div class="leitura" id="leitBox" hidden>
+        <div class="seg seg-mini" id="segLeit" role="group" aria-label="Leitura sobre o sistema">
+          <button type="button" data-v="0">Só o sistema</button>
+          <button type="button" data-v="1">Com leitura</button>
+        </div>
+        <div class="leit-linha" id="leitOpcoes">
+          <div class="seg seg-mini seg-nivel" id="nivelLeit" role="group" aria-label="Nível da leitura"></div>
+          <button type="button" class="btn-linha" id="btnNovaLeit">Nova leitura</button>
+        </div>
+        <p class="nota" id="leitInfo"></p>
+      </div>
       <div class="vista" id="vistaBox">
         <div class="seg seg-mini" id="segVista" role="group" aria-label="Como mostrar a partitura">
           <button type="button" data-v="foto">Foto da folha</button>
@@ -719,6 +737,20 @@ body.foco .partitura{gap:10px}
         </div>
       </section>
 
+      <section class="bloco" id="blocoLeit" aria-labelledby="hLeit" hidden>
+        <h3 id="hLeit">Leitura sobre o sistema</h3>
+        <div class="linha-sw">
+          <span class="txt" id="lbTroca"><b>Nova leitura a cada andamento</b><small>Depois das repetições de cada andamento entra uma linha nova, para você ler de verdade em vez de decorar.</small></span>
+          <button type="button" class="sw" role="switch" data-k="leitTroca" aria-labelledby="lbTroca"></button>
+        </div>
+        <div class="vol">Tamanho da leitura
+          <div class="seg" id="segCompLeit">
+            <button type="button" data-v="1">1 compasso</button>
+            <button type="button" data-v="2">2 compassos</button>
+          </div>
+        </div>
+      </section>
+
       <section class="bloco" aria-labelledby="hSom">
         <h3 id="hSom">Som</h3>
         <div class="linha-sw">
@@ -804,7 +836,7 @@ const VEL={x:0.8,X:1,g:0.3,f:0.8};
 const PROX={'.':'x','x':'X','X':'g','g':'f','f':'.'};
 const hit=c=>!!c&&c!=='.';
 let edicoesMao={};
-const maoDe=ex=>edicoesMao[ex.id]||ex.mao;
+const maoDe=ex=>ex.__leit?ex.mao:(edicoesMao[ex.id]||ex.mao);
 const temMao=ex=>{const m=maoDe(ex);return !!m&&[...m].some(t=>t&&t!=='.');};
 const maoEm=(ex,i)=>{
   const m=maoDe(ex);let t=m?m[i]:'';if(!t||t==='.')return '';
@@ -819,7 +851,7 @@ const FOLHAS=CONTEUDO.grupos.map(g=>{const {categoria,ordem,...r}=g;return Objec
 const ABAS=CONTEUDO.categorias.map(c=>({id:c.id,nome:c.nome}));
 
 /* ---------- Estado salvo ---------- */
-const PADRAO={metaDia:20,durHoje:30,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
+const PADRAO={metaDia:20,durHoje:30,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
 const LIMITES={inicio:[30,300],fim:[30,300],passo:[1,30],reps:[1,64],bpmFixo:[30,300]};
 let cfg=Object.assign({},PADRAO,LS.get('cfg',{}));
 cfg.mix=Object.assign({},PADRAO.mix,cfg.mix||{});
@@ -831,6 +863,7 @@ let mudo=LS.get('mudo',{});
 let sel=LS.get('sel',{lista:'folha-1',ex:0});
 let editando=false;
 const salvaCfg=()=>LS.set('cfg',cfg);
+if(!Number.isInteger(cfg.leitSemente)||cfg.leitSemente<1){cfg.leitSemente=novaSemente();salvaCfg();}
 (function(){const c=LS.get('cfg',{})||{};if(c.durHoje==null&&(c.treinoMin===15||c.treinoMin===30))cfg.durHoje=c.treinoMin;})();
 
 function listas(){
@@ -839,7 +872,7 @@ function listas(){
   return l;
 }
 function lista(id){const ls=listas();return ls.find(l=>l.id===id)||ls[0];}
-function exDe(lid,i){const l=lista(lid);return l.exercicios[clamp(i,0,l.exercicios.length-1)];}
+function exDe(lid,i){const l=lista(lid);return comLeitura(l.exercicios[clamp(i,0,l.exercicios.length-1)]);}
 function exAtual(){return exDe(sel.lista,sel.ex);}
 /* Onde está um exercício pelo código fixo (id). A lista e a posição podem mudar quando o conteúdo é reorganizado. */
 function ondeEsta(id){
@@ -858,6 +891,7 @@ function comId(lid,i){return {lista:lid,ex:i,id:(exDe(lid,i)||{}).id};}
 function salvaSel(){LS.set('sel',comId(sel.lista,sel.ex));}
 const cacheTr=new Map();
 function trilhas(ex){
+  if(ex.__leit)return ex.trilhas;
   if(edicoes[ex.id])return edicoes[ex.id];
   if(!ex.acentos)return ex.trilhas;
   const modo=cfg.acentoTec||'grupo',chaveC=ex.id+'|'+modo;
@@ -869,6 +903,66 @@ function trilhas(ex){
   return cacheTr.get(chaveC);
 }
 function passos(ex){return ex.subs?ex.subs.reduce((a,b)=>a+b,0):(ex.barras||1)*ex.compasso[0]*ex.sub;}
+/* ---------- Leitura sobre o sistema ----------
+   Um sistema é um padrão de 1 compasso que os membros repetem. Com a leitura ligada, o app repete o sistema
+   por 1 ou 2 compassos e escreve por cima, na peça indicada em "leitura", uma linha de ritmo gerada na hora.
+   Cada tempo da linha é uma célula de semicolcheias (1 = nota): o nível define quais células podem aparecer. */
+const NIVEIS_LEIT=[
+  {n:1,nome:'Semínimas e colcheias',novas:['1000','1010','0000']},
+  {n:2,nome:'Contratempo',novas:['0010']},
+  {n:3,nome:'Duas semicolcheias',novas:['1011','1110']},
+  {n:4,nome:'Pontuadas e síncopes',novas:['1001','1100','1101']},
+  {n:5,nome:'Fora do tempo',novas:['0100','0001','0110','0101','0011','0111','1111']}
+];
+function novaSemente(){return 1+Math.floor(Math.random()*2147483000);}
+function sorteador(s){return ()=>{s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+const maxNivelLeit=ex=>ex.sub===4?5:ex.sub===2?2:0;
+const nivelLeit=ex=>clamp(cfg.leitNivel||1,1,Math.max(1,maxNivelLeit(ex)));
+function geraLeitura(sub,tempos,nivel,semente){
+  const r=sorteador(semente^(nivel*2654435761)^(tempos*40503)^sub);
+  const serve=c=>sub===4||(c[1]==='0'&&c[3]==='0');            /* em colcheias, só tempo e & */
+  const velhas=[],novas=[];
+  NIVEIS_LEIT.forEach(nv=>{if(nv.n<=nivel)nv.novas.filter(serve).forEach(c=>(nv.n===nivel?novas:velhas).push(c));});
+  const peso=c=>c==='0000'?0.35:1;
+  const somaV=velhas.reduce((a,c)=>a+peso(c),0),somaN=novas.reduce((a,c)=>a+peso(c),0);
+  /* as figuras novas do nível ficam com metade das chances; no nível 1 todas são novas */
+  const fator=somaV&&somaN?somaV/somaN:1;
+  const cels=[...velhas.map(c=>[c,peso(c)]),...novas.map(c=>[c,peso(c)*fator])];
+  const total=cels.reduce((a,[,p])=>a+p,0);
+  const sorteia=()=>{let x=r()*total;for(const [c,p] of cels){if((x-=p)<0)return c;}return cels[cels.length-1][0];};
+  const temNova=new Set(nivel>1?novas:[]);
+  let out='';
+  for(let b=0;b<tempos/4;b++){
+    let comp=null;
+    for(let tent=0;tent<60&&!comp;tent++){
+      const cs=[sorteia(),sorteia(),sorteia(),sorteia()];
+      if(cs.filter(c=>c==='0000').length>1)continue;          /* no máximo um tempo de pausa por compasso */
+      if(temNova.size&&!cs.some(c=>temNova.has(c)))continue;   /* todo compasso traz a figura do nível */
+      if(nivel>1&&cs.every(c=>c===cs[0]))continue;              /* nada de quatro tempos iguais */
+      if(b===0&&nivel<=2&&cs[0]==='0000')continue;             /* nos níveis fáceis, a leitura começa no 1 */
+      comp=cs;
+    }
+    out+=(comp||['1000','1010','1000','1010']).map(c=>sub===4?c:c[0]+c[2]).join('');
+  }
+  return out.replace(/1/g,'x').replace(/0/g,'.');
+}
+const cacheLeit=new Map();
+function comLeitura(ex){
+  if(!ex||!ex.leitura||!cfg.leitOn||ex.__leit||ex.subs||ex.compasso[1]!==4||!maxNivelLeit(ex))return ex;
+  const nb=cfg.leitComp===1?1:2,niv=nivelLeit(ex),voz=ex.leitura,ed=edicoes[ex.id],em=edicoesMao[ex.id];
+  const chave=nb+'|'+niv+'|'+cfg.leitSemente,c=cacheLeit.get(ex.id);
+  if(c&&c.chave===chave&&c.ed===ed&&c.em===em)return c.ex;
+  const base=trilhas(ex),n1=passos(ex),linha=geraLeitura(ex.sub,n1/ex.sub*nb,niv,cfg.leitSemente),tr={};
+  for(const k in base)tr[k]=base[k].repeat(nb);
+  const atual=tr[voz]||'.'.repeat(n1*nb);
+  tr[voz]=[...atual].map((ch,i)=>hit(ch)?ch:linha[i]==='x'?'x':'.').join('');
+  const d=Object.assign({},ex,{barras:(ex.barras||1)*nb,trilhas:tr,__leit:{voz,nivel:niv,linha}});
+  const m=edicoesMao[ex.id]||ex.mao;
+  if(m)d.mao=Array.isArray(m)?[].concat(...Array(nb).fill(m)):m.repeat(nb);
+  cacheLeit.set(ex.id,{chave,ed,em,ex:d});
+  return d;
+}
+function novaLeitura(){cfg.leitSemente=novaSemente();salvaCfg();}
 /* Exercícios com figura diferente em cada tempo (subs = notas por tempo) */
 function gradeVar(ex){
   if(ex.__g)return ex.__g;
@@ -1105,6 +1199,7 @@ function fimCompasso(){
   if(eng.noDegrau<precisa())return;
   eng.noDegrau=0;
   registra(exDe(eng.lista,eng.ex),eng.bpm);
+  if(cfg.leitTroca&&exDe(eng.lista,eng.ex).__leit){novaLeitura();fila.push({t:eng.t,releitura:true});}
   const l=lista(eng.lista),ult=eng.ex>=l.exercicios.length-1,varios=l.exercicios.length>1;
   const emLista=cfg.lista&&!eng.rotina;
   if(emLista&&!ult){trocaEx(eng.ex+1);return;}
@@ -1152,6 +1247,7 @@ function aplica(ev){
     av.textContent=ev.fimRotina&&ss?`${ss.tipo==='hoje'?'Treino de hoje concluído':`Rotina "${ss.nome}" concluída`}: ${ss.n} ${ss.n===1?'exercício':'exercícios'}, ${ss.min} minutos.`:cfg.lista?`Meta concluída: a folha inteira a ${ev.bpm} BPM.`:`Meta concluída: ${ex.nome} a ${ev.bpm} BPM.`;av.hidden=false;
     return;
   }
+  if(ev.releitura){renderPartitura();return;}
   if(ev.troca){sel={lista:ev.troca.lista,ex:ev.troca.ex};salvaSel();if(ev.rotina==null||abaAtiva!=='rotina')abaAtiva=abaDe(lista(sel.lista));listaAnd=sel.lista;renderColecao();if(typeof atualizaNav==='function')atualizaNav();renderPartitura();renderPulsos();renderAjustes();renderAndamento();return;}
   const nb=ev.nbt!=null?ev.nbt:Math.floor(ev.passo/ev.sub)%exDe(ev.lista,ev.ex).compasso[0];
   if(ev.ini!=null?ev.ini:ev.passo%ev.sub===0){
@@ -1621,11 +1717,26 @@ function renderCabecalho(){
   $('#exFolha').textContent=l.titulo+(edicoes[ex.id]||edicoesMao[ex.id]?', com edições suas':'');
 }
 function renderPartitura(){
-  renderCabecalho();notacao();renderGrade();renderEditar();
+  if(editando&&exAtual().__leit)editando=false;
+  renderCabecalho();renderLeitura();notacao();renderGrade();renderEditar();
   $('.bpm-u').textContent=exAtual().compasso[1]===8?'BPM (colcheia)':'BPM';
   atualizaBtnRotina();atualizaFav();
   const b=$('#btnEditar');b.setAttribute('aria-pressed',editando?'true':'false');b.textContent=editando?'Concluir edição':'Editar notas';
-  b.hidden=!!exAtual().subs;if(exAtual().subs&&editando){editando=false;}
+  b.hidden=!!exAtual().subs||!!exAtual().__leit;if(exAtual().subs&&editando){editando=false;}
+}
+const FALA_LEIT={bd:'O bumbo lê a linha nova',sn:'A mão livre lê a linha nova na caixa',ft:'A mão direita lê a linha nova no surdo',hp:'O pé esquerdo lê a linha nova no chimbal'};
+function renderLeitura(){
+  const ex=exAtual(),box=$('#leitBox');
+  box.hidden=!ex.leitura;if(!ex.leitura)return;
+  const on=!!ex.__leit,max=maxNivelLeit(ex);
+  $$('#segLeit button').forEach(b=>b.setAttribute('aria-pressed',(b.dataset.v==='1')===on?'true':'false'));
+  $('#leitOpcoes').hidden=!on;
+  const s=$('#nivelLeit'),niv=nivelLeit(ex),nv=NIVEIS_LEIT[niv-1];
+  if(s.children.length!==max)s.innerHTML=NIVEIS_LEIT.filter(n=>n.n<=max).map(n=>`<button type="button" data-v="${n.n}" aria-label="Nível ${n.n}: ${esc(n.nome.toLowerCase())}">${n.n}</button>`).join('');
+  $$('button',s).forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===niv?'true':'false'));
+  $('#leitInfo').textContent=on
+    ?`Nível ${niv}, ${nv.nome.toLowerCase()}. ${FALA_LEIT[ex.leitura]||'Uma peça lê a linha nova'}. ${cfg.leitTroca?'A leitura muda a cada andamento novo.':'A leitura só muda quando você toca em Nova leitura.'}`
+    :'Toque o sistema sozinho, cantando os tempos, até ele sair sem pensar. Depois ligue a leitura.';
 }
 function renderEditar(){
   const box=$('#editar');box.hidden=!editando;if(!editando)return;
@@ -1729,15 +1840,22 @@ function renderAjustes(){
   $$('#segContagem button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===cfg.contagem?'true':'false'));
   $$('#segLevada button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===cfg.levada?'true':'false'));
   $('#blocoLevada').hidden=!lista(sel.lista).virada;
+  $('#blocoLeit').hidden=!exAtual().leitura;
+  $$('#segCompLeit button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===(cfg.leitComp===1?1:2)?'true':'false'));
   $('#volGroove').value=cfg.volGroove;$('#volClique').value=cfg.volClique;
 }
 $$('.sw').forEach(s=>s.addEventListener('click',()=>{
   const k=s.dataset.k;cfg[k]=!cfg[k];salvaCfg();renderAjustes();renderAndamento();
+  if(k.startsWith('leit'))renderLeitura();
   if(k==='progressao'&&eng)eng.bpm=cfg.progressao?eng.bpm:cfg.bpmFixo;
 }));
 $$('#segContagem button').forEach(b=>b.addEventListener('click',()=>{cfg.contagem=+b.dataset.v;salvaCfg();renderAjustes();}));
 $$('#segLevada button').forEach(b=>b.addEventListener('click',()=>{cfg.levada=+b.dataset.v;salvaCfg();renderAjustes();}));
 $$('#segVista button').forEach(b=>b.addEventListener('click',()=>{cfg.vista=b.dataset.v;salvaCfg();notacao();}));
+$$('#segLeit button').forEach(b=>b.addEventListener('click',()=>{cfg.leitOn=b.dataset.v==='1';salvaCfg();renderPartitura();renderAjustes();}));
+$('#btnNovaLeit').addEventListener('click',()=>{novaLeitura();renderPartitura();});
+$('#nivelLeit').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;cfg.leitNivel=clamp(+b.dataset.v||1,1,5);salvaCfg();renderPartitura();});
+$$('#segCompLeit button').forEach(b=>b.addEventListener('click',()=>{cfg.leitComp=+b.dataset.v===1?1:2;salvaCfg();renderAjustes();renderPartitura();}));
 const MIX=[['bd','Bumbo'],['sn','Caixa'],['hh','Chimbal (mão)'],['hp','Chimbal (pé)'],['pr','Pratos'],['tm','Tons']];
 (function montaMixer(){
   const box=$('#mixer');
@@ -2343,7 +2461,7 @@ function barraFiltro(){
   return f;
 }
 
-/* ---------- Trilha de estudo: os exercícios em sete etapas, na ordem de estudo ---------- */
+/* ---------- Trilha de estudo: os exercícios em oito etapas, na ordem de estudo ---------- */
 /* Um exercício conta como dominado na trilha quando chega no andamento final da lista dele (a mesma meta do resto do app).
    A etapa atual é a primeira que ainda tem exercício por dominar, ou a que a pessoa escolheu (cfg.etapa). */
 const TRILHA=CONTEUDO.trilha&&Array.isArray(CONTEUDO.trilha.etapas)?CONTEUDO.trilha:null;
@@ -2551,6 +2669,7 @@ function marcasDe(ex,l){
   if(tr.rd)t.push('conducao');
   if(tr.cr)t.push('prato de ataque');
   if((ex.barras||1)>1)t.push('2 compassos dois compassos');
+  if(ex.leitura)t.push('sistema sistemas leitura coordenacao independencia gary chester new breed');
   if(l.nivel)t.push('nivel '+l.nivel);
   return t.join(' ');
 }

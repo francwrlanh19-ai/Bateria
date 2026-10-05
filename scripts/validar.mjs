@@ -102,6 +102,14 @@ export function validar() {
         else if (/[^.xXgf]/.test(v)) E(`${P}: trilha "${k}" tem caractere inválido (use . x X g f)`);
       }
 
+      // Sistema com leitura: o app gera uma linha de leitura e põe na peça indicada
+      if (ex.leitura != null) {
+        if (!INSTRUMENTOS.includes(ex.leitura)) E(`${P}: "leitura" precisa ser uma peça (${INSTRUMENTOS.join(', ')})`);
+        else if (trilhas[ex.leitura] && /[^.]/.test(trilhas[ex.leitura])) E(`${P}: a peça da leitura ("${ex.leitura}") precisa estar livre no sistema`);
+        if (ex.subs || den !== 4 || ![2, 4].includes(ex.sub)) E(`${P}: a leitura só funciona com compasso de semínima e "sub" 2 ou 4`);
+        if ((ex.barras || 1) !== 1) E(`${P}: o sistema com leitura precisa ter 1 compasso (o app repete o sistema embaixo da leitura)`);
+      }
+
       if (ex.mao) {
         const maos = Array.isArray(ex.mao) ? ex.mao : [...ex.mao];
         if (maos.length !== casas) E(`${P}: "mao" tem ${maos.length} casas, deveria ter ${casas}`);
