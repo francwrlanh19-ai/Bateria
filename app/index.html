@@ -209,6 +209,20 @@ body.foco .leitura{display:none}
 .mix-linha{display:grid;grid-template-columns:7.2rem minmax(0,1fr) 3rem;align-items:center;gap:8px;font-size:14px}
 .mix-linha input{width:100%;accent-color:var(--sn)}
 .mix-linha output{font-variant-numeric:tabular-nums;color:var(--muted);text-align:right;font-size:13px}
+/* Afinação da bateria */
+.afinas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.afina{display:grid;align-content:start;gap:2px;text-align:left;border:1.5px solid var(--line);background:transparent;border-radius:12px;padding:9px 11px;min-height:62px}
+.afina b{font-weight:700;font-size:15.5px;line-height:1.2}
+.afina small{color:var(--muted);font-size:12.5px;line-height:1.25}
+.afina[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.afina[aria-pressed="true"] small{color:inherit;opacity:.8}
+.afina:active{transform:scale(.97)}
+#afinaPecas{display:grid;gap:4px}
+#afinaPecas .mix-linha{min-height:36px}
+#afinaPecas output{font-weight:600;color:var(--ink)}
+.btn-ouvir{justify-self:start;display:inline-flex;align-items:center;gap:8px}
+.btn-ouvir svg{width:15px;height:15px}
+.btn-ouvir:disabled{opacity:.45;cursor:default}
 .btn-perigo{justify-self:start;border:1.5px solid var(--line);background:transparent;border-radius:9px;padding:7px 12px;font-weight:600;font-size:14.5px}
 .btn-perigo.confirmar{border-color:var(--bd);color:var(--bd)}
 
@@ -775,6 +789,25 @@ body.foco .partitura{gap:10px}
         <p class="nota">Sons gravados: Virtuosity Drums, de Versilian Studios, em domínio público (CC0). Partituras desenhadas com VexFlow (licença MIT). Alguns exercícios foram transcritos de materiais didáticos de outros autores, a quem pertencem os créditos.</p>
       </section>
 
+      <section class="bloco" aria-labelledby="hAfina">
+        <h3 id="hAfina">Afinação da bateria</h3>
+        <p class="nota">Toque numa afinação para ouvir. Ela vale para bumbo, caixa e tons em todos os exercícios; pratos e chimbal não mudam.</p>
+        <div class="afinas" id="afinas" role="group" aria-labelledby="hAfina"></div>
+        <div class="mixer" id="afinaPers" role="group" aria-labelledby="hAfinaPers" hidden>
+          <p class="mixer-t" id="hAfinaPers">Afinação de cada peça</p>
+          <div id="afinaPecas"></div>
+          <small class="nota">Cada passo é meio tom: para a direita o tambor fica mais agudo; para a esquerda, mais grave.</small>
+          <div class="vol">Abafamento
+            <div class="seg" id="segAbaf" role="group" aria-label="Abafamento">
+              <button type="button" data-v="0">Nenhum</button>
+              <button type="button" data-v="1">Pouco</button>
+              <button type="button" data-v="2">Muito</button>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn-linha btn-ouvir" id="btnOuvirAfina"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z" fill="currentColor"/></svg>Ouvir a bateria</button>
+      </section>
+
       <section class="bloco" aria-labelledby="hDados">
         <h3 id="hDados">Seus dados</h3>
         <p class="nota">Recordes, rotina, edições e exercícios criados ficam salvos só neste aparelho. Salve uma cópia de vez em quando: ela também serve para passar tudo para outro celular.</p>
@@ -851,11 +884,12 @@ const FOLHAS=CONTEUDO.grupos.map(g=>{const {categoria,ordem,...r}=g;return Objec
 const ABAS=CONTEUDO.categorias.map(c=>({id:c.id,nome:c.nome}));
 
 /* ---------- Estado salvo ---------- */
-const PADRAO={metaDia:20,durHoje:30,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
+const PADRAO={metaDia:20,durHoje:30,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
 const LIMITES={inicio:[30,300],fim:[30,300],passo:[1,30],reps:[1,64],bpmFixo:[30,300]};
 let cfg=Object.assign({},PADRAO,LS.get('cfg',{}));
 cfg.mix=Object.assign({},PADRAO.mix,cfg.mix||{});
 cfg.porLista=cfg.porLista||{};
+if(cfg.afinaPers!=null&&(typeof cfg.afinaPers!=='object'||Array.isArray(cfg.afinaPers)))delete cfg.afinaPers;
 let recordes=LS.get('recordes',{});
 let edicoes=LS.get('edicoes',{});
 let meus=LS.get('meus',[]);
@@ -1010,18 +1044,19 @@ function fonteRuido(t,dur){const s=ac.createBufferSource();s.buffer=ruido;s.star
 function filtro(tipo,f,q){const b=ac.createBiquadFilter();b.type=tipo;b.frequency.value=f;if(q)b.Q.value=q;return b;}
 function osc(tipo,t,dur){const o=ac.createOscillator();o.type=tipo;o.start(t);o.stop(t+dur);return o;}
 
-function bumbo(t,v){
-  const o=osc('sine',t,0.5),g=ac.createGain();
-  o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(46,t+0.12);
-  env(g,t,1.15*v,0.45);o.connect(g).connect(busG);
+/* r: quanto mais agudo (1 = como está); d: quanto do som sobra com o abafamento (1 = aberto) */
+function bumbo(t,v,r=1,d=1){
+  const o=osc('sine',t,0.45*d+0.05),g=ac.createGain();
+  o.frequency.setValueAtTime(150*r,t);o.frequency.exponentialRampToValueAtTime(46*r,t+0.12);
+  env(g,t,1.15*v,0.45*d);o.connect(g).connect(busG);
   const n=fonteRuido(t,0.03),gn=ac.createGain();env(gn,t,0.35*v,0.02);n.connect(filtro('lowpass',3000)).connect(gn).connect(busG);
 }
-function caixa(t,v){
-  const n=fonteRuido(t,0.25),g=ac.createGain();env(g,t,0.75*v,0.19);
-  n.connect(filtro('highpass',1300)).connect(g).connect(busG);
+function caixa(t,v,r=1,d=1){
+  const n=fonteRuido(t,0.25),g=ac.createGain();env(g,t,0.75*v,0.19*Math.max(d,0.5));
+  n.connect(filtro('highpass',1300*r)).connect(g).connect(busG);
   const o=osc('triangle',t,0.12),go=ac.createGain();
-  o.frequency.setValueAtTime(205,t);o.frequency.exponentialRampToValueAtTime(165,t+0.06);
-  env(go,t,0.6*v,0.1);o.connect(go).connect(busG);
+  o.frequency.setValueAtTime(205*r,t);o.frequency.exponentialRampToValueAtTime(165*r,t+0.06);
+  env(go,t,0.6*v,0.1*Math.max(d,0.5));o.connect(go).connect(busG);
 }
 function metal(t,v,dec,op){
   const base=op.base||40,f1=filtro('bandpass',op.bp||10000),f2=filtro('highpass',op.hp||7000),g=ac.createGain();
@@ -1060,6 +1095,36 @@ function clique(t,forte,medio){
 const AMOSTRA_DE={bd:['bd',1],sn:['sn',1],hh:['hh',1],ho:['ho',1],hp:['hp',1],rd:['rd',1],cr:['cr',1],ft:['ft',1],t1:['tm',1],t2:['tm',0.84]};
 const PAN={bd:0,sn:-0.04,hh:-0.32,ho:-0.32,hp:-0.26,rd:0.34,cr:-0.22,t1:-0.12,t2:0.1,ft:0.32};
 const GRUPO_MIX={bd:'bd',sn:'sn',hh:'hh',ho:'hh',hp:'hp',rd:'pr',cr:'pr',t1:'tm',t2:'tm',ft:'tm'};
+/* ---------- Afinação da bateria ----------
+   Gravação original: bumbo ~83 Hz, caixa ~181 Hz, tom 1 ~182 Hz, tom 2 ~153 Hz, surdo ~114 Hz.
+   Cada afinação diz, por peça, [meios tons para cima (+) ou para baixo (−), abafamento 0 nenhum, 1 pouco, 2 muito].
+   Só bumbo, caixa e tons mudam; pratos e chimbal ficam como estão. */
+const PECAS_AFINA=[['bd','Bumbo'],['sn','Caixa'],['t1','Tom 1'],['t2','Tom 2'],['ft','Surdo']];
+const AFINACOES=[
+  {id:'natural',nome:'Natural',desc:'Como a bateria foi gravada',p:{}},
+  {id:'worship',nome:'Worship',desc:'Grave e encorpada, tons cantando',p:{bd:[-3,1],sn:[-2,1],t1:[-3,0],t2:[-3,0],ft:[-4,0]}},
+  {id:'gospel',nome:'Gospel',desc:'Caixa aguda e estalada',p:{bd:[1,1],sn:[5,0],t1:[3,0],t2:[3,0],ft:[3,0]}},
+  {id:'rock',nome:'Rock',desc:'Grave, seca e com pegada',p:{bd:[-2,2],sn:[-1,1],t1:[-2,1],t2:[-2,1],ft:[-3,1]}},
+  {id:'jazz',nome:'Jazz',desc:'Bumbo e tons agudos e abertos',p:{bd:[5,0],sn:[3,0],t1:[5,0],t2:[5,0],ft:[5,0]}},
+  {id:'pers',nome:'Personalizada',desc:'Você ajusta cada peça'}
+];
+const afinaDe=id=>AFINACOES.find(a=>a.id===id)||AFINACOES[0];
+let AF={};
+function calcAfina(){
+  const a=afinaDe(cfg.afinacao),P=cfg.afinaPers||{};AF={};
+  PECAS_AFINA.forEach(([k])=>{
+    const [st,ab]=a.id==='pers'?[clamp(Math.round(+P[k]||0),-6,6),clamp(Math.round(+P.abaf||0),0,2)]:(a.p[k]||[0,0]);
+    AF[k]={r:Math.pow(2,st/12),ab};
+  });
+}
+calcAfina();
+/* abafamento: o som segue normal por um instante [segura, em segundos] e depois some depressa [constante de queda] */
+const ABAFA={bd:[[.16,.09],[.08,.05]],sn:[[.07,.05],[.04,.03]],t1:[[.12,.09],[.06,.05]],t2:[[.12,.09],[.06,.05]],ft:[[.14,.1],[.07,.05]]};
+function abafa(g,src,k,t,nivel,ab){
+  const p=ABAFA[k]&&ABAFA[k][ab-1];if(!p)return;
+  g.gain.setValueAtTime(nivel,t+p[0]);g.gain.setTargetAtTime(0,t+p[0],p[1]);
+  try{src.stop(t+p[0]+p[1]*9);}catch(e){}
+}
 let kit=null;const rrIdx={};
 function b64(u){const s=atob(u.slice(u.indexOf(',')+1)),b=new Uint8Array(s.length);for(let i=0;i<s.length;i++)b[i]=s.charCodeAt(i);return b.buffer;}
 function decodifica(ctx,ab){return new Promise((ok,erro)=>{let feito=false;const f=x=>{if(!feito){feito=true;ok(x);}};const p=ctx.decodeAudioData(ab,f,erro);if(p&&p.then)p.then(f,erro);});}
@@ -1087,14 +1152,15 @@ function tocaGravado(k,t,c,pan){
   let lv=c==='X'?'X':c==='g'?'g':'x',ganho=1;
   if(!cams[lv]){ganho=lv==='g'?0.3:1.4;lv='x';}
   const lista=cams[lv],i=rrIdx[k+lv]=((rrIdx[k+lv]||0)+1)%lista.length,a=lista[i];
-  const src=ac.createBufferSource(),g=ac.createGain();
-  src.buffer=a.buf;if(m[1]!==1)src.playbackRate.value=m[1];
+  const src=ac.createBufferSource(),g=ac.createGain(),af=AF[k],taxa=m[1]*(af?af.r:1);
+  src.buffer=a.buf;if(taxa!==1)src.playbackRate.value=taxa;
   const nivel=ganho*(0.93+Math.random()*0.12)*(cfg.mix[GRUPO_MIX[k]]!=null?cfg.mix[GRUPO_MIX[k]]:1);
   g.gain.value=nivel;src.connect(g);
   if(ac.createStereoPanner){const pn=ac.createStereoPanner();pn.pan.value=pan!=null?pan:(PAN[k]||0);g.connect(pn).connect(busG);}else g.connect(busG);
   if(k==='hh'||k==='hp')abafaAberto(t);
   if(k==='ho'){abafaAberto(t);chokeAberto={g,nivel,fim:t+a.buf.duration};}
   src.start(t,a.off);
+  if(af&&af.ab)abafa(g,src,k,t,nivel,af.ab);
   return true;
 }
 function toca(k,t,c,pan){
@@ -1104,17 +1170,18 @@ function toca(k,t,c,pan){
   tocaSint(k,t,v*mx);
 }
 function tocaSint(k,t,v){
+  const af=AF[k],r=af?af.r:1,d=af?[1,0.6,0.35][af.ab]||1:1;
   switch(k){
-    case 'bd':bumbo(t,v);break;
-    case 'sn':caixa(t,v);break;
+    case 'bd':bumbo(t,v,r,d);break;
+    case 'sn':caixa(t,v,r,d);break;
     case 'hh':chimbal(t,v,false,false);break;
     case 'ho':chimbal(t,v,true,false);break;
     case 'hp':chimbal(t,v,false,true);break;
     case 'rd':prato(t,v,true);break;
     case 'cr':prato(t,v,false);break;
-    case 't1':tom(t,v,260,195,0.4);break;
-    case 't2':tom(t,v,200,148,0.45);break;
-    case 'ft':tom(t,v,135,92,0.55);break;
+    case 't1':tom(t,v,260*r,195*r,0.4*d);break;
+    case 't2':tom(t,v,200*r,148*r,0.45*d);break;
+    case 'ft':tom(t,v,135*r,92*r,0.55*d);break;
   }
 }
 
@@ -1797,6 +1864,7 @@ function atualizaPlay(){
   b.innerHTML=on
     ?'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2" fill="currentColor"/></svg><span>Parar</span>'
     :'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z" fill="currentColor"/></svg><span>Tocar</span>';
+  renderAfina();
 }
 
 /* ---------- Ajustes ---------- */
@@ -1843,6 +1911,7 @@ function renderAjustes(){
   $('#blocoLeit').hidden=!exAtual().leitura;
   $$('#segCompLeit button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===(cfg.leitComp===1?1:2)?'true':'false'));
   $('#volGroove').value=cfg.volGroove;$('#volClique').value=cfg.volClique;
+  renderAfina();
 }
 $$('.sw').forEach(s=>s.addEventListener('click',()=>{
   const k=s.dataset.k;cfg[k]=!cfg[k];salvaCfg();renderAjustes();renderAndamento();
@@ -1871,6 +1940,55 @@ const MIX=[['bd','Bumbo'],['sn','Caixa'],['hh','Chimbal (mão)'],['hp','Chimbal 
 })();
 $('#volGroove').addEventListener('input',e=>{cfg.volGroove=+e.target.value;aplicaVolumes();salvaCfg();});
 $('#volClique').addEventListener('input',e=>{cfg.volClique=+e.target.value;aplicaVolumes();salvaCfg();});
+
+/* ---------- Afinação: escolha nos ajustes ---------- */
+const sinalMeioTom=v=>v>0?'+'+v:v<0?'−'+(-v):'0';
+/* ao abrir a personalizada pela primeira vez, ela começa igual à afinação que estava escolhida */
+function escolheAfina(id){
+  if(id==='pers'&&!cfg.afinaPers){
+    const a=afinaDe(cfg.afinacao),v={};let ab=0;
+    PECAS_AFINA.forEach(([k])=>{const x=a.p&&a.p[k]||[0,0];v[k]=x[0];ab+=x[1];});
+    v.abaf=Math.round(ab/PECAS_AFINA.length);cfg.afinaPers=v;
+  }
+  cfg.afinacao=afinaDe(id).id;calcAfina();salvaCfg();renderAfina();
+}
+function renderAfina(){
+  const id=afinaDe(cfg.afinacao).id,P=cfg.afinaPers||{};
+  $$('#afinas .afina').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===id?'true':'false'));
+  $('#afinaPers').hidden=id!=='pers';
+  $$('#afinaPecas input').forEach(inp=>{const v=clamp(Math.round(+P[inp.dataset.k]||0),-6,6);inp.value=v;inp.nextElementSibling.textContent=sinalMeioTom(v);});
+  $$('#segAbaf button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===clamp(Math.round(+P.abaf||0),0,2)?'true':'false'));
+  const ouvir=$('#btnOuvirAfina');ouvir.disabled=!!eng;ouvir.title=eng?'Pare o exercício para ouvir só a bateria. A afinação nova já vale no que está tocando.':'';
+}
+/* trecho curto para ouvir a afinação: chimbal, bumbo e caixa, uma virada pelos tons e prato no fim */
+const DEMO_AFINA=[[0,'bd'],[0,'hh'],[.3,'hh'],[.6,'sn'],[.6,'hh'],[.9,'hh'],[1.2,'t1'],[1.35,'t1'],[1.5,'t2'],[1.65,'t2'],[1.8,'ft'],[1.95,'ft'],[2.1,'bd'],[2.1,'cr']];
+function ouveAfina(so){
+  if(eng)return;                 /* tocando um exercício: a mudança já aparece nas próximas notas */
+  audio();novaSessao();chokeAberto=null;
+  const t0=ac.currentTime+0.08;
+  (so?[[0,so],[.32,so]]:DEMO_AFINA).forEach(([d,k])=>toca(k,t0+d,'x'));
+}
+(function montaAfina(){
+  const box=$('#afinas');
+  AFINACOES.forEach(a=>{
+    const b=el('button','afina');b.type='button';b.dataset.v=a.id;
+    b.innerHTML=`<b>${esc(a.nome)}</b><small>${esc(a.desc)}</small>`;
+    b.addEventListener('click',()=>{escolheAfina(a.id);ouveAfina();});
+    box.append(b);
+  });
+  const pec=$('#afinaPecas');
+  PECAS_AFINA.forEach(([k,nome])=>{
+    const l=el('label','mix-linha');
+    l.innerHTML=`<span>${esc(nome)}</span><input type="range" min="-6" max="6" step="1" data-k="${k}" aria-label="Afinação: ${esc(nome)}, em meios tons"><output></output>`;
+    const inp=$('input',l);
+    inp.addEventListener('input',()=>{cfg.afinaPers=cfg.afinaPers||{};cfg.afinaPers[k]=+inp.value;calcAfina();salvaCfg();renderAfina();});
+    inp.addEventListener('change',()=>ouveAfina(k));
+    pec.append(l);
+  });
+  $$('#segAbaf button').forEach(b=>b.addEventListener('click',()=>{cfg.afinaPers=cfg.afinaPers||{};cfg.afinaPers.abaf=+b.dataset.v;calcAfina();salvaCfg();renderAfina();ouveAfina();}));
+  $('#btnOuvirAfina').addEventListener('click',()=>ouveAfina());
+  renderAfina();
+})();
 
 /* Botão que repete enquanto está pressionado */
 function segurar(btn,fn){

@@ -38,6 +38,7 @@
 - `inicioCompasso()` e `fimCompasso()` cuidam da contagem inicial, da levada antes de virada (`tocaLevada`), do "ouvir e repetir", da progressão de andamento, de "tocar a folha inteira" e da rotina.
 - Sons: `carregaKit()` decodifica as amostras e `tocaGravado()` escolhe camada (fraca, normal, forte), alternância, pan e corte do chimbal aberto. Há sons sintetizados de reserva.
 - Andamento por lista: cada grupo guarda a sua faixa (`andamento` no JSON; valores do usuário em `cfg.porLista`).
+- Afinação: `AFINACOES` (Natural, Worship, Gospel, Rock, Jazz e Personalizada) diz, por peça (bumbo, caixa, tom 1, tom 2, surdo), quantos meios tons subir ou descer e o abafamento (0, 1 ou 2). `calcAfina()` monta `AF`; `tocaGravado()` muda o `playbackRate` e chama `abafa()`; `tocaSint()` multiplica as frequências. Pratos e chimbal não mudam. A escolha fica em `cfg.afinacao` e os valores da personalizada em `cfg.afinaPers`. Gravação original: bumbo ~83 Hz, caixa ~181 Hz, tom 1 ~182 Hz, surdo ~114 Hz.
 
 ## Notação e grade
 - `notacao()`: foto da folha (`window.FOTOS`, vazio na versão pública) ou partitura VexFlow. `notacaoFiguras()` cuida dos exercícios com `subs` (quiálteras).
