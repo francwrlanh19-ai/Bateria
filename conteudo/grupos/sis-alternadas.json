@@ -1,0 +1,22 @@
+{
+  "id": "sis-alternadas",
+  "categoria": "sistemas",
+  "ordem": 80,
+  "nivel": 4,
+  "titulo": "Mãos alternando",
+  "descricao": "As duas mãos alternam, D E D E, entre o chimbal e a caixa, como nas levadas de semicolcheia do worship, e o bumbo lê. A linha Mãos mostra quem toca cada nota. Comece bem devagar.",
+  "andamento": {
+    "inicio": 45,
+    "fim": 80,
+    "passo": 5,
+    "reps": 4
+  },
+  "maosPes": true,
+  "exercicios": [
+    {"id": "lal-1", "num": 1, "nome": "Colcheias alternadas", "compasso": [4, 4], "sub": 4, "leitura": "bd", "mao": "D.E.D.E.D.E.D.E.", "trilhas": {"hh": "x.x...x.x.x...x.", "sn": "....x.......x..."}},
+    {"id": "lal-2", "num": 2, "nome": "Semicolcheias alternadas", "compasso": [4, 4], "sub": 4, "leitura": "bd", "mao": "DEDEDEDEDEDEDEDE", "trilhas": {"hh": "xxxx.xxxxxxx.xxx", "sn": "....x.......x..."}},
+    {"id": "lal-3", "num": 3, "nome": "Começando com a esquerda", "compasso": [4, 4], "sub": 4, "leitura": "bd", "mao": "EDEDEDEDEDEDEDED", "trilhas": {"hh": "xxxx.xxxxxxx.xxx", "sn": "....x.......x..."}},
+    {"id": "lal-4", "num": 4, "nome": "Alternadas com acento", "compasso": [4, 4], "sub": 4, "leitura": "bd", "mao": "DEDEDEDEDEDEDEDE", "trilhas": {"hh": "Xxxx.xxxXxxx.xxx", "sn": "....X.......X..."}},
+    {"id": "lal-5", "num": 5, "nome": "Caixa fantasma", "compasso": [4, 4], "sub": 4, "leitura": "bd", "mao": "DEDEDEDEDEDEDEDE", "trilhas": {"hh": "x.x...x.x.x...x.", "sn": ".g.gXg.g.g.gXg.g"}}
+  ]
+}

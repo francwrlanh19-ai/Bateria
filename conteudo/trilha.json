@@ -1,6 +1,6 @@
 {
   "nome": "Trilha de estudo",
-  "descricao": "Oito etapas, do primeiro toque às quiálteras e à leitura sobre sistemas. Um exercício fica dominado quando você chega no andamento final da lista dele. A etapa avança sozinha quando todos os exercícios dela estão dominados, e o treino de hoje pega os exercícios novos na ordem da trilha.",
+  "descricao": "Nove etapas, do primeiro toque às quiálteras e à leitura sobre sistemas. Um exercício fica dominado quando você chega no andamento final da lista dele. A etapa avança sozinha quando todos os exercícios dela estão dominados, e o treino de hoje pega os exercícios novos na ordem da trilha.",
   "etapas": [
     {
       "id": "primeiros-passos",
@@ -49,6 +49,12 @@
       "nome": "Sistemas com leitura",
       "objetivo": "Um padrão fixo nos quatro membros com uma linha de leitura nova por cima: primeiro no bumbo, depois na caixa, no surdo e no chimbal com o pé. Comece no nível 1 de leitura e suba quando a linha nova sair de primeira.",
       "itens": ["lb-1", "lb-2", "lb-3", "lb-4", "lb-5", "lb-6", "lb-7", "lbe-1", "lbe-2", "lbe-3", "lc-1", "lc-2", "lc-3", "lc-4", "lce-1", "lce-2", "lce-3", "ls-1", "ls-2", "ls-3", "ls-4", "lp-1", "lp-2", "lp-3", "lp-4"]
+    },
+    {
+      "id": "sistemas-avancados",
+      "nome": "Sistemas avançados",
+      "objetivo": "Semicolcheias com acentos e chimbal aberto, e as mãos alternando entre chimbal e caixa, com o bumbo lendo. Quando um sistema sair fácil, use Fixar no sistema: um compasso da leitura entra no sistema e outra peça passa a ler.",
+      "itens": ["lsm-1", "lsm-2", "lsm-3", "lsm-4", "lsm-5", "lsm-6", "lsm-7", "lsm-8", "lal-1", "lal-2", "lal-3", "lal-4", "lal-5"]
     }
   ]
 }

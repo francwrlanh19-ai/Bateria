@@ -1,0 +1,25 @@
+{
+  "id": "sis-semi",
+  "categoria": "sistemas",
+  "ordem": 70,
+  "nivel": 4,
+  "titulo": "Semicolcheias e acentos",
+  "descricao": "A mão direita toca semicolcheias com acentos ou abre o chimbal, a esquerda faz a caixa no 2 e no 4, e o bumbo lê. Acentos e aberturas fazem parte do sistema: não mudam quando a leitura muda. No 7 quem conduz é a mão esquerda; no 8 a caixa lê por cima das semicolcheias.",
+  "andamento": {
+    "inicio": 45,
+    "fim": 80,
+    "passo": 5,
+    "reps": 4
+  },
+  "maosPes": true,
+  "exercicios": [
+    {"id": "lsm-1", "num": 1, "nome": "Acento no tempo", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"hh": "XxxxXxxxXxxxXxxx", "sn": "....x.......x..."}},
+    {"id": "lsm-2", "num": 2, "nome": "Acento no &", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"hh": "xxXxxxXxxxXxxxXx", "sn": "....x.......x..."}},
+    {"id": "lsm-3", "num": 3, "nome": "Acento no 2 e no 4", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"hh": "xxxxXxxxxxxxXxxx", "sn": "....x.......x..."}},
+    {"id": "lsm-4", "num": 4, "nome": "Chimbal aberto no & do 4", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"hh": "x.x.x.x.x.x.x...", "ho": "..............x.", "sn": "....x.......x..."}},
+    {"id": "lsm-5", "num": 5, "nome": "Chimbal aberto em todo &", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"hh": "x...x...x...x...", "ho": "..x...x...x...x.", "sn": "....x.......x..."}},
+    {"id": "lsm-6", "num": 6, "nome": "Condução em semicolcheias", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"rd": "xxxxxxxxxxxxxxxx", "sn": "....x.......x...", "hp": "....x.......x..."}},
+    {"id": "lsm-7", "num": 7, "nome": "Esquerda em semicolcheias", "compasso": [4, 4], "sub": 4, "leitura": "bd", "trilhas": {"hh": "XxxxXxxxXxxxXxxx", "sn": "....x.......x..."}},
+    {"id": "lsm-8", "num": 8, "nome": "Caixa lê sobre semicolcheias", "compasso": [4, 4], "sub": 4, "leitura": "sn", "trilhas": {"hh": "XxxxXxxxXxxxXxxx", "bd": "x.......x......."}}
+  ]
+}

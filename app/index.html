@@ -122,6 +122,11 @@ h1,h2,h3,p{margin:0}
 .seg-nivel button{min-width:34px;padding:6px 0;font-variant-numeric:tabular-nums}
 .leit-linha .btn-linha{flex:none;min-height:40px}
 body.foco .leitura{display:none}
+.leitura>.btn-linha{justify-self:start;min-height:40px}
+.fixar{display:grid;gap:10px;border-top:1.5px solid var(--line);padding-top:10px}
+.fixar-campo{display:grid;gap:4px;font-size:14px;font-weight:600;color:var(--muted)}
+.fixar-campo .seg-mini{justify-self:start}
+.fixar .btn-primario{min-height:44px;padding:10px 16px;font-size:15px}
 .dica-leitura{display:grid;gap:6px;font-size:14px;line-height:1.4;background:var(--bg);border-radius:10px;padding:10px 12px}
 .g-conta{font-size:12px;text-align:center;color:var(--muted);border-radius:4px;padding:1px 0;font-variant-numeric:tabular-nums}
 .g-conta.g-tempo{color:var(--ink);font-weight:700}
@@ -654,6 +659,23 @@ body.foco .partitura{gap:10px}
           <button type="button" class="btn-linha" id="btnNovaLeit">Nova leitura</button>
         </div>
         <p class="nota" id="leitInfo"></p>
+        <button type="button" class="btn-linha" id="btnFixar" aria-expanded="false" aria-controls="fixarBox">Fixar no sistema</button>
+        <div class="fixar" id="fixarBox" hidden>
+          <p class="nota">Um compasso da leitura entra no sistema e fica fixo. Depois, outra peça lê por cima. O sistema novo vai para Meus exercícios.</p>
+          <div class="fixar-campo" id="fixarCompBox">Compasso que entra
+            <div class="seg seg-mini" id="fixarComp" role="group" aria-label="Compasso que entra no sistema">
+              <button type="button" data-v="1">1º compasso</button>
+              <button type="button" data-v="2">2º compasso</button>
+            </div>
+          </div>
+          <div class="fixar-campo">Quem lê depois
+            <div class="seg seg-mini" id="fixarVoz" role="group" aria-label="Peça que lê depois"></div>
+          </div>
+          <div class="leit-linha">
+            <button type="button" class="btn-primario" id="btnCriaComp">Criar sistema composto</button>
+            <button type="button" class="btn-linha" id="btnCancFixar">Cancelar</button>
+          </div>
+        </div>
       </div>
       <div class="vista" id="vistaBox">
         <div class="seg seg-mini" id="segVista" role="group" aria-label="Como mostrar a partitura">
@@ -1791,10 +1813,39 @@ function renderPartitura(){
   const b=$('#btnEditar');b.setAttribute('aria-pressed',editando?'true':'false');b.textContent=editando?'Concluir edição':'Editar notas';
   b.hidden=!!exAtual().subs||!!exAtual().__leit;if(exAtual().subs&&editando){editando=false;}
 }
-const FALA_LEIT={bd:'O bumbo lê a linha nova',sn:'A mão livre lê a linha nova na caixa',ft:'A mão direita lê a linha nova no surdo',hp:'O pé esquerdo lê a linha nova no chimbal'};
+const FALA_LEIT={bd:'O bumbo lê a linha nova',sn:'A caixa lê a linha nova',ft:'A mão direita lê a linha nova no surdo',hp:'O pé esquerdo lê a linha nova no chimbal'};
+/* Sistema composto: um compasso da leitura entra no sistema e outra peça passa a ler.
+   Quem pode ler depois: bumbo, caixa ou chimbal no pé. O pé esquerdo não lê se uma mão já toca o chimbal,
+   e a caixa não lê se as duas mãos já se alternam o tempo todo. */
+const NOME_VOZ={bd:'Bumbo',sn:'Caixa',hp:'Chimbal no pé',ft:'Surdo'};
+let fixando=null,fixarComp=1,fixarVoz=null,avisoLeit=null;
+function vozesComposto(ex){
+  const tr=ex.trilhas||{},usa=k=>/[^.]/.test(tr[k]||''),m=maoDe(ex),maos=m?(Array.isArray(m)?m.join(''):m):'';
+  const duasMaos=/[Dd]/.test(maos)&&/[Ee]/.test(maos);
+  const fixas=ex.fixas||[];
+  return ['sn','bd','hp'].filter(k=>k!==ex.leitura&&!fixas.includes(k)&&!(k==='hp'&&(usa('hh')||usa('ho')))&&!(k==='sn'&&duasMaos));
+}
+function criaComposto(){
+  const d=exAtual();if(!d.__leit)return;
+  const base=lista(sel.lista).exercicios[sel.ex],n1=passos(base),nb=Math.max(1,Math.round(passos(d)/n1));
+  const vozes=vozesComposto(d),voz=vozes.includes(fixarVoz)?fixarVoz:vozes[0];if(!voz)return;
+  const k=clamp(fixarComp,1,nb)-1,tr={};
+  for(const i in d.trilhas){const t=d.trilhas[i].slice(k*n1,(k+1)*n1);if(/[^.]/.test(t))tr[i]=t;}
+  /* nome: o sistema de origem e as peças fixadas, como "Chimbal em colcheias + bumbo + caixa" */
+  const raiz=base.raiz||base.nome,fixas=[...(base.fixas||[]),d.leitura];
+  const suf=fixas.map(f=>' + '+({bd:'bumbo',sn:'caixa',ft:'surdo',hp:'pé'}[f]||f)).join('');
+  const nome=(raiz.length+suf.length>40?raiz.slice(0,39-suf.length).trimEnd()+'…':raiz)+suf;
+  const novo={id:'meu-'+Date.now().toString(36),nome,raiz,fixas,compasso:base.compasso.slice(),sub:base.sub,meu:true,leitura:voz,trilhas:tr};
+  if((base.barras||1)>1)novo.barras=base.barras;
+  if(d.mao){const m=d.mao.slice(k*n1,(k+1)*n1);if(/[DEde]/.test(Array.isArray(m)?m.join(''):m))novo.mao=m;}
+  meus.push(novo);LS.set('meus',meus);
+  novaLeitura();                       /* a peça nova lê outra linha, não a que acabou de ser fixada */
+  fixando=null;avisoLeit={id:novo.id,txt:`Sistema composto criado em Meus exercícios. Agora ${NOME_VOZ[voz].toLowerCase()} lê.`};
+  escolhe('meus',meus.length-1);atualizaNav();
+}
 function renderLeitura(){
   const ex=exAtual(),box=$('#leitBox');
-  box.hidden=!ex.leitura;if(!ex.leitura)return;
+  box.hidden=!ex.leitura||!!ex.subs||ex.compasso[1]!==4||!maxNivelLeit(ex);if(box.hidden)return;
   const on=!!ex.__leit,max=maxNivelLeit(ex);
   $$('#segLeit button').forEach(b=>b.setAttribute('aria-pressed',(b.dataset.v==='1')===on?'true':'false'));
   $('#leitOpcoes').hidden=!on;
@@ -1804,6 +1855,18 @@ function renderLeitura(){
   $('#leitInfo').textContent=on
     ?`Nível ${niv}, ${nv.nome.toLowerCase()}. ${FALA_LEIT[ex.leitura]||'Uma peça lê a linha nova'}. ${cfg.leitTroca?'A leitura muda a cada andamento novo.':'A leitura só muda quando você toca em Nova leitura.'}`
     :'Toque o sistema sozinho, cantando os tempos, até ele sair sem pensar. Depois ligue a leitura.';
+  if(avisoLeit&&avisoLeit.id===ex.id)$('#leitInfo').textContent=avisoLeit.txt+' '+$('#leitInfo').textContent;
+  else avisoLeit=null;
+  const vozes=on?vozesComposto(ex):[],bf=$('#btnFixar'),fb=$('#fixarBox');
+  if(fixando!==ex.id)fixando=null;
+  bf.hidden=!vozes.length;bf.setAttribute('aria-expanded',fixando?'true':'false');
+  fb.hidden=!vozes.length||!fixando;if(fb.hidden)return;
+  const nb=Math.max(1,Math.round(passos(ex)/passos(lista(sel.lista).exercicios[sel.ex])));
+  if(fixarComp>nb)fixarComp=1;
+  $('#fixarCompBox').hidden=nb<2;
+  $$('#fixarComp button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===fixarComp?'true':'false'));
+  if(!vozes.includes(fixarVoz))fixarVoz=vozes[0];
+  $('#fixarVoz').innerHTML=vozes.map(k=>`<button type="button" data-v="${k}" aria-pressed="${k===fixarVoz}">${NOME_VOZ[k]}</button>`).join('');
 }
 function renderEditar(){
   const box=$('#editar');box.hidden=!editando;if(!editando)return;
@@ -1923,6 +1986,11 @@ $$('#segLevada button').forEach(b=>b.addEventListener('click',()=>{cfg.levada=+b
 $$('#segVista button').forEach(b=>b.addEventListener('click',()=>{cfg.vista=b.dataset.v;salvaCfg();notacao();}));
 $$('#segLeit button').forEach(b=>b.addEventListener('click',()=>{cfg.leitOn=b.dataset.v==='1';salvaCfg();renderPartitura();renderAjustes();}));
 $('#btnNovaLeit').addEventListener('click',()=>{novaLeitura();renderPartitura();});
+$('#btnFixar').addEventListener('click',()=>{const id=exAtual().id;fixando=fixando===id?null:id;renderLeitura();});
+$('#btnCancFixar').addEventListener('click',()=>{fixando=null;renderLeitura();});
+$('#fixarComp').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;fixarComp=+b.dataset.v;renderLeitura();});
+$('#fixarVoz').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;fixarVoz=b.dataset.v;renderLeitura();});
+$('#btnCriaComp').addEventListener('click',criaComposto);
 $('#nivelLeit').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;cfg.leitNivel=clamp(+b.dataset.v||1,1,5);salvaCfg();renderPartitura();});
 $$('#segCompLeit button').forEach(b=>b.addEventListener('click',()=>{cfg.leitComp=+b.dataset.v===1?1:2;salvaCfg();renderAjustes();renderPartitura();}));
 const MIX=[['bd','Bumbo'],['sn','Caixa'],['hh','Chimbal (mão)'],['hp','Chimbal (pé)'],['pr','Pratos'],['tm','Tons']];
@@ -2579,7 +2647,7 @@ function barraFiltro(){
   return f;
 }
 
-/* ---------- Trilha de estudo: os exercícios em oito etapas, na ordem de estudo ---------- */
+/* ---------- Trilha de estudo: os exercícios em nove etapas, na ordem de estudo ---------- */
 /* Um exercício conta como dominado na trilha quando chega no andamento final da lista dele (a mesma meta do resto do app).
    A etapa atual é a primeira que ainda tem exercício por dominar, ou a que a pessoa escolheu (cfg.etapa). */
 const TRILHA=CONTEUDO.trilha&&Array.isArray(CONTEUDO.trilha.etapas)?CONTEUDO.trilha:null;
