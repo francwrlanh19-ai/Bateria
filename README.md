@@ -68,3 +68,9 @@ Cada aparelho guarda os próprios recordes, rotinas, favoritos, diário de estud
 A pasta `.claude/skills/bateria-app/` tem as instruções para o Claude manter este projeto: formato dos JSON, como transcrever partituras e como publicar. O Claude Code no Codespace usa essa pasta automaticamente. No claude.ai, instale o arquivo `bateria-app.skill` em Configurações › Capacidades › Skills.
 
 Créditos: sons de Virtuosity Drums (Versilian Studios, CC0); partituras desenhadas com VexFlow (MIT). Alguns exercícios foram transcritos de materiais didáticos de outros autores, a quem pertencem os créditos.
+
+## Foco em leitura
+
+- `conteudo/areas.json` tem duas áreas: **Leitura** (`"principal": true`) e **Outros**. A área principal aparece primeiro no início, com as categorias numeradas como passos (Figuras, Leitura na caixa, Sistemas com leitura). No Treino de hoje ela ganha um exercício de cada categoria, e Outros entra com um. Os botões anterior e próximo da tela de leitura atravessam os passos da área principal.
+- **Tela de leitura**: folha branca na tela inteira, com o título, anterior e próximo em cima e só o andamento e o Tocar à direita. Liga sozinha com o celular deitado; no computador e no tablet, abre pelo botão de tela cheia (⛶) e fecha no ✕, no Esc ou no voltar. Teclado: espaço toca e para, setas para cima e para baixo mudam o BPM, setas para os lados trocam de exercício.
+- Exercício com `leitura` e sem nenhuma nota no sistema (como "Só a caixa") fica sempre com a leitura ligada.

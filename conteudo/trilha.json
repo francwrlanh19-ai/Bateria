@@ -46,9 +46,9 @@
     },
     {
       "id": "sistemas-com-leitura",
-      "nome": "Sistemas com leitura",
-      "objetivo": "Um padrão fixo nos quatro membros com uma linha de leitura nova por cima: primeiro no bumbo, depois na caixa, no surdo e no chimbal com o pé. Comece no nível 1 de leitura e suba quando a linha nova sair de primeira.",
-      "itens": ["lb-1", "lb-2", "lb-3", "lb-4", "lb-5", "lb-6", "lb-7", "lbe-1", "lbe-2", "lbe-3", "lc-1", "lc-2", "lc-3", "lc-4", "lce-1", "lce-2", "lce-3", "ls-1", "ls-2", "ls-3", "ls-4", "lp-1", "lp-2", "lp-3", "lp-4"]
+      "nome": "Leitura na caixa e sistemas",
+      "objetivo": "Primeiro a caixa lê sozinha, depois com os pés marcando o tempo. Em seguida, um padrão fixo nos quatro membros com a leitura por cima: no bumbo, na caixa, no surdo e no chimbal com o pé. Comece no nível 1 de leitura e suba quando a linha nova sair de primeira.",
+      "itens": ["lx-1", "lx-2", "lx-3", "lb-1", "lb-2", "lb-3", "lb-4", "lb-5", "lb-6", "lb-7", "lbe-1", "lbe-2", "lbe-3", "lc-1", "lc-2", "lc-3", "lc-4", "lce-1", "lce-2", "lce-3", "ls-1", "ls-2", "ls-3", "ls-4", "lp-1", "lp-2", "lp-3", "lp-4"]
     },
     {
       "id": "sistemas-avancados",

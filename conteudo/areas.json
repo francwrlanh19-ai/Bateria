@@ -1,6 +1,4 @@
 [
-  { "id": "maos", "nome": "Mãos", "descricao": "Aquecer e controlar as baquetas", "cor": "--ft", "icone": "🥢" },
-  { "id": "leitura", "nome": "Ritmo e leitura", "descricao": "Contar, subdividir e ler", "cor": "--brass", "icone": "🎼" },
-  { "id": "coordenacao", "nome": "Coordenação", "descricao": "Os quatro membros juntos", "cor": "--rd", "icone": "🤹" },
-  { "id": "levadas", "nome": "Levadas e viradas", "descricao": "Para tocar no culto", "cor": "--cym", "icone": "🥁" }
+  {"id": "leitura", "nome": "Leitura", "descricao": "Aprenda a ler bateria, um passo de cada vez", "cor": "--brass", "icone": "🎼", "principal": true},
+  {"id": "outros", "nome": "Outros", "descricao": "Técnica, coordenação e levadas para o culto", "cor": "--rd", "icone": "🥁"}
 ]

@@ -1,0 +1,20 @@
+{
+  "id": "leitura-caixa",
+  "categoria": "na-caixa",
+  "ordem": 10,
+  "nivel": 1,
+  "titulo": "Leitura na caixa",
+  "descricao": "A caixa lê uma linha nova a cada andamento, e o clique marca o tempo. Cante os tempos enquanto lê. Depois leia com o pé esquerdo marcando o tempo e, por fim, com bumbo e pé juntos.",
+  "andamento": {
+    "inicio": 50,
+    "fim": 90,
+    "passo": 5,
+    "reps": 4
+  },
+  "maosPes": true,
+  "exercicios": [
+    {"id": "lx-1", "num": 1, "nome": "Só a caixa", "compasso": [4, 4], "sub": 4, "leitura": "sn", "trilhas": {"sn": "................"}},
+    {"id": "lx-2", "num": 2, "nome": "Com o pé no tempo", "compasso": [4, 4], "sub": 4, "leitura": "sn", "trilhas": {"hp": "x...x...x...x..."}},
+    {"id": "lx-3", "num": 3, "nome": "Com bumbo e pé", "compasso": [4, 4], "sub": 4, "leitura": "sn", "trilhas": {"bd": "x.......x.......", "hp": "....x.......x..."}}
+  ]
+}

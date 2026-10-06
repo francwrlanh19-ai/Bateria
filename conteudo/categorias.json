@@ -1,12 +1,5 @@
 [
   {
-    "id": "tecnica",
-    "area": "maos",
-    "nome": "Técnica",
-    "descricao": "Controle de baqueta, acento que anda e tercinas",
-    "cor": "--ft"
-  },
-  {
     "id": "figuras",
     "area": "leitura",
     "nome": "Figuras",
@@ -14,57 +7,71 @@
     "cor": "--brass"
   },
   {
+    "id": "na-caixa",
+    "area": "leitura",
+    "nome": "Leitura na caixa",
+    "descricao": "Uma linha nova a cada andamento, só na caixa",
+    "cor": "--tom"
+  },
+  {
+    "id": "sistemas",
+    "area": "leitura",
+    "nome": "Sistemas com leitura",
+    "descricao": "Curso: um padrão fixo nos quatro membros e uma leitura por cima",
+    "cor": "--sn"
+  },
+  {
+    "id": "tecnica",
+    "area": "outros",
+    "nome": "Técnica",
+    "descricao": "Controle de baqueta, acento que anda e tercinas",
+    "cor": "--ft"
+  },
+  {
     "id": "independencia",
-    "area": "coordenacao",
+    "area": "outros",
     "nome": "Independência",
     "descricao": "Pés fixos, mãos livres: ostinato e samba",
     "cor": "--rd"
   },
   {
     "id": "paradiddle",
-    "area": "coordenacao",
+    "area": "outros",
     "nome": "Paradiddle aplicado",
     "descricao": "Paradiddle entre o chimbal e a caixa, com bumbo",
     "cor": "--tom"
   },
   {
-    "id": "sistemas",
-    "area": "coordenacao",
-    "nome": "Sistemas com leitura",
-    "descricao": "Curso: um padrão fixo nos quatro membros e uma leitura por cima",
-    "cor": "--sn"
-  },
-  {
     "id": "worship",
-    "area": "levadas",
+    "area": "outros",
     "nome": "Worship",
     "descricao": "Viradas, levadas e 6/8",
     "cor": "--cym"
   },
   {
     "id": "rock",
-    "area": "levadas",
+    "area": "outros",
     "nome": "Rock",
     "descricao": "Levadas de rock e shuffle",
     "cor": "--ft"
   },
   {
     "id": "samba",
-    "area": "levadas",
+    "area": "outros",
     "nome": "Samba",
     "descricao": "Grooves de samba",
     "cor": "--hh"
   },
   {
     "id": "afrobeat",
-    "area": "levadas",
+    "area": "outros",
     "nome": "Afrobeat",
     "descricao": "Levadas de afrobeat",
     "cor": "--bd"
   },
   {
     "id": "grooves",
-    "area": "levadas",
+    "area": "outros",
     "nome": "Grooves de semicolcheia",
     "descricao": "Chimbal em colcheias, bumbo e caixa em semicolcheias",
     "cor": "--sn"
