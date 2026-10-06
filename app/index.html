@@ -537,21 +537,37 @@ body.foco #btnEditar{display:none}
   body.foco .part-topo h2{font-size:20px}
   body.foco .partitura{padding:10px 12px}
 }
-/* Celular deitado no treino: só a folha, o maior possível, e o andamento na lateral (+, BPM, −, Tocar) */
+/* Celular deitado no treino: a folha cobre a tela inteira. Em cima, uma faixa de legenda (exercício e execução);
+   à direita, só os botões de andamento e o Tocar, flutuando por cima, translúcidos (mais apagados enquanto toca) */
+.legenda-deit{display:none}
 @media (orientation:landscape) and (max-height:560px){
+  body.tela-treino{background:var(--paper)}
   body.tela-treino .topo,body.tela-treino .barra-nav,body.tela-treino .colecao,body.tela-treino .lateral,body.tela-treino .veu,
   body.tela-treino .part-topo,body.tela-treino .leitura,body.tela-treino .vista,body.tela-treino .nota-foto,
   body.tela-treino .grade-wrap,body.tela-treino .dica-leitura,body.tela-treino .ex-acoes,body.tela-treino .rotina-info,
   body.tela-treino .add-rotina,body.tela-treino .editar,body.tela-treino #tpAjustes{display:none !important}
-  body.tela-treino .app{grid-template-columns:minmax(0,1fr);min-height:100vh;min-height:100dvh;align-content:center;padding-top:8px;padding-bottom:8px;padding-left:calc(8px + env(safe-area-inset-left,0px))}
-  body.tela-treino .partitura{background:none;border:0;padding:0}
-  body.tela-treino .papel{padding:8px 10px}
-  body.tela-treino .papel-in{max-width:min(100%,calc((100vh - 44px) * var(--asp,3)));max-width:min(100%,calc((100dvh - 44px) * var(--asp,3)))}
-  body.tela-treino .tp-bpm{display:grid;place-items:center;gap:2px;line-height:1;order:2;padding:4px 0}
-  .tp-bpm output{font-family:var(--f-display);font-weight:800;font-size:34px;font-variant-numeric:tabular-nums}
+  body.tela-treino .papel{position:fixed;inset:0;z-index:5;border-radius:0;box-shadow:none;display:grid;place-items:center;
+    padding:calc(30px + env(safe-area-inset-top,0px)) calc(86px + env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) calc(14px + env(safe-area-inset-left,0px))}
+  body.tela-treino .papel-in{width:100%;max-width:min(100%,calc((100vh - 40px) * var(--asp,3)));max-width:min(100%,calc((100dvh - 40px) * var(--asp,3)))}
+  body.tela-treino .legenda-deit{display:flex;position:fixed;z-index:6;top:calc(7px + env(safe-area-inset-top,0px));left:calc(14px + env(safe-area-inset-left,0px));right:calc(90px + env(safe-area-inset-right,0px));
+    gap:16px;align-items:baseline;justify-content:space-between;font-size:13.5px;line-height:1.25;color:#454b52;pointer-events:none}
+  .legenda-deit p{margin:0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .leg-ex b{color:#1d2329;font-weight:700;margin-right:8px}
+  .leg-exec{flex:none;max-width:55%;text-align:right}
+  .leg-exec b{color:#1d2329;margin-right:6px}
+  body.tela-treino .transporte{top:50%;bottom:auto;left:auto;right:calc(8px + env(safe-area-inset-right,0px));width:70px;padding:0;transform:translateY(-50%);
+    background:none;border:0;-webkit-backdrop-filter:none;backdrop-filter:none;z-index:7;transition:opacity .2s}
+  body.tela-treino .transporte-in{height:auto;gap:8px}
+  body.tela-treino .tp-lado{flex:0 0 50px;height:50px;background:rgba(255,255,255,.38);border-color:rgba(29,35,41,.22);color:#1d2329}
+  body.tela-treino .tp-play{flex:none;height:92px;max-height:none;background:rgba(29,35,41,.55);color:#fff}
+  body.tela-treino .tp-play[aria-pressed="true"]{background:rgba(214,64,85,.62)}
+  body.tela-treino .transporte:has(.tp-play[aria-pressed="true"]){opacity:.6}
+  body.tela-treino .tp-bpm{display:grid;place-items:center;gap:2px;line-height:1;order:2;padding:2px 0;color:#1d2329}
+  .tp-bpm output{font-family:var(--f-display);font-weight:800;font-size:32px;font-variant-numeric:tabular-nums}
   .tp-bpm span{font-size:11px;font-weight:700;letter-spacing:.04em;opacity:.7}
   body.tela-treino #tpMais{order:1}body.tela-treino #tpMenos{order:3}body.tela-treino #tpPlay{order:4}
 }
+
 
 body.foco .topo,body.foco .colecao,body.foco .grade-pausa{display:none}
 body.foco .app{padding-top:10px}
@@ -702,6 +718,7 @@ body.foco .partitura{gap:10px}
       <div class="papel" id="papel">
         <div class="papel-in"><img class="foto" id="foto" alt="" hidden><div id="vf"></div><div class="cursor" id="cursor" hidden></div></div>
       </div>
+      <div class="legenda-deit" id="legDeit"><p class="leg-ex"><b id="legNome"></b><span id="legInfo"></span></p><p class="leg-exec" id="legExec"></p></div>
       <p class="nota-foto" id="notaFoto" hidden>A foto mostra a versão original. A grade e o som seguem as suas edições.</p>
       <div class="grade-wrap"><div class="grade" id="grade"></div></div>
       <p class="dica-leitura" id="dicaLeitura" hidden></p>
@@ -1836,11 +1853,21 @@ function renderCabecalho(){
 }
 function renderPartitura(){
   if(editando&&exAtual().__leit)editando=false;
-  renderCabecalho();renderLeitura();notacao();renderGrade();renderEditar();
+  renderCabecalho();renderLeitura();renderLegenda();notacao();renderGrade();renderEditar();
   $('.bpm-u').textContent=exAtual().compasso[1]===8?'BPM (colcheia)':'BPM';
   atualizaBtnRotina();atualizaFav();
   const b=$('#btnEditar');b.setAttribute('aria-pressed',editando?'true':'false');b.textContent=editando?'Concluir edição':'Editar notas';
   b.hidden=!!exAtual().subs||!!exAtual().__leit;if(exAtual().subs&&editando){editando=false;}
+}
+function renderLegenda(){
+  const ex=exAtual();
+  $('#legNome').textContent=ex.nome;
+  $('#legInfo').textContent=lista(sel.lista).titulo+(ex.__leit?`, leitura nível ${ex.__leit.nivel}`:'');
+}
+function renderLegExec(){
+  const av=$('#aviso'),e=$('#estado').textContent,r=$('#rep').textContent,box=$('#legExec');
+  if(!av.hidden&&av.textContent){box.textContent=av.textContent;return;}
+  box.innerHTML=`<b>${esc(e)}</b>${esc(r)}`;
 }
 const FALA_LEIT={bd:'O bumbo lê a linha nova',sn:'A caixa lê a linha nova',ft:'A mão direita lê a linha nova no surdo',hp:'O pé esquerdo lê a linha nova no chimbal'};
 /* Sistema composto: um compasso da leitura entra no sistema e outra peça passa a ler.
@@ -2117,6 +2144,7 @@ const nomeArea=catId=>{const c=CONTEUDO.categorias.find(x=>x.id===catId),a=c&&AR
 function aplicaTela(t){
   if(tela==='treino'&&t!=='treino'&&eng)parar();
   if(t!=='treino'&&document.body.classList.contains('foco'))mostraFoco(false);
+  if(t!=='treino')saiTelaCheiaDeitado();
   tela=t;
   document.body.classList.remove('tela-hub','tela-categoria','tela-treino');document.body.classList.add('tela-'+t);
   $('#barraNav').hidden=t==='hub';
@@ -2235,7 +2263,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#ajustes').class
   f.addEventListener('touchmove',e=>{if(y0==null)return;dy=Math.max(0,e.touches[0].clientY-y0);f.style.transform=`translateY(${dy}px)`;f.style.transition='none';},{passive:true});
   f.addEventListener('touchend',()=>{if(y0==null)return;f.style.transform='';f.style.transition='';if(dy>80)fechaAjustes();y0=null;});
 })();
-{const gira=()=>{if(document.body.classList.contains('tela-treino'))notacao();};if(mqDeitado.addEventListener)mqDeitado.addEventListener('change',gira);else if(mqDeitado.addListener)mqDeitado.addListener(gira);}
+let fsDeitado=false;
+function saiTelaCheiaDeitado(){if(fsDeitado&&document.fullscreenElement&&!document.body.classList.contains('foco')&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});fsDeitado=false;}
+{const gira=()=>{if(!mqDeitado.matches)saiTelaCheiaDeitado();if(document.body.classList.contains('tela-treino'))notacao();};if(mqDeitado.addEventListener)mqDeitado.addEventListener('change',gira);else if(mqDeitado.addListener)mqDeitado.addListener(gira);}
 function mostraFoco(on){
   document.body.classList.toggle('foco',on);
   $('#btnFoco').setAttribute('aria-pressed',on?'true':'false');
@@ -2250,6 +2280,7 @@ $('#btnFoco').addEventListener('click',()=>{
   else{mostraFoco(true);empilha('foco');}
 });
 document.addEventListener('fullscreenchange',()=>{
+  if(!document.fullscreenElement)fsDeitado=false;
   if(!document.fullscreenElement&&document.body.classList.contains('foco')){if(!desempilha('foco'))mostraFoco(false);}
 });
 /* a linha inteira do interruptor responde ao toque */
@@ -2257,6 +2288,13 @@ $$('.linha-sw').forEach(l=>l.addEventListener('click',e=>{if(!e.target.closest('
 /* vibração curta ao tocar e parar (Android) */
 function vibra(ms){try{if(navigator.vibrate)navigator.vibrate(ms);}catch(e){}}
 $('#tpPlay').addEventListener('pointerdown',()=>vibra(12));
+$('#tpPlay').addEventListener('click',()=>{
+  if(!mqDeitado.matches||!document.body.classList.contains('tela-treino')||document.fullscreenElement)return;
+  const d=document.documentElement;
+  try{if(d.requestFullscreen)d.requestFullscreen({navigationUI:'hide'}).then(()=>{fsDeitado=true;}).catch(()=>{});}catch(e){}
+});
+['#estado','#rep','#aviso'].forEach(q=>new MutationObserver(renderLegExec).observe($(q),{childList:true,characterData:true,subtree:true,attributes:true,attributeFilter:['hidden']}));
+renderLegExec();
 /* bordas esmaecidas nas listas que rolam para o lado */
 function marcaRolagem(el){
   const f=()=>{el.classList.toggle('mais-esq',el.scrollLeft>4);el.classList.toggle('mais-dir',el.scrollLeft+el.clientWidth<el.scrollWidth-4);};
