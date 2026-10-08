@@ -1,0 +1,23 @@
+{
+  "id": "tribais-nordicos",
+  "categoria": "tribais",
+  "ordem": 10,
+  "nivel": 2,
+  "andamento": {
+    "inicio": 60,
+    "fim": 100,
+    "bpmFixo": 72
+  },
+  "maosPes": true,
+  "titulo": "Tribais nórdicos",
+  "descricao": "Levadas nos tons no estilo do folk nórdico: o surdo e o bumbo juntos fazem o tambor grande, e o tom responde. Servem para introduções, pontes e subidas antes do refrão.",
+  "exercicios": [
+    {"id":"tn-1","num":1,"nome":"Marcha","nivel":1,"compasso":[4,4],"sub":2,"mao":"DEDEDEDE","trilhas":{"ft":"XxXxXxXx","bd":"x...x..."}},
+    {"id":"tn-2","num":2,"nome":"Remada","nivel":1,"compasso":[4,4],"sub":2,"mao":"DEDEDEDE","trilhas":{"t1":".x.x.x.x","ft":"X.x.X.x.","bd":"x...x..."}},
+    {"id":"tn-3","num":3,"nome":"Tribal com caixa","compasso":[4,4],"sub":2,"trilhas":{"sn":"..X...X.","ft":"xxxxxxxx","bd":"x...x..."}},
+    {"id":"tn-4","num":4,"nome":"Batida de coração","compasso":[4,4],"sub":4,"mao":"DD..E...DD..E...","trilhas":{"t1":"....x.......x...","ft":"Xx......Xx......","bd":"x.......x......."}},
+    {"id":"tn-5","num":5,"nome":"Galope","compasso":[4,4],"sub":4,"mao":"D.DED.DED.DED.DE","trilhas":{"ft":"X.xxX.xxX.xxX.xx","bd":"x.......x......."}},
+    {"id":"tn-6","num":6,"nome":"Trovão","compasso":[4,4],"sub":4,"mao":"DEDEDEDEDEDEDEDE","trilhas":{"ft":"XxxxXxxxXxxxXxxx","bd":"x...x...x...x..."}},
+    {"id":"tn-7","num":7,"nome":"Três, três, dois","nivel":3,"compasso":[4,4],"sub":4,"mao":"DEDEDEDEDEDEDEDE","trilhas":{"ft":"XxxXxxXxXxxXxxXx","bd":"x..x..x.x..x..x."}}
+  ]
+}

@@ -2,7 +2,7 @@
 
 A DRUM APP PILLED WITH GOOD EXERCISES. - BRAZILIAN WORSHIP TO JESUS
 
-App para treinar bateria com os músicos da igreja: grooves, samba, paradiddle, worship, afrobeat, rock, ostinato, técnica de mãos e figuras rítmicas (da semínima à fusa, com quintinas e septinas).
+App para treinar bateria com os músicos da igreja: grooves, samba, paradiddle, worship, tribais, afrobeat, rock, ostinato, técnica de mãos e figuras rítmicas (da semínima à fusa, com quintinas e septinas).
 
 Site: https://francwrlanh19-ai.github.io/Bateria/
 

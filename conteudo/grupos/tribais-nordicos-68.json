@@ -1,0 +1,19 @@
+{
+  "id": "tribais-nordicos-68",
+  "categoria": "tribais",
+  "ordem": 20,
+  "nivel": 2,
+  "andamento": {
+    "inicio": 100,
+    "fim": 160,
+    "bpmFixo": 120
+  },
+  "maosPes": true,
+  "titulo": "Tribais nórdicos em 6/8",
+  "descricao": "Os mesmos tambores em 6/8, para as baladas. Aqui o andamento conta colcheias: o metrônomo clica 6 vezes por compasso, mais forte no 1 e no 4.",
+  "exercicios": [
+    {"id":"tn68-1","num":1,"nome":"Balanço","nivel":1,"compasso":[6,8],"sub":2,"mao":"D...E.D...E.","trilhas":{"t1":"....x.....x.","ft":"X.....X.....","bd":"x.....x....."}},
+    {"id":"tn68-2","num":2,"nome":"Roda","compasso":[6,8],"sub":2,"mao":"D.E.D.E.D.E.","trilhas":{"ft":"X.x.x.X.x.x.","bd":"x.....x....."}},
+    {"id":"tn68-3","num":3,"nome":"Galope em 6/8","compasso":[6,8],"sub":2,"mao":"D...DED...DE","trilhas":{"t1":"....xx....xx","ft":"X.....X.....","bd":"x.....x....."}}
+  ]
+}

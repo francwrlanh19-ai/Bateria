@@ -49,6 +49,13 @@
     "cor": "--cym"
   },
   {
+    "id": "tribais",
+    "area": "outros",
+    "nome": "Tribais",
+    "descricao": "Levadas nos tons para pontes e subidas no culto",
+    "cor": "--tom"
+  },
+  {
     "id": "rock",
     "area": "outros",
     "nome": "Rock",
