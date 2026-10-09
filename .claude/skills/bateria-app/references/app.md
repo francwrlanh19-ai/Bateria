@@ -25,6 +25,8 @@
 - **Categoria**: o texto de cima mostra a área; filtros no topo (`barraFiltro`: todos, novos, treinando, revisar, dominados, favoritos); cada lista mostra título, nível (`nivel`), descrição e fonte (`topoLista`), e cada exercício mostra o estado (`linhaEx`). O voltar devolve para a tela de origem (categoria, busca ou trilha).
 - **Categoria** (`renderColecao` com `tela==='categoria'`): grupos e exercícios em linhas.
 - **Treino**: partitura (foto ou redesenhada), grade, painel de andamento e barra de controles.
+- **Tela de leitura** (classe `leitor` no body; `atualizaLeitor`, `abreLeitor`, `fechaLeitor`): liga com o celular deitado (`mqDeitado`) ou pelo botão de tela cheia no computador. Em cima, `#legDeit` (título, anterior e próximo); à direita, andamento e Tocar. Nos exercícios com leitura (`leituraPossivel`), a coluna da esquerda `#leitDeit` (`renderLeitDeit`, chamada por `renderLegenda`) escolhe o nível (Sem, 1 a 5) e pede leitura nova, e o body ganha `com-leitura` (mais margem à esquerda da folha).
+- **Leitura sobre o sistema**: toda mudança passa por `mudaLeitura({on, nivel, nova})`. Parado, vale na hora (`aplicaLeitura`). Tocando, fica em `leitPend` (botão tracejado, classe `pend`; `leituraAlvo` diz como a leitura vai ficar) e `inicioCompasso()` aplica no começo da próxima volta, com o evento `releitura` na fila para redesenhar junto com o som; `parar()` aplica a pendente.
 - Navegação: `mudaTela(t)` empilha no histórico, para o botão voltar do Android funcionar; `aplicaTela(t)` desenha a tela. Ao sair do treino, o som para.
 - No celular, os ajustes abrem como folha inferior (`mostraAjustes`). O modo foco em tela cheia é `mostraFoco`.
 
