@@ -44,6 +44,8 @@
 
 ## Notação e grade
 - `notacao()`: foto da folha (`window.FOTOS`, vazio na versão pública) ou partitura VexFlow. `notacaoFiguras()` cuida dos exercícios com `subs` (quiálteras).
+- Espaço em cima e embaixo de cada linha: `notacao()` desenha cada linha num grupo SVG, mede com `getBBox` e, se acento, marca de chimbal, mãos ou nome do prato passar da faixa, desenha de novo com mais espaço (`maisCima`, `maisBaixo`), igual em todas as linhas, porque o cursor divide a altura por igual. Com a partitura escondida não dá para medir; o desenho visível seguinte corrige. Textos são medidos com `medeTexto` (canvas), porque o `measureText` do VexFlow guarda em cache o zero medido com a partitura escondida.
+- Pratos: `NOME_PRATO` escreve Chimbal, Cond., Cúpula e Ataque em cima da primeira nota de cada prato; `MARCA_CHIMBAL` dá `o` (aberto, `ho`), `ø` (meio aberto, `hm`) e `+` (fechado logo depois de abrir, `fechamentosChimbal`). A cúpula (`rb`) tem cabeça de losango (`f/5/d2`) e, no som, usa a condução gravada mais aguda com um "plim" de sino (`sino`); o meio aberto usa o chimbal aberto com queda rápida (`MEIO_ABERTO`) e é cortado pelo próximo chimbal fechado.
 - `renderGrade()`: grade por instrumento, com linha "Mãos" e blocos por compasso. `renderRegua()` é a régua de figuras.
 - Edição: botão "Editar notas", que guarda as alterações em `edicoes`/`edicoesMao` no aparelho. Exercícios criados ficam em "Meus".
 

@@ -5,8 +5,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const INSTRUMENTOS = ['cr', 'rd', 'hh', 'ho', 't1', 't2', 'sn', 'ft', 'bd', 'hp'];
-const DE_MAO = ['cr', 'rd', 'hh', 'ho', 't1', 't2', 'sn', 'ft'];
+const INSTRUMENTOS = ['cr', 'rd', 'rb', 'hh', 'ho', 'hm', 't1', 't2', 'sn', 'ft', 'bd', 'hp'];
+const DE_MAO = ['cr', 'rd', 'rb', 'hh', 'ho', 'hm', 't1', 't2', 'sn', 'ft'];
 
 export function validar() {
   const erros = [];

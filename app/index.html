@@ -142,14 +142,20 @@ body.foco .leitura{display:none}
 .g-conta.g-par{background:transparent}
 .g-cel::after{content:"";position:absolute;inset:0;margin:auto;width:12px;height:12px;border-radius:50%;background:currentColor;transform:scale(0);transition:transform .06s ease-out}
 .g-cel.x::after{border-radius:0;background:linear-gradient(45deg,transparent 40%,currentColor 40% 60%,transparent 60%),linear-gradient(-45deg,transparent 40%,currentColor 40% 60%,transparent 60%)}
+.g-cel.dia::after{border-radius:2px;width:10px;height:10px;transform:rotate(45deg) scale(0)}
 .g-cel.on::after{transform:scale(1)}
+.g-cel.dia.on::after{transform:rotate(45deg) scale(1)}
 .g-cel.acc::after{transform:scale(1.3)}
+.g-cel.dia.acc::after{transform:rotate(45deg) scale(1.3)}
 .g-cel.acc::before{content:"";position:absolute;left:50%;top:1px;width:7px;height:7px;margin-left:-3.5px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg) scale(.7);opacity:.9}
 .g-cel.gh::after{transform:scale(.62);opacity:.45}
 .g-cel.mudo{opacity:.3}
 .g-cel.agora,.g-conta.agora{background:var(--now)}
 .g-cel.agora.on::after{transform:scale(1.4)}
 .g-cel.agora.acc::after{transform:scale(1.6)}
+.g-cel.dia.gh::after{transform:rotate(45deg) scale(.62)}
+.g-cel.dia.agora.on::after{transform:rotate(45deg) scale(1.4)}
+.g-cel.dia.agora.acc::after{transform:rotate(45deg) scale(1.6)}
 .grade.editando .g-cel{cursor:pointer;box-shadow:inset 0 0 0 1px var(--line)}
 .grade.editando .g-cel:hover{box-shadow:inset 0 0 0 2px var(--muted)}
 
@@ -954,8 +960,10 @@ const LS={
 const INSTR={
   cr:{nome:'Prato de ataque',curto:'Ataque',voz:1,key:'a/5/x2',cor:'--cym',prato:true},
   rd:{nome:'Condução',curto:'Condução',voz:1,key:'f/5/x2',cor:'--rd',prato:true},
+  rb:{nome:'Cúpula do ride',curto:'Cúpula',voz:1,key:'f/5/d2',cor:'--rd',losango:true},
   hh:{nome:'Chimbal',curto:'Chimbal',voz:1,key:'g/5/x2',cor:'--hh',prato:true},
   ho:{nome:'Chimbal aberto',curto:'Ch. aberto',voz:1,key:'g/5/x2',cor:'--hh',prato:true},
+  hm:{nome:'Chimbal meio aberto',curto:'Meio aberto',voz:1,key:'g/5/x2',cor:'--hh',prato:true},
   t1:{nome:'Tom 1',curto:'Tom 1',voz:-1,key:'e/5',cor:'--tom'},
   t2:{nome:'Tom 2',curto:'Tom 2',voz:-1,key:'d/5',cor:'--tom'},
   sn:{nome:'Caixa',curto:'Caixa',voz:-1,key:'c/5',cor:'--sn'},
@@ -963,7 +971,9 @@ const INSTR={
   bd:{nome:'Bumbo',curto:'Bumbo',voz:-1,key:'f/4',cor:'--bd'},
   hp:{nome:'Chimbal no pé',curto:'Ch. pé',voz:-1,key:'d/4/x2',cor:'--hp',prato:true}
 };
-const ORDEM=['cr','rd','hh','ho','t1','t2','sn','ft','bd','hp'];
+const ORDEM=['cr','rd','rb','hh','ho','hm','t1','t2','sn','ft','bd','hp'];
+/* nome escrito em cima da primeira nota de cada prato, para separar chimbal, condução, cúpula e ataque */
+const NOME_PRATO=[['Chimbal',['hh','ho','hm']],['Cond.',['rd']],['Cúpula',['rb']],['Ataque',['cr']]];
 const VEL={x:0.8,X:1,g:0.3,f:0.8};
 const PROX={'.':'x','x':'X','X':'g','g':'f','f':'.'};
 const hit=c=>!!c&&c!=='.';
@@ -1190,13 +1200,20 @@ function metal(t,v,dec,op){
   [2,3,4.16,5.43,6.79,8.21].forEach(r=>{const o=osc('square',t,dec+0.03);o.frequency.value=base*r;o.connect(f1);});
   f1.connect(f2).connect(g);return g;
 }
-function chimbal(t,v,aberto,pe){
+function chimbal(t,v,aberto,pe,decAberto){
   abafaAberto(t);
-  const dec=aberto?0.42:pe?0.05:0.065;
+  const dec=aberto?(decAberto||0.42):pe?0.05:0.065;
   const g=metal(t,v,dec,{ganho:pe?0.2:0.34});
   if(aberto){const cg=ac.createGain();g.connect(cg).connect(busG);chokeAberto={g:cg,nivel:1,fim:t+dec};}
   else g.connect(busG);
 }
+/* cúpula do ride: um "plim" com altura definida (parciais de sino) e um pouco de metal por cima */
+function sino(t,v){
+  [[1,1,1.3],[1.52,0.55,0.9],[2.26,0.38,0.7],[3.07,0.22,0.5]].forEach(([r,a,d])=>{
+    const o=osc('sine',t,d+0.05),g=ac.createGain();o.frequency.value=780*r;env(g,t,0.16*v*a,d);o.connect(g).connect(busG);
+  });
+}
+function cupula(t,v){sino(t,v);metal(t,v,0.6,{base:64,bp:9500,hp:6500,ganho:0.12}).connect(busG);}
 function prato(t,v,conducao){
   if(conducao){metal(t,v,0.9,{base:52,bp:8000,hp:5000,ganho:0.2}).connect(busG);return;}
   const n=fonteRuido(t,1.4),g=ac.createGain();env(g,t,0.45*v,1.3);n.connect(filtro('highpass',3500)).connect(g).connect(busG);
@@ -1218,9 +1235,12 @@ function clique(t,forte,medio){
   o.frequency.value=forte?1900:medio?1600:1350;env(g,t,forte?1:0.65,0.035);o.connect(g).connect(busC);
 }
 /* ---------- Bateria gravada ---------- */
-const AMOSTRA_DE={bd:['bd',1],sn:['sn',1],hh:['hh',1],ho:['ho',1],hp:['hp',1],rd:['rd',1],cr:['cr',1],ft:['ft',1],t1:['tm',1],t2:['tm',0.84]};
-const PAN={bd:0,sn:-0.04,hh:-0.32,ho:-0.32,hp:-0.26,rd:0.34,cr:-0.22,t1:-0.12,t2:0.1,ft:0.32};
-const GRUPO_MIX={bd:'bd',sn:'sn',hh:'hh',ho:'hh',hp:'hp',rd:'pr',cr:'pr',t1:'tm',t2:'tm',ft:'tm'};
+/* a cúpula usa a condução gravada mais aguda, com o "plim" de sino por cima; o meio aberto usa o chimbal aberto,
+   que some depressa (MEIO_ABERTO: segura e constante de queda, em segundos) */
+const AMOSTRA_DE={bd:['bd',1],sn:['sn',1],hh:['hh',1],ho:['ho',1],hm:['ho',1],hp:['hp',1],rd:['rd',1],rb:['rd',1.5],cr:['cr',1],ft:['ft',1],t1:['tm',1],t2:['tm',0.84]};
+const PAN={bd:0,sn:-0.04,hh:-0.32,ho:-0.32,hm:-0.32,hp:-0.26,rd:0.34,rb:0.34,cr:-0.22,t1:-0.12,t2:0.1,ft:0.32};
+const GRUPO_MIX={bd:'bd',sn:'sn',hh:'hh',ho:'hh',hm:'hh',hp:'hp',rd:'pr',rb:'pr',cr:'pr',t1:'tm',t2:'tm',ft:'tm'};
+const MEIO_ABERTO=[0.07,0.07];
 /* ---------- Afinação da bateria ----------
    Gravação original: bumbo ~83 Hz, caixa ~181 Hz, tom 1 ~182 Hz, tom 2 ~153 Hz, surdo ~114 Hz.
    Cada afinação diz, por peça, [meios tons para cima (+) ou para baixo (−), abafamento 0 nenhum, 1 pouco, 2 muito].
@@ -1275,7 +1295,7 @@ function abafaAberto(t){
 function tocaGravado(k,t,c,pan){
   const m=AMOSTRA_DE[k],cams=m&&kit[m[0]];if(!cams)return false;
   if(c==='f'){tocaGravado(k,t-0.03,'g',pan);return tocaGravado(k,t,'x',pan);}
-  let lv=c==='X'?'X':c==='g'?'g':'x',ganho=1;
+  let lv=c==='X'||(k==='rb'&&c!=='g')?'X':c==='g'?'g':'x',ganho=k==='rb'&&c!=='X'?0.75:1;
   if(!cams[lv]){ganho=lv==='g'?0.3:1.4;lv='x';}
   const lista=cams[lv],i=rrIdx[k+lv]=((rrIdx[k+lv]||0)+1)%lista.length,a=lista[i];
   const src=ac.createBufferSource(),g=ac.createGain(),af=AF[k],taxa=m[1]*(af?af.r:1);
@@ -1285,6 +1305,14 @@ function tocaGravado(k,t,c,pan){
   if(ac.createStereoPanner){const pn=ac.createStereoPanner();pn.pan.value=pan!=null?pan:(PAN[k]||0);g.connect(pn).connect(busG);}else g.connect(busG);
   if(k==='hh'||k==='hp')abafaAberto(t);
   if(k==='ho'){abafaAberto(t);chokeAberto={g,nivel,fim:t+a.buf.duration};}
+  if(k==='hm'){
+    /* o envelope fica num ganho antes de g, para o corte do próximo chimbal fechado partir do nível certo */
+    abafaAberto(t);const [seg,q]=MEIO_ABERTO,ge=ac.createGain();
+    src.disconnect();src.connect(ge).connect(g);
+    ge.gain.setValueAtTime(1,t+seg);ge.gain.setTargetAtTime(0,t+seg,q);
+    chokeAberto={g,nivel,fim:t+seg+q*8};try{src.stop(t+seg+q*10);}catch(e){}
+  }
+  if(k==='rb')sino(t,nivel*(c==='X'?1:c==='g'?0.35:0.75));
   src.start(t,a.off);
   if(af&&af.ab)abafa(g,src,k,t,nivel,af.ab);
   return true;
@@ -1302,8 +1330,10 @@ function tocaSint(k,t,v){
     case 'sn':caixa(t,v,r,d);break;
     case 'hh':chimbal(t,v,false,false);break;
     case 'ho':chimbal(t,v,true,false);break;
+    case 'hm':chimbal(t,v,true,false,0.2);break;
     case 'hp':chimbal(t,v,false,true);break;
     case 'rd':prato(t,v,true);break;
+    case 'rb':cupula(t,v);break;
     case 'cr':prato(t,v,false);break;
     case 't1':tom(t,v,260*r,195*r,0.4*d);break;
     case 't2':tom(t,v,200*r,148*r,0.45*d);break;
@@ -1504,6 +1534,21 @@ function escritaDe(ex){
   const dmap=tercina?{3:'q'}:mapaValores(1/(bv*sub),grupo);
   return {grupo,tercina,dmap,ok:tercina||Object.keys(dmap).length>0};
 }
+/* Marcas de chimbal em cima da nota: o no aberto, + no fechado e ø no meio aberto, todas do mesmo tamanho
+   ([símbolo da fonte Bravura, escala]) */
+const MARCA_CHIMBAL={aberto:['brassMuteOpen',32],fechado:['brassMuteClosed',34],meio:['csymHalfDiminished',20]};
+/* largura de um texto na partitura (o VexFlow escreve em pt). Mede num canvas: a medida do próprio VexFlow
+   guarda em cache o zero de quando a partitura estava escondida */
+const medeTexto=(()=>{let cx=null;return (txt,fonte)=>{try{cx=cx||document.createElement('canvas').getContext('2d');cx.font=fonte;return cx.measureText(txt).width;}catch(e){return 0;}};})();
+/* casas em que o chimbal fecha com a mão logo depois de um aberto ou meio aberto: ganham o "+".
+   Conta a volta inteira (o fim do exercício emenda no começo); se o pé fecha junto, o X do pé já mostra */
+function fechamentosChimbal(tr,total){
+  const ev=[],s=new Set(),em=k=>p=>!!tr[k]&&hit(tr[k][p]);
+  const ab=p=>em('ho')(p)||em('hm')(p),fe=em('hh'),pe=em('hp');
+  for(let p=0;p<total;p++)if(ab(p)||fe(p)||pe(p))ev.push(p);
+  ev.forEach((p,j)=>{if(!ab(p)||ev.length<2)return;const n=ev[(j+1)%ev.length];if(fe(n)&&!ab(n)&&!pe(n))s.add(n);});
+  return s;
+}
 function partes(len,dmap){const ks=Object.keys(dmap).map(Number).sort((a,b)=>b-a),out=[];let r=len;while(r>0){const k=ks.find(v=>v<=r);if(!k)break;out.push(k);r-=k;}return out;}
 function notacaoFiguras(ex,box,papel){
   const VF=Vex.Flow,GV=gradeVar(ex),tr=trilhas(ex),bpc=ex.compasso[0];
@@ -1536,8 +1581,9 @@ function notacaoFiguras(ex,box,papel){
   const y=Math.max(16,alto-25);
   ns.forEach(t=>{
     const ch=maoEm(ex,t.__passo);if(!ch)return;
-    c.save();c.setFont('Georgia',ex.subs.some(q=>q>=7)?13:15,'bold');
-    const w=c.measureText(ch).width,cx=(t.getNoteHeadBeginX()+t.getNoteHeadEndX())/2;
+    const tam=ex.subs.some(q=>q>=7)?13:15;
+    c.save();c.setFont('Georgia',tam,'bold');
+    const w=medeTexto(ch,`bold ${tam}pt Georgia`),cx=(t.getNoteHeadBeginX()+t.getNoteHeadEndX())/2;
     c.fillText(ch,cx-w/2,y);c.restore();
   });
   posX=GV.bt.map((_,p)=>{const t=ns.find(n=>n.__passo===p);return t?(t.getNoteHeadBeginX()+t.getNoteHeadEndX())/2/W*100:null;});
@@ -1573,101 +1619,140 @@ function notacao(){
     const VF=Vex.Flow,bpc=ex.compasso[0],barras=ex.barras||1,beats=bpc*barras,sub=ex.sub,tr=trilhas(ex),total=beats*sub;
     const ESC=escritaDe(ex),G=ESC.grupo,L=lista(sel.lista),curto=L.estilo==='curto',chave=k=>(L.cabecas&&L.cabecas[k])||INSTR[k].key;
     const semi=beats*4/ex.compasso[1];
-    const acentoCima=Object.keys(tr).some(k=>INSTR[k]&&tr[k].includes('X')&&(lista(sel.lista).vozUnica||lista(sel.lista).maosPes?!(k==='bd'||k==='hp'):INSTR[k].voz===1));
-    const extraT=ESC.tercina?(temMao(ex)?30:18):0,topo=(temMao(ex)?(acentoCima?46:30):0)+extraT;
+    const acentoCima=Object.keys(tr).some(k=>INSTR[k]&&tr[k].includes('X')&&(L.vozUnica||L.maosPes?!(k==='bd'||k==='hp'):INSTR[k].voz===1));
+    const mao=temMao(ex),extraT=ESC.tercina?(mao?30:18):0,topoBase=(mao?(acentoCima?46:30):0)+extraT;
     const NL=linhasPartitura(ex),passosLinha=total/NL;linhasNot=NL;
-    const HL=138+topo-(lista(sel.lista).vozUnica?28:0);
-    const W=470+Math.max(0,semi/NL-4)*105+(sub>=8?150:0),H=HL*NL;larguraCursor=16/W*100;
-    const r=new VF.Renderer(box,VF.Renderer.Backends.SVG);r.resize(W,H);
-    const c=r.getContext();
-    /* uma pauta por linha: a fórmula de compasso só na primeira e o ritornelo só no fim da última */
-    const pautas=Array.from({length:NL},(_,li)=>{
-      const p=new VF.Stave(4,6+topo+li*HL,W-10);
-      p.addClef('percussion');if(li===0)p.addTimeSignature(bpc+'/'+ex.compasso[1]);
-      if(li===NL-1)p.setEndBarType((VF.BarlineType||VF.Barline.type).REPEAT_END);
-      p.setContext(c).draw();return p;
-    });
-    const maosPes=!!lista(sel.lista).maosPes,vozDe=k=>maosPes?(k==='bd'||k==='hp'?-1:1):INSTR[k].voz;
-    const vozesL=Array.from({length:NL},()=>[]),vigas=[];
-    const unicaV=!!lista(sel.lista).vozUnica;
-    const pausa=(d,dir,p)=>{const n=new VF.StaveNote({keys:[unicaV?'b/4':dir===1?'e/5':'a/4'],duration:d+'r',stem_direction:dir,clef:'percussion'});if(d.includes('d'))VF.Dot.buildAndAttach([n],{all:true});n.__passo=p;return n;};
-    const pausas=(len,dir,p,dm)=>partes(len,dm).map((q,j)=>pausa(dm[q],dir,j===0?p:null));
-    const unica=!!lista(sel.lista).vozUnica,tercinas=[],porCompasso=bpc*sub;
-    for(const dir of (unica?[1]:[1,-1])){
-      const grupo=ORDEM.filter(k=>tr[k]&&(unica||vozDe(k)===dir));
-      if(!grupo.some(k=>/[^.]/.test(tr[k])))continue;
-      const linhasNotas=Array.from({length:NL},()=>[]);let notas=linhasNotas[0];
-      for(let g=0;g<total/G;g++){
-        const b0=g*G,li=Math.floor(b0/passosLinha);
-        if(linhasNotas[li]!==notas)notas=linhasNotas[li];
-        else if(g>0&&b0%porCompasso===0)notas.push(new VF.BarNote());
-        const on=[];
-        for(let s=0;s<G;s++){if(grupo.some(k=>hit(tr[k][b0+s])))on.push(s);}
-        const emTercina=ESC.tercina&&!(on.length===1&&on[0]===0);
-        const dm=emTercina?{1:'8',2:'q'}:ESC.dmap,ini=notas.length;
-        if(!on.length){notas.push(...pausas(G,dir,b0,ESC.tercina?{3:'q'}:dm));continue;}
-        if(on[0]>0)notas.push(...pausas(on[0],dir,b0,dm));
-        const doGrupo=[];
-        on.forEach((s,j)=>{
-          const prox=j+1<on.length?on[j+1]:G;let len=prox-s;
-          /* estilo curto: a última nota do grupo tem o mesmo valor da anterior, e o resto vira pausa */
-          if(curto&&j===on.length-1&&j>0){const gap=s-on[j-1];if(gap<len)len=gap;}
-          const i=b0+s,ks=grupo.filter(k=>hit(tr[k][i]));
-          const keys=[...new Set(ks.map(chave))];
-          const pd=partes(len,dm),dn=dm[pd[0]];
-          const n=new VF.StaveNote({keys,duration:dn,stem_direction:dir,clef:'percussion'});
-          if(dn.includes('d'))VF.Dot.buildAndAttach([n],{all:true});
-          if(ks.every(k=>tr[k][i]==='g'))VF.Parenthesis.buildAndAttach([n]);
-          const fk=ks.filter(k=>tr[k][i]==='f');
-          if(fk.length){const gn=new VF.GraceNote({keys:[...new Set(fk.map(chave))],duration:'8',slash:true,stem_direction:1,clef:'percussion'});n.addModifier(new VF.GraceNoteGroup([gn],false),0);}
-          const pos=dir===1?VF.Modifier.Position.ABOVE:VF.Modifier.Position.BELOW;
-          if(ks.some(k=>tr[k][i]==='X'))n.addModifier(new VF.Articulation('a>').setPosition(pos),0);
-          if(ks.includes('ho'))n.addModifier(new VF.Articulation('ah').setPosition(VF.Modifier.Position.ABOVE),0);
-          n.__passo=i;notas.push(n);
-          if(pd.length>1)notas.push(...pd.slice(1).map(q=>pausa(dm[q],dir,null)));
-          if(prox-s>len)notas.push(...pausas(prox-s-len,dir,null,dm));
-          if(/^(8|16|32)/.test(dn))doGrupo.push(n);
-        });
-        if(doGrupo.length>=2)vigas.push(new VF.Beam(doGrupo));
-        if(emTercina)tercinas.push(new VF.Tuplet(notas.slice(ini),{num_notes:3,notes_occupied:2}));
-      }
-      linhasNotas.forEach((ns,li)=>{const v=new VF.Voice({num_beats:beats/NL,beat_value:ex.compasso[1]}).setMode(VF.Voice.Mode.SOFT);v.addTickables(ns);vozesL[li].push(v);});
-    }
-    if(vozesL[0].length){
-      vozesL.forEach((vs,li)=>{new VF.Formatter().joinVoices(vs).formatToStave(vs,pautas[li]);vs.forEach(v=>v.draw(c,pautas[li]));});
-      vigas.forEach(b=>b.setContext(c).draw());
-      tercinas.forEach(t=>t.setContext(c).draw());
-      if(temMao(ex))vozesL.forEach((vozes,li)=>{
-        /* Mãos (D/E) numa linha única acima das hastes, como na folha (uma por linha da partitura) */
-        let alto=Infinity;const alvos=[];
-        vozes.forEach(v=>v.getTickables().forEach(t=>{
-          if(!(t instanceof VF.StaveNote)||t.isRest())return;
-          if(t.getStemDirection()===1)alto=Math.min(alto,t.getStemExtents().topY);
-          const ch=t.__passo!=null?maoEm(ex,t.__passo):'';
-          if(ch)alvos.push([t,ch]);
-        }));
-        const y=Math.max(16+li*HL,(isFinite(alto)?alto:40+li*HL)-9-(acentoCima?16:0)-extraT);
-        alvos.forEach(([t,ch])=>{
-          const forte=/[A-Z]/.test(ch);
-          c.save();c.setFont('Georgia',16,forte?'bold':'normal');
-          const w=c.measureText(ch).width,cx=(t.getNoteHeadBeginX()+t.getNoteHeadEndX())/2;
-          c.fillText(ch,cx-w/2,y);c.restore();
-        });
+    const W=470+Math.max(0,semi/NL-4)*105+(sub>=8?150:0);larguraCursor=16/W*100;
+    const maosPes=!!L.maosPes,vozDe=k=>maosPes?(k==='bd'||k==='hp'?-1:1):INSTR[k].voz;
+    const unica=!!L.vozUnica,porCompasso=bpc*sub,ACIMA=VF.Modifier.Position.ABOVE,ABAIXO=VF.Modifier.Position.BELOW;
+    const fechaEm=fechamentosChimbal(tr,total);
+    const marca=tipo=>{const [g,esc]=MARCA_CHIMBAL[tipo],a=new VF.Articulation(g).setPosition(ACIMA);a.render_options.font_scale=esc;a.reset();return a;};
+    /* nome dos pratos: a primeira nota de cada prato no exercício ganha o nome em cima (Chimbal, Cond., Cúpula, Ataque) */
+    const rotuloEm={};
+    NOME_PRATO.forEach(([nome,ks])=>{for(let p=0;p<total;p++){if(ks.some(k=>tr[k]&&hit(tr[k][p]))){(rotuloEm[p]=rotuloEm[p]||[]).push(nome);break;}}});
+    /* y e altura do que foi desenhado num grupo; null quando a partitura está escondida e não dá para medir */
+    const caixa=g=>{try{const b=g.getBBox();return b&&b.height>0?{y:b.y,h:b.height}:null;}catch(e){return null;}};
+    let maisCima=0,maisBaixo=0,H=0;
+    /* Desenha a partitura. Se algo (acento, marca de chimbal, mãos, nome do prato) passar do alto ou do pé
+       da faixa de alguma linha, desenha de novo com mais espaço, igual em todas as linhas (o cursor divide
+       a altura por igual entre as linhas). */
+    for(let tent=0;tent<3;tent++){
+      box.innerHTML='';posX=null;posLin=null;
+      const topo=topoBase+maisCima,HL=138+topo+maisBaixo-(unica?28:0);H=HL*NL;
+      const r=new VF.Renderer(box,VF.Renderer.Backends.SVG);r.resize(W,H);
+      const c=r.getContext();
+      /* uma pauta por linha: a fórmula de compasso só na primeira e o ritornelo só no fim da última */
+      const pautas=Array.from({length:NL},(_,li)=>{
+        const p=new VF.Stave(4,6+topo+li*HL,W-10);
+        p.addClef('percussion');if(li===0)p.addTimeSignature(bpc+'/'+ex.compasso[1]);
+        if(li===NL-1)p.setEndBarType((VF.BarlineType||VF.Barline.type).REPEAT_END);
+        return p;
       });
+      const vozesL=Array.from({length:NL},()=>[]),vigas=[],tercinas=[];
+      const pausa=(d,dir,p)=>{const n=new VF.StaveNote({keys:[unica?'b/4':dir===1?'e/5':'a/4'],duration:d+'r',stem_direction:dir,clef:'percussion'});if(d.includes('d'))VF.Dot.buildAndAttach([n],{all:true});n.__passo=p;return n;};
+      const pausas=(len,dir,p,dm)=>partes(len,dm).map((q,j)=>pausa(dm[q],dir,j===0?p:null));
+      for(const dir of (unica?[1]:[1,-1])){
+        const grupo=ORDEM.filter(k=>tr[k]&&(unica||vozDe(k)===dir));
+        if(!grupo.some(k=>/[^.]/.test(tr[k])))continue;
+        const linhasNotas=Array.from({length:NL},()=>[]);let notas=linhasNotas[0];
+        for(let g=0;g<total/G;g++){
+          const b0=g*G,li=Math.floor(b0/passosLinha);
+          if(linhasNotas[li]!==notas)notas=linhasNotas[li];
+          else if(g>0&&b0%porCompasso===0)notas.push(new VF.BarNote());
+          const on=[];
+          for(let s=0;s<G;s++){if(grupo.some(k=>hit(tr[k][b0+s])))on.push(s);}
+          const emTercina=ESC.tercina&&!(on.length===1&&on[0]===0);
+          const dm=emTercina?{1:'8',2:'q'}:ESC.dmap,ini=notas.length;
+          if(!on.length){notas.push(...pausas(G,dir,b0,ESC.tercina?{3:'q'}:dm));continue;}
+          if(on[0]>0)notas.push(...pausas(on[0],dir,b0,dm));
+          const doGrupo=[];
+          on.forEach((s,j)=>{
+            const prox=j+1<on.length?on[j+1]:G;let len=prox-s;
+            /* estilo curto: a última nota do grupo tem o mesmo valor da anterior, e o resto vira pausa */
+            if(curto&&j===on.length-1&&j>0){const gap=s-on[j-1];if(gap<len)len=gap;}
+            const i=b0+s,ks=grupo.filter(k=>hit(tr[k][i]));
+            const keys=[...new Set(ks.map(chave))];
+            const pd=partes(len,dm),dn=dm[pd[0]];
+            const n=new VF.StaveNote({keys,duration:dn,stem_direction:dir,clef:'percussion'});
+            if(dn.includes('d'))VF.Dot.buildAndAttach([n],{all:true});
+            if(ks.every(k=>tr[k][i]==='g'))VF.Parenthesis.buildAndAttach([n]);
+            const fk=ks.filter(k=>tr[k][i]==='f');
+            if(fk.length){const gn=new VF.GraceNote({keys:[...new Set(fk.map(chave))],duration:'8',slash:true,stem_direction:1,clef:'percussion'});n.addModifier(new VF.GraceNoteGroup([gn],false),0);}
+            if(ks.some(k=>tr[k][i]==='X'))n.addModifier(new VF.Articulation('a>').setPosition(dir===1?ACIMA:ABAIXO),0);
+            /* chimbal: o aberto, + no fechado logo depois de abrir, ø no meio aberto */
+            if(ks.includes('ho'))n.addModifier(marca('aberto'),0);
+            if(ks.includes('hm'))n.addModifier(marca('meio'),0);
+            if(ks.includes('hh')&&fechaEm.has(i))n.addModifier(marca('fechado'),0);
+            if(dir===1&&rotuloEm[i])n.__rotulo=rotuloEm[i];
+            n.__passo=i;notas.push(n);
+            if(pd.length>1)notas.push(...pd.slice(1).map(q=>pausa(dm[q],dir,null)));
+            if(prox-s>len)notas.push(...pausas(prox-s-len,dir,null,dm));
+            if(/^(8|16|32)/.test(dn))doGrupo.push(n);
+          });
+          if(doGrupo.length>=2)vigas.push({li,b:new VF.Beam(doGrupo)});
+          if(emTercina)tercinas.push({li,t:new VF.Tuplet(notas.slice(ini),{num_notes:3,notes_occupied:2})});
+        }
+        linhasNotas.forEach((ns,li)=>{const v=new VF.Voice({num_beats:beats/NL,beat_value:ex.compasso[1]}).setMode(VF.Voice.Mode.SOFT);v.addTickables(ns);vozesL[li].push(v);});
+      }
+      if(!vozesL[0].length){pautas.forEach(p=>p.setContext(c).draw());break;}
+      const caixas=vozesL.map((vs,li)=>{
+        const grp=c.openGroup('linha');
+        pautas[li].setContext(c).draw();
+        new VF.Formatter().joinVoices(vs).formatToStave(vs,pautas[li]);vs.forEach(v=>v.draw(c,pautas[li]));
+        vigas.forEach(o=>{if(o.li===li)o.b.setContext(c).draw();});
+        tercinas.forEach(o=>{if(o.li===li)o.t.setContext(c).draw();});
+        /* topo das hastes; com a partitura visível, a medida do grupo já inclui acentos, marcas e quiálteras */
+        let alto=Infinity;
+        vs.forEach(v=>v.getTickables().forEach(t=>{if(t instanceof VF.StaveNote&&!t.isRest()&&t.getStemDirection()===1)alto=Math.min(alto,t.getStemExtents().topY);}));
+        if(!isFinite(alto))alto=pautas[li].getYForLine(0)-6;
+        const med=caixa(grp),cimaNotas=med?med.y:alto-(acentoCima?16:0)-extraT;
+        /* Mãos (D/E) numa linha única acima das hastes, como na folha (uma por linha da partitura) */
+        let yMao=null;
+        if(mao){
+          yMao=Math.min(alto-9-(acentoCima?16:0)-extraT,cimaNotas-5);
+          vs.forEach(v=>v.getTickables().forEach(t=>{
+            if(!(t instanceof VF.StaveNote)||t.isRest()||t.__passo==null)return;
+            const ch=maoEm(ex,t.__passo);if(!ch)return;
+            const forte=/[A-Z]/.test(ch);
+            c.save();c.setFont('Georgia',16,forte?'bold':'normal');
+            const w=medeTexto(ch,(forte?'bold ':'')+'16pt Georgia'),cx=(t.getNoteHeadBeginX()+t.getNoteHeadEndX())/2;
+            c.fillText(ch,cx-w/2,yMao);c.restore();
+          }));
+        }
+        /* nome dos pratos, acima de tudo; dois nomes que se encostariam sobem em degraus */
+        const y0=yMao!=null?yMao-19:cimaNotas-7,fileiras=[];
+        vs.forEach(v=>v.getTickables().forEach(t=>{
+          (t.__rotulo||[]).forEach(txt=>{
+            c.save();c.setFont('Georgia',13,'normal','italic');c.setFillStyle('#3d4651');
+            const w=medeTexto(txt,'italic 13pt Georgia')||txt.length*9;let x=t.getNoteHeadBeginX()-1;if(x+w>W-4)x=W-4-w;
+            let f=0;while(fileiras[f]&&fileiras[f].some(([a,b])=>x<b+8&&x+w>a-8))f++;
+            (fileiras[f]=fileiras[f]||[]).push([x,x+w]);
+            c.fillText(txt,x,y0-f*14);c.restore();
+          });
+        }));
+        c.closeGroup();
+        return caixa(grp);
+      });
+      if(tent<2&&caixas.every(Boolean)){
+        let fc=0,fb=0;
+        caixas.forEach((b,li)=>{fc=Math.max(fc,li*HL+2-b.y);fb=Math.max(fb,b.y+b.h+2-(li+1)*HL);});
+        if(fc>0.5||fb>0.5){maisCima+=Math.max(0,Math.ceil(fc));maisBaixo+=Math.max(0,Math.ceil(fb));continue;}
+      }
       posX=[];posLin=[];
       vozesL.forEach((vozes,li)=>{
-      const acc={};
-      vozes.forEach(v=>v.getTickables().forEach(t=>{if(t.__passo==null)return;(acc[t.__passo]=acc[t.__passo]||[]).push(t.getAbsoluteX()+5);}));
-      const pts=Object.keys(acc).map(Number).sort((a,b)=>a-b).map(p=>[p,acc[p].reduce((s,x)=>s+x,0)/acc[p].length]);
-      const p0=li*passosLinha,p1=p0+passosLinha;
-      pts.push([p1,pautas[li].getNoteEndX()]);
-      for(let p=p0;p<p1;p++){
-        let j=pts.findIndex(q=>q[0]>p);if(j<1)j=1;
-        const a=pts[j-1],b=pts[j];
-        const x=a[0]>p?a[1]:a[1]+(b[1]-a[1])*(p-a[0])/(b[0]-a[0]);
-        posX.push(x/W*100);posLin.push(li);
-      }
+        const acc={};
+        vozes.forEach(v=>v.getTickables().forEach(t=>{if(t.__passo==null)return;(acc[t.__passo]=acc[t.__passo]||[]).push(t.getAbsoluteX()+5);}));
+        const pts=Object.keys(acc).map(Number).sort((a,b)=>a-b).map(p=>[p,acc[p].reduce((s,x)=>s+x,0)/acc[p].length]);
+        const p0=li*passosLinha,p1=p0+passosLinha;
+        pts.push([p1,pautas[li].getNoteEndX()]);
+        for(let p=p0;p<p1;p++){
+          let j=pts.findIndex(q=>q[0]>p);if(j<1)j=1;
+          const a=pts[j-1],b=pts[j];
+          const x=a[0]>p?a[1]:a[1]+(b[1]-a[1])*(p-a[0])/(b[0]-a[0]);
+          posX.push(x/W*100);posLin.push(li);
+        }
       });
+      break;
     }
     const svg=box.querySelector('svg');
     $('.papel-in').style.setProperty('--asp',(W/H).toFixed(3));
@@ -1743,7 +1828,7 @@ function renderGrade(){
       for(let i=i0;i<i1;i++){
         const c=tr[k][i]||'.';
         const cls=['g-cel'];
-        if(inst.prato)cls.push('x');
+        if(inst.prato)cls.push('x');else if(inst.losango)cls.push('dia');
         if(Math.floor(i/(sub*(composto(ex)?3:1)))%2)cls.push('g-par');
         if(hit(c))cls.push(c==='X'?'on acc':c==='g'?'on gh':c==='f'?'on fl':'on');
         if(mudo[k])cls.push('mudo');
@@ -1994,7 +2079,7 @@ function vozesComposto(ex){
   const duasMaos=/[Dd]/.test(maos)&&/[Ee]/.test(maos);
   const fixas=ex.fixas||[],base=lista(sel.lista).exercicios[sel.ex];
   if(base&&semBase(base))return [];
-  return ['sn','bd','hp'].filter(k=>k!==ex.leitura&&!fixas.includes(k)&&!(k==='hp'&&(usa('hh')||usa('ho')))&&!(k==='sn'&&duasMaos));
+  return ['sn','bd','hp'].filter(k=>k!==ex.leitura&&!fixas.includes(k)&&!(k==='hp'&&(usa('hh')||usa('ho')||usa('hm')))&&!(k==='sn'&&duasMaos));
 }
 function criaComposto(){
   const d=exAtual();if(!d.__leit)return;

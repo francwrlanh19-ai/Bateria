@@ -78,8 +78,14 @@ Arquivo `conteudo/grupos/<id>.json`, com o nome do arquivo igual ao `id`:
 | `hp` | chimbal com o pé | `t2` | tom 2 |
 | `rd` | prato de condução | `ft` | surdo |
 | `cr` | prato de ataque | `bd` | bumbo |
+| `rb` | cúpula do ride (losango na linha da condução) | `hm` | chimbal meio aberto (ø em cima) |
 
 Em cada casa: `.` pausa · `x` nota · `X` acento · `g` nota fantasma (parênteses) · `f` flam (nota de enfeite antes).
+
+Marcas que o app põe sozinho na partitura:
+- `o` em cima do chimbal aberto (`ho`), `ø` no meio aberto (`hm`) e `+` no chimbal fechado (`hh`) que vem logo depois de um aberto ou meio aberto. Se o pé (`hp`) fecha junto, o X do pé já mostra e o `+` não aparece.
+- O nome do prato (Chimbal, Cond., Cúpula, Ataque) em cima da primeira nota de cada prato no exercício.
+- Não escreva essas marcas no JSON: basta usar a trilha certa.
 
 ## 5. Manulação (mao)
 

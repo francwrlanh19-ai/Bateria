@@ -39,7 +39,8 @@ Site: https://francwrlanh19-ai.github.io/Bateria/
 - `sub`: casas por tempo (2 colcheias, 3 tercinas, 4 semicolcheias, 8 fusas). Em 6/8, casas por colcheia.
 - `subs`: no lugar de `sub`, uma lista com quantas notas há em cada tempo (para quintinas, septinas etc.).
 - `barras`: quantos compassos o exercício tem (padrão 1).
-- Trilhas: `hh` chimbal, `ho` chimbal aberto, `hp` chimbal no pé, `sn` caixa, `bd` bumbo, `t1` e `t2` tons, `ft` surdo, `rd` condução, `cr` ataque.
+- Trilhas: `hh` chimbal, `ho` chimbal aberto, `hm` chimbal meio aberto, `hp` chimbal no pé, `sn` caixa, `bd` bumbo, `t1` e `t2` tons, `ft` surdo, `rd` condução, `rb` cúpula do ride, `cr` ataque.
+- Na partitura, o app escreve o nome do prato (Chimbal, Cond., Cúpula, Ataque) em cima da primeira nota de cada prato, põe `o` no chimbal aberto, `ø` no meio aberto e `+` no chimbal que fecha logo depois de abrir, e desenha a cúpula com cabeça de losango. Acentos, marcas e mãos ganham espaço em cima da pauta (a partitura é medida e redesenhada quando falta espaço).
 - Em cada casa: `.` pausa, `x` nota, `X` acento, `g` nota fantasma, `f` flam.
 - `mao` (opcional): uma letra por casa, `D` direita e `E` esquerda.
 - `leitura` (opcional): transforma o exercício num *sistema com leitura*. O valor é a peça que lê (`bd`, `sn`, `ft`, `hp`…), que precisa estar livre no sistema. O sistema tem 1 compasso, em 4/4 com `sub` 2 ou 4; o app repete o sistema por 1 ou 2 compassos e gera por cima uma linha de leitura nova, em 5 níveis (curso **Sistemas com leitura**, em Coordenação).
