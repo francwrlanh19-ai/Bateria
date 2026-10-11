@@ -53,6 +53,7 @@ Arquivo `conteudo/grupos/<id>.json`, com o nome do arquivo igual ao `id`:
   - `estilo: "curto"`: notas escritas curtas com pausas, como em algumas folhas de afrobeat.
   - `cabecas`: troca a cabeça de nota de um instrumento. Exemplo: `{"hh":"g/5/x3"}` desenha o X dentro de um círculo.
   - `virada: true`: liga a opção "Levada antes da virada", que toca levada nos compassos anteriores e prato no 1 depois.
+  - `levadas`: lista de ids de levadas de 1 compasso (de qualquer lista), por exemplo `["rk-5", "rk-6"]`. A lista vira "levada + virada", como a leitura: a virada é o exercício e a pessoa escolhe a levada (ou Sem) nos botões em cima da partitura e na coluna da esquerda da tela cheia. O app monta 2 compassos: a levada escolhida, com prato no 1 (a não ser que a virada termine no prato), e a virada, com a levada ocupando as pausas até a primeira nota da virada. Com `levadas`, a opção antiga "Levada antes da virada" some. O validador confere se os ids existem e têm 1 compasso.
   - `panMao: true`: a mão direita soa à direita e a esquerda à esquerda. Use em técnica e figuras.
   - `modoAcento: true`: mostra a chave "Acento no grupo / no tempo". Os exercícios precisam ter `acentos`.
 

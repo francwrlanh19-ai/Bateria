@@ -600,6 +600,23 @@ body.leitor:has(.tp-play[aria-pressed="true"]) .leit-deit{opacity:.6}
 .leit-deit-niv button.pend,.leit-deit-nova.pend{outline:2px dashed #1d2329;outline-offset:-5px}
 @media (max-height:330px){.leit-deit-t,.leit-deit-nova span{display:none}.leit-deit-nova{height:40px}}
 @media (max-height:290px){.leit-deit-niv button{min-height:22px;font-size:15px}.leit-deit-nova{height:34px}}
+/* Levada + virada. Tela normal: grade de botões (Sem e o número de cada levada). Tela de leitura: a coluna
+   da esquerda fica mais larga, com duas colunas de botões */
+.lev-tit{font-weight:700;font-size:14.5px;margin:0}
+.lev-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:6px}
+.lev-grade button{min-height:40px;border:1.5px solid var(--line);border-radius:9px;background:var(--surface);padding:0;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
+.lev-grade button.lev-sem{grid-column:span 2}
+.lev-grade button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+body.leitor .lev-deit:not([hidden]){width:96px}
+body.leitor.com-levada .papel{padding-left:calc(114px + env(safe-area-inset-left,0px))}
+.lev-deit-grade{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:34px;gap:4px;min-height:0}
+.lev-deit-grade button{border-radius:10px;border:1.5px solid rgba(29,35,41,.16);background:rgba(29,35,41,.05);color:#1d2329;padding:0;font-family:var(--f-display);font-weight:800;font-size:17px;line-height:1;font-variant-numeric:tabular-nums}
+.lev-deit-grade button.lev-sem{grid-column:span 2;font-family:var(--f-body);font-size:13.5px;font-weight:700}
+.lev-deit-grade button:active{background:rgba(29,35,41,.14)}
+.lev-deit-grade button[aria-pressed="true"]{background:rgba(29,35,41,.82);border-color:transparent;color:#fff}
+.lev-deit-grade button.pend{outline:2px dashed #1d2329;outline-offset:-5px}
+@media (max-height:330px){.lev-deit-grade{grid-auto-rows:27px}}
+@media (max-height:290px){.lev-deit-grade{grid-auto-rows:23px;gap:3px}.lev-deit-grade button{font-size:15px}}
 
 
 
@@ -749,6 +766,11 @@ body.foco .partitura{gap:10px}
           </div>
         </div>
       </div>
+      <div class="leitura" id="levBox" hidden>
+        <p class="lev-tit">Levada antes da virada</p>
+        <div class="lev-grade" id="levSel" role="group" aria-label="Levada antes da virada"></div>
+        <p class="nota" id="levInfo"></p>
+      </div>
       <div class="vista" id="vistaBox">
         <div class="seg seg-mini" id="segVista" role="group" aria-label="Como mostrar a partitura">
           <button type="button" data-v="foto">Foto da folha</button>
@@ -767,6 +789,10 @@ body.foco .partitura{gap:10px}
         <span class="leit-deit-t" aria-hidden="true">Leitura</span>
         <div class="leit-deit-niv" id="leitDeitNiv" role="group" aria-label="Nível da leitura"></div>
         <button type="button" class="leit-deit-nova" id="leitDeitNova" aria-label="Nova leitura" title="Nova leitura"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M21 4v6h-6M20.5 15a8.6 8.6 0 1 1-2-8.9L21 10"/></svg><span>Nova</span></button>
+      </div>
+      <div class="leit-deit lev-deit" id="levDeit" role="group" aria-label="Levada" hidden>
+        <span class="leit-deit-t" aria-hidden="true">Levada</span>
+        <div class="lev-deit-grade" id="levDeitSel" role="group" aria-label="Levada antes da virada"></div>
       </div>
       <p class="nota-foto" id="notaFoto" hidden>A foto mostra a versão original. A grade e o som seguem as suas edições.</p>
       <div class="grade-wrap"><div class="grade" id="grade"></div></div>
@@ -978,7 +1004,7 @@ const VEL={x:0.8,X:1,g:0.3,f:0.8};
 const PROX={'.':'x','x':'X','X':'g','g':'f','f':'.'};
 const hit=c=>!!c&&c!=='.';
 let edicoesMao={};
-const maoDe=ex=>ex.__leit?ex.mao:(edicoesMao[ex.id]||ex.mao);
+const maoDe=ex=>ex.__leit||ex.__lev?ex.mao:(edicoesMao[ex.id]||ex.mao);
 const temMao=ex=>{const m=maoDe(ex);return !!m&&[...m].some(t=>t&&t!=='.');};
 const maoEm=(ex,i)=>{
   const m=maoDe(ex);let t=m?m[i]:'';if(!t||t==='.')return '';
@@ -991,6 +1017,8 @@ const maoEm=(ex,i)=>{
 const CONTEUDO=window.CONTEUDO||{categorias:[],grupos:[]};
 const FOLHAS=CONTEUDO.grupos.map(g=>{const {categoria,ordem,...r}=g;return Object.assign({aba:categoria},r);});
 const ABAS=CONTEUDO.categorias.map(c=>({id:c.id,nome:c.nome}));
+/* exercício de qualquer lista pelo id, com a lista dele (as viradas buscam as levadas assim) */
+const EX_POR_ID=new Map();FOLHAS.forEach(l=>l.exercicios.forEach(e=>EX_POR_ID.set(e.id,{ex:e,l})));
 
 /* ---------- Estado salvo ---------- */
 const PADRAO={metaDia:20,durHoje:30,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
@@ -1015,7 +1043,7 @@ function listas(){
   return l;
 }
 function lista(id){const ls=listas();return ls.find(l=>l.id===id)||ls[0];}
-function exDe(lid,i){const l=lista(lid);return comLeitura(l.exercicios[clamp(i,0,l.exercicios.length-1)]);}
+function exDe(lid,i){const l=lista(lid);return comLevada(comLeitura(l.exercicios[clamp(i,0,l.exercicios.length-1)]),l);}
 function exAtual(){return exDe(sel.lista,sel.ex);}
 /* Onde está um exercício pelo código fixo (id). A lista e a posição podem mudar quando o conteúdo é reorganizado. */
 function ondeEsta(id){
@@ -1034,7 +1062,7 @@ function comId(lid,i){return {lista:lid,ex:i,id:(exDe(lid,i)||{}).id};}
 function salvaSel(){LS.set('sel',comId(sel.lista,sel.ex));}
 const cacheTr=new Map();
 function trilhas(ex){
-  if(ex.__leit)return ex.trilhas;
+  if(ex.__leit||ex.__lev)return ex.trilhas;
   if(edicoes[ex.id])return edicoes[ex.id];
   if(!ex.acentos)return ex.trilhas;
   const modo=cfg.acentoTec||'grupo',chaveC=ex.id+'|'+modo;
@@ -1132,6 +1160,63 @@ function leituraAlvo(ex){
   const sempre=semBase(lista(sel.lista).exercicios[sel.ex]);
   const aOn=sempre||(p.nivel!=null?true:p.on!=null?!!p.on:on),aNiv=clamp(p.nivel!=null?p.nivel:niv,1,max),nova=!!p.nova&&aOn;
   return {on:aOn,nivel:aNiv,nova,muda:aOn!==on||(aOn&&aNiv!==niv)||nova};
+}
+/* ---------- Levada + virada ----------
+   Uma lista de viradas com "levadas" (ids de levadas de outras listas) funciona como a leitura: a virada é
+   o exercício, e a levada escolhida (cfg.virLevada, a mesma para todas as viradas; "" é sem levada) entra como
+   primeiro compasso. A levada continua no compasso da virada, ocupando as pausas, até a primeira nota da
+   virada, e o prato entra no 1 da levada, depois da virada (a não ser que a virada já termine no prato). */
+const mdc=(a,b)=>b?mdc(b,a%b):a;
+const cacheLev=new Map();
+let levPend=null;   /* levada escolhida tocando: entra no começo da próxima volta, como na leitura */
+function levadasDe(l){return (l&&Array.isArray(l.levadas)?l.levadas:[]).map(id=>EX_POR_ID.get(id)).filter(Boolean);}
+function levadaEscolhida(l,id){
+  const ls=levadasDe(l);if(!ls.length)return null;
+  const v=id!==undefined?id:cfg.virLevada;if(v==='')return null;
+  return ls.find(o=>o.ex.id===v)||ls[0];
+}
+function levadaPossivel(ex,l){return !!(ex&&!ex.subs&&(ex.barras||1)===1&&levadasDe(l).length);}
+function comLevada(ex,l){
+  if(!ex||ex.__lev||!levadaPossivel(ex,l))return ex;
+  const o=levadaEscolhida(l);if(!o)return ex;
+  const g=o.ex;
+  if(g.subs||(g.barras||1)!==1||g.compasso[0]!==ex.compasso[0]||g.compasso[1]!==ex.compasso[1])return ex;
+  const S=g.sub/mdc(g.sub,ex.sub)*ex.sub;if(S>8)return ex;
+  const ed=edicoes[ex.id],em=edicoesMao[ex.id],edg=edicoes[g.id],chave=g.id+'|'+S,c=cacheLev.get(ex.id);
+  if(c&&c.chave===chave&&c.ed===ed&&c.em===em&&c.edg===edg)return c.ex;
+  const n=ex.compasso[0]*S,fg=S/g.sub,fv=S/ex.sub;
+  const estica=(s,f)=>f===1?s:[...s].map(ch=>ch+'.'.repeat(f-1)).join('');
+  const L={},V={},tr={};
+  const tg=trilhas(g),tv=trilhas(ex);
+  for(const k in tg)L[k]=estica(tg[k],fg);
+  for(const k in tv)V[k]=estica(tv[k],fv);
+  let pri=n;for(const k in V){const i=V[k].search(/[^.]/);if(i>=0&&i<pri)pri=i;}
+  const vazio='.'.repeat(n);
+  new Set([...Object.keys(L),...Object.keys(V)]).forEach(k=>{const a=L[k]||vazio,b=V[k]||vazio;tr[k]=a+a.slice(0,pri)+b.slice(pri);});
+  /* prato no 1 depois da virada: a mão sai do chimbal ou da condução e o bumbo continua */
+  if(!(V.cr&&/[^.]/.test(V.cr.slice(n-S)))){
+    tr.cr='x'+(tr.cr||'.'.repeat(2*n)).slice(1);
+    ['hh','ho','hm','rd','rb'].forEach(k=>{if(tr[k])tr[k]='.'+tr[k].slice(1);});
+  }
+  const d=Object.assign({},ex,{sub:S,barras:2,trilhas:tr,__lev:{id:g.id,num:g.num,nome:g.nome,lista:o.l.titulo}});
+  const m=maoDe(ex);
+  if(m&&[...m].some(t=>t&&t!=='.')){
+    const v=[];[...(Array.isArray(m)?m:m)].forEach(t=>{v.push(t==='.'?'':t);for(let j=1;j<fv;j++)v.push('');});
+    d.mao=Array(n).fill('').concat(v.map((t,i)=>i<pri?'':t));
+  }else delete d.mao;
+  cacheLev.set(ex.id,{chave,ed,em,edg,ex:d});
+  return d;
+}
+/* trocar a levada: parado vale na hora; tocando, entra no começo da próxima volta */
+function mudaLevada(id){
+  if(!eng||eng.tipo==='contagem'){levPend=null;cfg.virLevada=id;salvaCfg();renderPartitura();renderAjustes();return;}
+  levPend=id;renderLevada();renderLegenda();
+}
+/* id da levada escolhida e da que vai entrar ("" é sem levada), para os botões e os textos */
+function levadaIds(l){
+  const o=levadaEscolhida(l),atual=o?o.ex.id:'';
+  const alvo=levPend==null?atual:(levadaEscolhida(l,levPend)||{ex:{id:''}}).ex.id;
+  return {atual,alvo};
 }
 /* Exercícios com figura diferente em cada tempo (subs = notas por tempo) */
 function gradeVar(ex){
@@ -1361,6 +1446,7 @@ function parar(){
   marcaPasso(-1);acendePulso(-1);soltarTela();atualizaPlay();renderAndamento();
   if(abaAtiva==='rotina')renderColecao();
   if(leitPend){const op=leitPend;leitPend=null;aplicaLeitura(op);renderPartitura();renderAjustes();}
+  if(levPend!=null){cfg.virLevada=levPend;levPend=null;salvaCfg();renderPartitura();renderAjustes();}
 }
 function agenda(){
   if(!eng)return;
@@ -1398,6 +1484,7 @@ function agendaPasso(){
 function inicioCompasso(){
   if(eng.pend){const mudou=eng.pend.lista!==eng.lista;eng.lista=eng.pend.lista;eng.ex=eng.pend.ex;eng.pend=null;eng.faixa=null;eng.noDegrau=0;eng.fase=0;eng.crashProx=true;if(mudou)eng.bpm=cfg.progressao?cfg.inicio:cfg.bpmFixo;}
   if(leitPend){aplicaLeitura(leitPend);leitPend=null;fila.push({t:eng.t,releitura:true});}
+  if(levPend!=null){cfg.virLevada=levPend;levPend=null;salvaCfg();fila.push({t:eng.t,releitura:true});}
   if(eng.contagem>0){eng.contagem--;eng.tipo='contagem';return;}
   eng.ouvindo=!cfg.ouvir||eng.noDegrau%2===0;
   if(eng.fase<nLevada(eng.lista)){eng.tipo='levada';eng.crashAgora=eng.fase===0&&eng.crashProx;}
@@ -1435,7 +1522,7 @@ function fimCompasso(){
 }
 function trocaEx(i){eng.ex=i;eng.contagem=1;eng.fase=0;eng.crashProx=true;fila.push({t:eng.t,troca:{lista:eng.lista,ex:i}});}
 /* ---------- Levada antes das viradas ---------- */
-function nLevada(lid){const l=lista(lid);return l&&l.virada?cfg.levada:0;}
+function nLevada(lid){const l=lista(lid);return l&&l.virada&&!l.levadas?cfg.levada:0;}
 function inicioVirada(ex){
   const tr=trilhas(ex);let pri=passos(ex);
   for(const k in tr){const i=tr[k].search(/[^.]/);if(i>=0&&i<pri)pri=i;}
@@ -2009,12 +2096,12 @@ function renderCabecalho(){
   $('#exFolha').textContent=l.titulo+(edicoes[ex.id]||edicoesMao[ex.id]?', com edições suas':'');
 }
 function renderPartitura(){
-  if(editando&&exAtual().__leit)editando=false;
-  renderCabecalho();renderLeitura();renderLegenda();notacao();renderGrade();renderEditar();
+  if(editando&&(exAtual().__leit||exAtual().__lev))editando=false;
+  renderCabecalho();renderLeitura();renderLevada();renderLegenda();notacao();renderGrade();renderEditar();
   $('.bpm-u').textContent=exAtual().compasso[1]===8?'BPM (colcheia)':'BPM';
   atualizaBtnRotina();atualizaFav();
   const b=$('#btnEditar');b.setAttribute('aria-pressed',editando?'true':'false');b.textContent=editando?'Concluir edição':'Editar notas';
-  b.hidden=!!exAtual().subs||!!exAtual().__leit;if(exAtual().subs&&editando){editando=false;}
+  b.hidden=!!exAtual().subs||!!exAtual().__leit||!!exAtual().__lev;if(exAtual().subs&&editando){editando=false;}
 }
 function vizinhoEx(dir){
   /* na área principal (o curso de leitura) a sequência atravessa os passos: Figuras, Leitura na caixa, Sistemas */
@@ -2029,13 +2116,13 @@ function vizinhoEx(dir){
 function renderLegenda(){
   const ex=exAtual();
   $('#legNome').textContent=ex.nome;
-  $('#legInfo').textContent=lista(sel.lista).titulo+textoLeitura(ex);
+  $('#legInfo').textContent=lista(sel.lista).titulo+textoLeitura(ex)+textoLevada(ex);
   const emSessao=!!(eng&&eng.rotina);
   [['#btnAnt',-1,'Exercício anterior'],['#btnProx',1,'Próximo exercício']].forEach(([q,d,txt])=>{
     const v=emSessao?null:vizinhoEx(d),b=$(q);
     b.disabled=!v;b.setAttribute('aria-label',v?`${txt}: ${exDe(v.lista,v.ex).nome}`:txt);
   });
-  renderLeitDeit(ex);
+  renderLeitDeit(ex);renderLevDeit(ex);
 }
 /* texto da leitura na faixa de cima da tela de leitura, como "nível 2: contratempo" */
 function textoLeitura(ex){
@@ -2061,6 +2148,39 @@ function renderLeitDeit(ex){
     b.setAttribute('aria-pressed',atual?'true':'false');b.classList.toggle('pend',alvo&&!atual);
   });
   const nova=$('#leitDeitNova');nova.hidden=!on&&!a.on;nova.classList.toggle('pend',a.nova);
+}
+/* texto da levada na faixa de cima da tela de leitura, como "levada 12" */
+function textoLevada(ex){
+  const l=lista(sel.lista);if(!levadaPossivel(l.exercicios[sel.ex],l))return '';
+  const {atual,alvo}=levadaIds(l),num=id=>(EX_POR_ID.get(id)||{ex:{}}).ex.num;
+  if(alvo!==atual)return alvo?`, levada ${num(alvo)} na próxima volta`:', sem levada na próxima volta';
+  return atual?`, levada ${num(atual)}`:', sem levada';
+}
+/* botões das levadas (tela normal e tela de leitura): Sem e o número de cada levada; tracejado = entra na próxima volta */
+function preencheLevadas(s,l){
+  const ls=levadasDe(l),chave=ls.map(o=>o.ex.id).join(',');
+  if(s.dataset.k!==chave){
+    s.dataset.k=chave;
+    s.innerHTML='<button type="button" data-v="" class="lev-sem" aria-label="Sem levada, só a virada">Sem</button>'
+      +ls.map(o=>`<button type="button" data-v="${esc(o.ex.id)}" aria-label="${esc(o.ex.nome)} do ${esc(o.l.titulo)}" title="${esc(o.ex.nome)} do ${esc(o.l.titulo)}">${esc(o.ex.num)}</button>`).join('');
+  }
+  const {atual,alvo}=levadaIds(l);
+  $$('button',s).forEach(b=>{const v=b.dataset.v;b.setAttribute('aria-pressed',v===atual?'true':'false');b.classList.toggle('pend',v===alvo&&alvo!==atual);});
+}
+function renderLevDeit(){
+  const box=$('#levDeit'),l=lista(sel.lista),pode=levadaPossivel(l.exercicios[sel.ex],l);
+  box.hidden=!pode;document.body.classList.toggle('com-levada',pode);
+  if(pode)preencheLevadas($('#levDeitSel'),l);
+}
+function renderLevada(){
+  const box=$('#levBox'),l=lista(sel.lista),pode=levadaPossivel(l.exercicios[sel.ex],l);
+  box.hidden=!pode;if(!pode)return;
+  preencheLevadas($('#levSel'),l);
+  const {atual,alvo}=levadaIds(l),o=EX_POR_ID.get(atual),oa=EX_POR_ID.get(alvo);
+  const pend=alvo===atual?'':oa?`A ${oa.ex.nome.toLowerCase()} entra na próxima volta. `:'Sem levada a partir da próxima volta. ';
+  $('#levInfo').textContent=pend+(o
+    ?`${o.ex.nome} do ${o.l.titulo} no primeiro compasso e a virada no segundo. A levada segue no começo do compasso da virada até ela começar, e o prato entra no 1 depois da virada.`
+    :'Só a virada. Escolha uma levada para tocar a levada no primeiro compasso e a virada no segundo.');
 }
 function vaiVizinho(dir){const v=vizinhoEx(dir);if(!v||(eng&&eng.rotina))return;escolhe(v.lista,v.ex);atualizaNav();}
 function renderLegExec(){
@@ -2229,7 +2349,7 @@ function renderAjustes(){
   $('#l-reps').textContent=cfg.progressao?'Repetições em cada andamento':'Repetições por rodada';
   $$('#segContagem button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===cfg.contagem?'true':'false'));
   $$('#segLevada button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===cfg.levada?'true':'false'));
-  $('#blocoLevada').hidden=!lista(sel.lista).virada;
+  $('#blocoLevada').hidden=!lista(sel.lista).virada||!!lista(sel.lista).levadas;
   $('#blocoLeit').hidden=!exAtual().leitura;
   $$('#segCompLeit button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===(cfg.leitComp===1?1:2)?'true':'false'));
   $('#volGroove').value=cfg.volGroove;$('#volClique').value=cfg.volClique;
@@ -2247,6 +2367,7 @@ $$('#segLeit button').forEach(b=>b.addEventListener('click',()=>mudaLeitura({on:
 $('#btnNovaLeit').addEventListener('click',()=>mudaLeitura({nova:true}));
 $('#leitDeitNiv').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const v=+b.dataset.v;mudaLeitura(v===0?{on:false}:{nivel:v});});
 $('#leitDeitNova').addEventListener('click',()=>mudaLeitura({nova:true}));
+['#levSel','#levDeitSel'].forEach(q=>$(q).addEventListener('click',e=>{const b=e.target.closest('button');if(b)mudaLevada(b.dataset.v);}));
 $('#btnFixar').addEventListener('click',()=>{const id=exAtual().id;fixando=fixando===id?null:id;renderLeitura();});
 $('#btnCancFixar').addEventListener('click',()=>{fixando=null;renderLeitura();});
 $('#fixarComp').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;fixarComp=+b.dataset.v;renderLeitura();});

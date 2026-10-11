@@ -44,6 +44,7 @@ Site: https://francwrlanh19-ai.github.io/Bateria/
 - Em cada casa: `.` pausa, `x` nota, `X` acento, `g` nota fantasma, `f` flam.
 - `mao` (opcional): uma letra por casa, `D` direita e `E` esquerda.
 - `leitura` (opcional): transforma o exercício num *sistema com leitura*. O valor é a peça que lê (`bd`, `sn`, `ft`, `hp`…), que precisa estar livre no sistema. O sistema tem 1 compasso, em 4/4 com `sub` 2 ou 4; o app repete o sistema por 1 ou 2 compassos e gera por cima uma linha de leitura nova, em 5 níveis (curso **Sistemas com leitura**, em Coordenação).
+- `levadas` (opcional, no grupo): ids de levadas de 1 compasso, como `["rk-5", "rk-6"]`. Numa lista de viradas, a pessoa escolhe a levada como escolhe o nível da leitura: o primeiro compasso é a levada (com prato no 1 depois da virada) e o segundo é a virada, com a levada até a virada começar. Em **Viradas simples para worship** ficam as levadas 5 a 16 do Rock Beats 2.
 - Os `id` de exercício nunca devem mudar: os recordes de cada pessoa ficam ligados a eles.
 
 ## Comandos (no Codespace)

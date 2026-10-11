@@ -47,6 +47,7 @@ export function validar() {
   const dir = path.join(raiz, 'conteudo/grupos');
   const idsGrupo = new Set();
   const idsExercicio = new Set();
+  const exPorId = new Map(), pedidosLevada = [];
 
   for (const arquivo of fs.readdirSync(dir).filter(f => f.endsWith('.json')).sort()) {
     const E = m => erros.push(`${arquivo}: ${m}`);
@@ -73,13 +74,18 @@ export function validar() {
         if (g.andamento.inicio != null && g.andamento.fim != null && g.andamento.inicio > g.andamento.fim) E('"andamento": o início é maior que o fim');
       }
     }
+    // Viradas com levada: "levadas" é uma lista de ids de levadas (de qualquer lista) que o app põe antes da virada
+    if (g.levadas != null) {
+      if (!Array.isArray(g.levadas) || !g.levadas.length || g.levadas.some(x => typeof x !== 'string')) E('"levadas" precisa ser uma lista de ids de exercício, como ["rk-5", "rk-6"]');
+      else pedidosLevada.push([arquivo, g.levadas]);
+    }
     if (!Array.isArray(g.exercicios) || !g.exercicios.length) { E('não tem exercícios'); continue; }
 
     g.exercicios.forEach((ex, i) => {
       const P = `exercício ${ex.id || '#' + (i + 1)}`;
       if (!ex.id) E(`${P}: falta "id"`);
       else if (idsExercicio.has(ex.id)) E(`${P}: id repetido (os ids precisam ser únicos em todo o app)`);
-      else idsExercicio.add(ex.id);
+      else { idsExercicio.add(ex.id); exPorId.set(ex.id, ex); }
       if (!ex.nome) E(`${P}: falta "nome"`);
       if (ex.nivel != null && !nivelOk(ex.nivel)) E(`${P}: "nivel" precisa ser um número inteiro de 1 a 5`);
 
@@ -121,6 +127,11 @@ export function validar() {
         });
       }
     });
+  }
+  for (const [arquivo, ids] of pedidosLevada) for (const id of ids) {
+    const lv = exPorId.get(id);
+    if (!lv) erros.push(`${arquivo}: "levadas" cita o exercício "${id}", que não existe`);
+    else if ((lv.barras || 1) !== 1 || lv.subs) erros.push(`${arquivo}: a levada "${id}" precisa ter 1 compasso, sem "subs"`);
   }
   // Trilha de estudo: etapas com os exercícios na ordem de estudo (cada exercício entra uma vez só)
   const avisos = [];

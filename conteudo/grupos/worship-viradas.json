@@ -9,8 +9,9 @@
   },
   "vozUnica": true,
   "virada": true,
+  "levadas": ["rk-5", "rk-6", "rk-7", "rk-8", "rk-9", "rk-10", "rk-11", "rk-12", "rk-13", "rk-14", "rk-15", "rk-16"],
   "titulo": "Viradas simples para worship",
-  "descricao": "Viradas de um compasso: as pausas do começo são o lugar da levada. O material original tem 12 viradas; aqui estão da 1 à 9.",
+  "descricao": "Viradas de um compasso. Escolha uma levada do Rock Beats 2: ela fica no primeiro compasso e a virada no segundo. A levada continua no começo do compasso da virada até a virada começar, e o prato entra no 1 depois dela. O material original tem 12 viradas; aqui estão da 1 à 9.",
   "exercicios": [
     {"id":"wv-1","num":1,"nome":"Virada 1","compasso":[4,4],"sub":8,"mao":["","","","","","","","","","","","","","","","","","","","","","","e","e","D","","E","","D","","",""],"trilhas":{"sn":"......................ggx.......","t1":"..........................x.....","ft":"............................x..."}},
     {"id":"wv-2","num":2,"nome":"Virada 2","compasso":[4,4],"sub":4,"mao":["","","","","","","","","","","","","D","E","D","E"],"trilhas":{"sn":"............xxx.","cr":"...............x","bd":"...............x"}},
