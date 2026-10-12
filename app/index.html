@@ -2104,7 +2104,7 @@ function renderPartitura(){
   b.hidden=!!exAtual().subs||!!exAtual().__leit||!!exAtual().__lev;if(exAtual().subs&&editando){editando=false;}
 }
 function vizinhoEx(dir){
-  /* na área principal (o curso de leitura) a sequência atravessa os passos: Figuras, Leitura na caixa, Sistemas */
+  /* numa área principal a sequência atravessa os passos dela (na Leitura: Figuras, Leitura na caixa, Sistemas) */
   const l0=lista(sel.lista),c0=CONTEUDO.categorias.find(c=>c.id===abaDe(l0)),ar=c0&&AREAS.find(a=>a.id===c0.area);
   const cats=ar&&ar.principal?CONTEUDO.categorias.filter(c=>c.area===ar.id&&!c.especial).map(c=>c.id):[abaDe(l0)];
   const ls=[].concat(...cats.map(id=>listas().filter(l=>abaDe(l)===id&&l.exercicios.length))),li=ls.findIndex(l=>l.id===l0.id);
@@ -2513,7 +2513,7 @@ function renderHub(){
   /* Busca: quando tem texto, os resultados aparecem no lugar das áreas */
   h.append(caixaBusca());
   const res=el('div','busca-res');res.id='buscaRes';res.hidden=true;h.append(res);
-  /* Áreas: a principal (Leitura) primeiro, com as categorias numeradas como passos; depois Outros */
+  /* Áreas: as principais (Leitura, Levadas e viradas) primeiro, com as categorias numeradas como passos; depois Outros */
   const caixa=el('div','areas');caixa.id='areasHub';
   const cats=CONTEUDO.categorias.filter(c=>!c.especial);
   const grupos=AREAS.length?AREAS:[{id:'',nome:'Categorias'}];
@@ -3141,15 +3141,15 @@ function renderTrilha(box){
   });
 }
 
-/* ---------- Treino de hoje: uma vaga para cada área; a área principal (Leitura) ganha uma vaga por categoria ---------- */
+/* ---------- Treino de hoje: uma vaga para cada área; as áreas principais (Leitura, Levadas e viradas) ganham uma vaga por categoria ---------- */
 const DURS={15:[3,4,4,4],30:[5,5,10,10],45:[10,10,10,15]};
 let planoHoje=LS.get('hoje',null);
 function vagasDoTreino(){
   const v=[];
   AREAS.forEach(a=>{
     const cs=CONTEUDO.categorias.filter(c=>c.area===a.id&&!c.especial);if(!cs.length)return;
-    if(a.principal)cs.forEach(c=>v.push({id:c.id,cats:[c.id],nome:c.nome,icone:a.icone,cor:c.cor||a.cor,principal:true}));
-    else v.push({id:a.id,cats:cs.map(c=>c.id),nome:a.nome,icone:a.icone,cor:a.cor});
+    if(a.principal)cs.forEach(c=>v.push({id:c.id,cats:[c.id],nome:c.nome,icone:a.icone,cor:c.cor||a.cor,principal:true,area:a.id,areaNome:a.nome}));
+    else v.push({id:a.id,cats:cs.map(c=>c.id),nome:a.nome,icone:a.icone,cor:a.cor,area:a.id,areaNome:a.nome});
   });
   return v;
 }
@@ -3236,11 +3236,14 @@ function cartaoHoje(){
   sec.append(go);
   return sec;
 }
+/* "Três de leitura, um de levadas e viradas e um de outros, na ordem do treino." */
 function textoVagas(){
-  const vs=vagasDoTreino(),nl=vs.filter(v=>v.principal).length,no=vs.length-nl,N=['nenhum','um','dois','três','quatro','cinco'];
-  if(!nl)return 'Um exercício de cada área, na ordem do treino.';
-  const a=N[nl]||String(nl);
-  return `${a[0].toUpperCase()+a.slice(1)} de leitura${no?` e ${N[no]||no} de outros`:''}, na ordem do treino.`;
+  const vs=vagasDoTreino(),N=['nenhum','um','dois','três','quatro','cinco'],por=[];
+  if(!vs.some(v=>v.principal))return 'Um exercício de cada área, na ordem do treino.';
+  vs.forEach(v=>{const o=por.find(x=>x.id===v.area);if(o)o.n++;else por.push({id:v.area,nome:v.areaNome,n:1});});
+  const ps=por.map(o=>`${N[o.n]||o.n} de ${String(o.nome).toLowerCase()}`);
+  const t=ps.length>1?ps.slice(0,-1).join(', ')+' e '+ps[ps.length-1]:ps[0];
+  return t[0].toUpperCase()+t.slice(1)+', na ordem do treino.';
 }
 function saudacao(){const h=new Date().getHours();return h>=5&&h<12?'Bom dia':h>=12&&h<18?'Boa tarde':'Boa noite';}
 function concluiHoje(){const p=planoDeHoje();p.feito=true;LS.set('hoje',p);const d=diaDoDiario();d.treinos=(d.treinos||0)+1;LS.set('diario',diario);}

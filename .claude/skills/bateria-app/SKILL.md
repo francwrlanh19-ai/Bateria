@@ -14,7 +14,7 @@ description: Mantém e publica o app "Estudo de bateria" (repositório GitHub fr
 
 ```
 app/                    o aplicativo (index.html, amostras.js com os sons, vendor/vexflow, ícones, manifest)
-conteudo/areas.json        áreas do início (Mãos, Ritmo e leitura, Coordenação, Levadas e viradas)
+conteudo/areas.json        áreas do início (Leitura e Levadas e viradas, as principais; Outros)
 conteudo/trilha.json       trilha de estudo: os ids dos exercícios em 7 etapas, na ordem de estudo
 conteudo/categorias.json   categorias (id, area, nome, descrição, cor; "rotina" e "meus" são especiais)
 conteudo/grupos/<id>.json  um arquivo por lista de exercícios

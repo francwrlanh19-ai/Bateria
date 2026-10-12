@@ -1,4 +1,5 @@
 [
-  {"id": "leitura", "nome": "Leitura", "descricao": "Aprenda a ler bateria, um passo de cada vez", "cor": "--brass", "icone": "🎼", "principal": true},
-  {"id": "outros", "nome": "Outros", "descricao": "Técnica, coordenação e levadas para o culto", "cor": "--rd", "icone": "🥁"}
+  {"id": "leitura", "nome": "Leitura", "descricao": "Destrava a coordenação: aprenda a ler bateria, um passo de cada vez", "cor": "--brass", "icone": "🎼", "principal": true},
+  {"id": "levadas", "nome": "Levadas e viradas", "descricao": "Condução: a levada em cima e a virada embaixo, sem perder o tempo", "cor": "--cym", "icone": "🥁", "principal": true},
+  {"id": "outros", "nome": "Outros", "descricao": "Técnica, independência e estilos para o culto", "cor": "--rd", "icone": "🧩"}
 ]

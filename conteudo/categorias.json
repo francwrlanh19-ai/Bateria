@@ -21,6 +21,13 @@
     "cor": "--sn"
   },
   {
+    "id": "viradas-levada",
+    "area": "levadas",
+    "nome": "Viradas com levada",
+    "descricao": "As viradas de worship com as levadas 5 a 16 do Rock Beats",
+    "cor": "--cym"
+  },
+  {
     "id": "tecnica",
     "area": "outros",
     "nome": "Técnica",
@@ -45,7 +52,7 @@
     "id": "worship",
     "area": "outros",
     "nome": "Worship",
-    "descricao": "Viradas, levadas e 6/8",
+    "descricao": "Levadas e 6/8",
     "cor": "--cym"
   },
   {

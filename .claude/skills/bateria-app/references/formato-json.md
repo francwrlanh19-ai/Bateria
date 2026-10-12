@@ -16,7 +16,7 @@
 ```json
 { "id": "levadas", "nome": "Levadas e viradas", "descricao": "Para tocar no culto", "cor": "--cym", "icone": "🥁" }
 ```
-As áreas atuais são `maos`, `leitura`, `coordenacao` e `levadas`. Mude só se o usuário pedir. O `icone` (um emoji) aparece no início, ao lado do nome da área e nos pads do treino de hoje.
+As áreas atuais são `leitura` e `levadas` (as duas com `"principal": true`: categorias numeradas como passos e uma vaga por categoria no treino de hoje) e `outros`. Mude só se o usuário pedir. O `icone` (um emoji) aparece no início, ao lado do nome da área e nos pads do treino de hoje.
 
 `conteudo/categorias.json` lista as categorias em ordem de exibição; cada uma pertence a uma área:
 ```json
