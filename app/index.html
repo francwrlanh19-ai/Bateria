@@ -861,6 +861,10 @@ body.foco .partitura{gap:10px}
           <button type="button" class="sw" role="switch" data-k="lista" aria-labelledby="lbLista"></button>
         </div>
         <div class="linha-sw">
+          <span class="txt" id="lbSorteio"><b>Sortear a ordem</b><small>Com Tocar a folha inteira, os exercícios vêm fora de ordem e só repetem depois de passar por todos. Nas viradas, você lê em vez de decorar a sequência.</small></span>
+          <button type="button" class="sw" role="switch" data-k="sorteio" aria-labelledby="lbSorteio"></button>
+        </div>
+        <div class="linha-sw">
           <span class="txt" id="lbOuvir"><b>Ouvir e repetir</b><small>Num compasso o app toca; no seguinte, só o clique e você toca.</small></span>
           <button type="button" class="sw" role="switch" data-k="ouvir" aria-labelledby="lbOuvir"></button>
         </div>
@@ -878,6 +882,15 @@ body.foco .partitura{gap:10px}
             <button type="button" data-v="1">1 compasso</button>
             <button type="button" data-v="2">2 compassos</button>
           </div>
+        </div>
+        <div class="vol">Clique que some
+          <div class="seg" id="segGap">
+            <button type="button" data-v="0">Nunca</button>
+            <button type="button" data-v="1">3 e 1</button>
+            <button type="button" data-v="2">2 e 2</button>
+            <button type="button" data-v="3">1 e 3</button>
+          </div>
+          <small class="nota">Compassos com clique e compassos em silêncio. No silêncio o app para de tocar e você segura o tempo sozinho; quando o clique volta, dá para ver se correu ou atrasou. "3 e 1" são três compassos com clique e um sem.</small>
         </div>
       </section>
 
@@ -1001,6 +1014,8 @@ const ORDEM=['cr','rd','rb','hh','ho','hm','t1','t2','sn','ft','bd','hp'];
 /* nome escrito em cima da primeira nota de cada prato, para separar chimbal, condução, cúpula e ataque */
 const NOME_PRATO=[['Chimbal',['hh','ho','hm']],['Cond.',['rd']],['Cúpula',['rb']],['Ataque',['cr']]];
 const VEL={x:0.8,X:1,g:0.3,f:0.8};
+/* clique que some: [compassos com clique, compassos em silêncio] para cada opção de cfg.gap */
+const GAP={1:[3,1],2:[2,2],3:[1,3]};
 const PROX={'.':'x','x':'X','X':'g','g':'f','f':'.'};
 const hit=c=>!!c&&c!=='.';
 let edicoesMao={};
@@ -1021,7 +1036,7 @@ const ABAS=CONTEUDO.categorias.map(c=>({id:c.id,nome:c.nome}));
 const EX_POR_ID=new Map();FOLHAS.forEach(l=>l.exercicios.forEach(e=>EX_POR_ID.set(e.id,{ex:e,l})));
 
 /* ---------- Estado salvo ---------- */
-const PADRAO={metaDia:20,durHoje:30,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
+const PADRAO={metaDia:20,durHoje:30,gap:0,sorteio:false,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
 const LIMITES={inicio:[30,300],fim:[30,300],passo:[1,30],reps:[1,64],bpmFixo:[30,300]};
 let cfg=Object.assign({},PADRAO,LS.get('cfg',{}));
 cfg.mix=Object.assign({},PADRAO.mix,cfg.mix||{});
@@ -1432,6 +1447,7 @@ function iniciar(op){
   audio();novaSessao();chokeAberto=null;
   eng={lista:sel.lista,ex:sel.ex,passo:0,t:ac.currentTime+0.1,bpm:cfg.progressao?cfg.inicio:cfg.bpmFixo,
        noDegrau:0,contagem:cfg.contagem,tipo:'contagem',ouvindo:true,fim:false,pend:null,fase:0,crashProx:true,crashAgora:false};
+  if(cfg.lista&&cfg.sorteio&&!(op&&op.sessao)&&lista(sel.lista).exercicios.length>1){eng.ordem=novaOrdem(lista(sel.lista).exercicios.length,sel.ex);eng.iOrdem=0;}
   if(op&&op.sessao){eng.rotina=Object.assign({i:0,inicioT:eng.t},op.sessao);eng.faixa=faixaDe(eng.rotina.itens[0]);if(eng.faixa&&cfg.progressao)eng.bpm=eng.faixa.ini;}
   fila.length=0;$('#aviso').hidden=true;
   $('#estado').textContent=cfg.contagem?'Contagem':'Tocando';$('#rep').textContent='';
@@ -1459,8 +1475,12 @@ function agendaPasso(){
   const sub=GV?GV.sb[p]:ex.sub;
   const tempo=GV?GV.ps[p]===0:p%sub===0,nb=(GV?GV.bt[p]:Math.floor(p/sub))%ex.compasso[0];
   const med=composto(ex)&&nb%3===0;
+  /* clique que some: conta os compassos tocados (sem a contagem) e cala o clique e o exercício nos compassos de silêncio */
+  const porComp=ex.subs?n:n/(ex.barras||1),inicioComp=p%porComp===0;
+  if(eng.tipo==='contagem')eng.calado=false;
+  else if(inicioComp){eng.nComp=(eng.nComp||0)+1;const g=GAP[cfg.gap];eng.calado=!!g&&(eng.nComp-1)%(g[0]+g[1])>=g[0];}
   if(eng.tipo==='contagem'){if(tempo)clique(t,nb===0,med);}
-  else{
+  else if(!eng.calado){
     const suaVez=cfg.ouvir&&!eng.ouvindo;
     if(tempo&&(cfg.clique||suaVez))clique(t,nb===0,med);
     if(cfg.groove&&eng.ouvindo){
@@ -1473,7 +1493,7 @@ function agendaPasso(){
       }
     }
   }
-  fila.push({t,passo:p,sub,ini:tempo,nbt:nb,tipo:eng.tipo,ouvindo:eng.ouvindo,lista:eng.lista,ex:eng.ex,bpm:eng.bpm,noDegrau:eng.noDegrau,fase:eng.fase,nl:nLevada(eng.lista),rt:eng.rotina&&eng.rotina.itens[eng.rotina.i]?{i:eng.rotina.i,n:eng.rotina.itens.length,tipo:eng.rotina.tipo,resta:Math.max(0,eng.rotina.itens[eng.rotina.i].min*60-(t-eng.rotina.inicioT))}:null});
+  fila.push({t,passo:p,sub,ini:tempo,nbt:nb,tipo:eng.tipo,ouvindo:eng.ouvindo,inicioComp,calado:!!eng.calado,posL:eng.ordem&&eng.ordem[eng.iOrdem]===eng.ex?eng.iOrdem:eng.ex,lista:eng.lista,ex:eng.ex,bpm:eng.bpm,noDegrau:eng.noDegrau,fase:eng.fase,nl:nLevada(eng.lista),rt:eng.rotina&&eng.rotina.itens[eng.rotina.i]?{i:eng.rotina.i,n:eng.rotina.itens.length,tipo:eng.rotina.tipo,resta:Math.max(0,eng.rotina.itens[eng.rotina.i].min*60-(t-eng.rotina.inicioT))}:null});
   eng.t+=60/eng.bpm/sub;
   eng.passo++;
   if(eng.passo>=n){
@@ -1482,7 +1502,7 @@ function agendaPasso(){
   }
 }
 function inicioCompasso(){
-  if(eng.pend){const mudou=eng.pend.lista!==eng.lista;eng.lista=eng.pend.lista;eng.ex=eng.pend.ex;eng.pend=null;eng.faixa=null;eng.noDegrau=0;eng.fase=0;eng.crashProx=true;if(mudou)eng.bpm=cfg.progressao?cfg.inicio:cfg.bpmFixo;}
+  if(eng.pend){const mudou=eng.pend.lista!==eng.lista;eng.lista=eng.pend.lista;eng.ex=eng.pend.ex;eng.pend=null;eng.ordem=null;eng.faixa=null;eng.noDegrau=0;eng.fase=0;eng.crashProx=true;if(mudou)eng.bpm=cfg.progressao?cfg.inicio:cfg.bpmFixo;}
   if(leitPend){aplicaLeitura(leitPend);leitPend=null;fila.push({t:eng.t,releitura:true});}
   if(levPend!=null){cfg.virLevada=levPend;levPend=null;salvaCfg();fila.push({t:eng.t,releitura:true});}
   if(eng.contagem>0){eng.contagem--;eng.tipo='contagem';return;}
@@ -1512,13 +1532,26 @@ function fimCompasso(){
   eng.noDegrau=0;
   registra(exDe(eng.lista,eng.ex),eng.bpm);
   if(cfg.leitTroca&&exDe(eng.lista,eng.ex).__leit){novaLeitura();fila.push({t:eng.t,releitura:true});}
-  const l=lista(eng.lista),ult=eng.ex>=l.exercicios.length-1,varios=l.exercicios.length>1;
+  const l=lista(eng.lista),varios=l.exercicios.length>1;
   const emLista=cfg.lista&&!eng.rotina;
-  if(emLista&&!ult){trocaEx(eng.ex+1);return;}
-  if(!cfg.progressao){if(emLista&&varios)trocaEx(0);return;}
+  /* folha inteira: na ordem da lista ou, com "Sortear a ordem", numa ordem sorteada que passa por todos antes de repetir */
+  const sorteio=emLista&&varios&&cfg.sorteio;
+  if(sorteio&&(!eng.ordem||eng.ordem.length!==l.exercicios.length||eng.ordem[eng.iOrdem]!==eng.ex)){eng.ordem=novaOrdem(l.exercicios.length,eng.ex);eng.iOrdem=0;}
+  const ult=sorteio?eng.iOrdem>=eng.ordem.length-1:eng.ex>=l.exercicios.length-1;
+  const proximo=()=>{if(sorteio){eng.iOrdem++;trocaEx(eng.ordem[eng.iOrdem]);}else trocaEx(eng.ex+1);};
+  const recomeca=()=>{if(sorteio){eng.ordem=novaOrdem(l.exercicios.length,null,eng.ex);eng.iOrdem=0;trocaEx(eng.ordem[0]);}else trocaEx(0);};
+  if(emLista&&!ult){proximo();return;}
+  if(!cfg.progressao){if(emLista&&varios)recomeca();return;}
   if(eng.bpm>=fimBpm()){if(!eng.rotina)eng.fim=true;return;}
   eng.bpm=Math.min(fimBpm(),eng.bpm+Math.max(1,cfg.passo));
-  if(emLista&&varios)trocaEx(0);
+  if(emLista&&varios)recomeca();
+}
+/* ordem sorteada dos exercícios da lista: começa em "primeiro" (se houver) e não começa por "evita" (o último tocado) */
+function novaOrdem(n,primeiro,evita){
+  const r=[...Array(n).keys()].filter(i=>i!==primeiro);
+  for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}
+  if(primeiro==null&&evita!=null&&r[0]===evita&&r.length>1)[r[0],r[1]]=[r[1],r[0]];
+  return primeiro!=null?[primeiro,...r]:r;
 }
 function trocaEx(i){eng.ex=i;eng.contagem=1;eng.fase=0;eng.crashProx=true;fila.push({t:eng.t,troca:{lista:eng.lista,ex:i}});}
 /* ---------- Levada antes das viradas ---------- */
@@ -1577,14 +1610,18 @@ function aplica(ev){
     mostraBpm(ev.bpm);
     const need=precisa();
     let frac=ev.noDegrau/need;
-    if(cfg.lista){const len=lista(ev.lista).exercicios.length;frac=(ev.ex*need+ev.noDegrau)/(len*need);}
+    if(cfg.lista){const len=lista(ev.lista).exercicios.length;frac=((ev.posL!=null?ev.posL:ev.ex)*need+ev.noDegrau)/(len*need);}
     atualizaEscada(ev.bpm,frac);
     if(ev.tipo==='toca'){
       const r=cfg.ouvir?Math.floor(ev.noDegrau/2)+1:ev.noDegrau+1;
       const vir=!!lista(ev.lista).virada;
       $('#estado').textContent=cfg.ouvir?(ev.ouvindo?'Ouça':'Sua vez'):(vir?'Virada':'Tocando');
+      if(ev.calado)$('#estado').textContent='Sem clique';
       $('#rep').textContent=ev.rt?`${ev.rt.tipo==='hoje'?'Treino':'Rotina'} ${ev.rt.i+1} de ${ev.rt.n}, faltam ${Math.floor(ev.rt.resta/60)}:${String(Math.floor(ev.rt.resta%60)).padStart(2,'0')}`:`Repetição ${r} de ${cfg.reps}`;
     }
+  }
+  if(ev.inicioComp&&ev.passo!==0&&ev.tipo==='toca'&&cfg.gap){
+    $('#estado').textContent=ev.calado?'Sem clique':cfg.ouvir?(ev.ouvindo?'Ouça':'Sua vez'):(lista(ev.lista).virada?'Virada':'Tocando');
   }
 }
 
@@ -2348,6 +2385,7 @@ function renderAjustes(){
   });
   $('#l-reps').textContent=cfg.progressao?'Repetições em cada andamento':'Repetições por rodada';
   $$('#segContagem button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===cfg.contagem?'true':'false'));
+  $$('#segGap button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===(cfg.gap||0)?'true':'false'));
   $$('#segLevada button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===cfg.levada?'true':'false'));
   $('#blocoLevada').hidden=!lista(sel.lista).virada||!!lista(sel.lista).levadas;
   $('#blocoLeit').hidden=!exAtual().leitura;
@@ -2361,6 +2399,7 @@ $$('.sw').forEach(s=>s.addEventListener('click',()=>{
   if(k==='progressao'&&eng)eng.bpm=cfg.progressao?eng.bpm:cfg.bpmFixo;
 }));
 $$('#segContagem button').forEach(b=>b.addEventListener('click',()=>{cfg.contagem=+b.dataset.v;salvaCfg();renderAjustes();}));
+$$('#segGap button').forEach(b=>b.addEventListener('click',()=>{cfg.gap=+b.dataset.v;salvaCfg();renderAjustes();}));
 $$('#segLevada button').forEach(b=>b.addEventListener('click',()=>{cfg.levada=+b.dataset.v;salvaCfg();renderAjustes();}));
 $$('#segVista button').forEach(b=>b.addEventListener('click',()=>{cfg.vista=b.dataset.v;salvaCfg();notacao();}));
 $$('#segLeit button').forEach(b=>b.addEventListener('click',()=>mudaLeitura({on:b.dataset.v==='1'})));

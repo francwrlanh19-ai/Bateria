@@ -59,6 +59,8 @@ Cada aparelho guarda os próprios recordes, rotinas, favoritos, diário de estud
 ## Uso diário
 
 - **Treino de hoje** (15, 30 ou 45 minutos): um exercício de cada área. Primeiro o que você está treinando, depois o que pede revisão, depois o próximo novo na ordem da trilha. Cada exercício começa perto do seu recorde e sobe até a meta da lista.
+- **Clique que some** (Ajustes › Treino): 3 e 1, 2 e 2 ou 1 e 3 compassos com e sem clique. Nos compassos sem clique o app fica em silêncio e a pessoa segura o tempo sozinha.
+- **Sortear a ordem** (Ajustes › Treino): com *Tocar a folha inteira*, os exercícios vêm em ordem sorteada, passando por todos antes de repetir. Bom para as viradas.
 - **Estados**: cada exercício fica *novo*, *treinando*, *dominado* (chegou no andamento final da lista) ou *revisar* (dominado e parado há 7 dias ou mais).
 - **Últimos 7 dias**, dias seguidos e meta diária; **busca**; **filtros** e **favoritos** nas categorias.
 - **Minhas rotinas**: várias, com nome. O botão *Enviar link* gera um link para mandar no WhatsApp; quem abre o link guarda a rotina no próprio app.
