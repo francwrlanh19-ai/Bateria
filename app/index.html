@@ -585,7 +585,7 @@ body.leitor #tpMais{order:1}body.leitor #tpMenos{order:3}body.leitor #tpPlay{ord
 .leit-deit{display:none}
 body.leitor .leit-deit:not([hidden]){display:flex;flex-direction:column;justify-content:center;align-items:stretch;gap:8px;position:fixed;z-index:32;
   top:calc(54px + env(safe-area-inset-top,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));left:calc(8px + env(safe-area-inset-left,0px));width:64px;transition:opacity .2s}
-body.leitor.com-leitura .papel{padding-left:calc(82px + env(safe-area-inset-left,0px))}
+body.leitor.com-leitura .papel,body.leitor.com-mistura .papel{padding-left:calc(82px + env(safe-area-inset-left,0px))}
 body.leitor:has(.tp-play[aria-pressed="true"]) .leit-deit{opacity:.6}
 .leit-deit-t{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;text-align:center;line-height:1;color:#4a5058}
 .leit-deit-niv{display:flex;flex-direction:column;flex:0 1 auto;min-height:0;border:1.5px solid rgba(29,35,41,.16);border-radius:12px;overflow:hidden;background:rgba(29,35,41,.05)}
@@ -607,6 +607,11 @@ body.leitor:has(.tp-play[aria-pressed="true"]) .leit-deit{opacity:.6}
 .lev-grade button{min-height:40px;border:1.5px solid var(--line);border-radius:9px;background:var(--surface);padding:0;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}
 .lev-grade button.lev-sem{grid-column:span 2}
 .lev-grade button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+/* Mistura de figuras: um botão por nível (até a figura do nível) na tela normal; na tela de leitura, a coluna da leitura */
+.mix-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:6px}
+.mix-grade button{min-height:40px;border:1.5px solid var(--line);border-radius:9px;background:var(--surface);padding:0 8px;font-weight:600;font-size:14.5px;text-align:left;white-space:nowrap}
+.mix-grade button b{display:inline-block;min-width:1.2em;font-variant-numeric:tabular-nums}
+.mix-grade button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
 body.leitor .lev-deit:not([hidden]){width:96px}
 body.leitor.com-levada .papel{padding-left:calc(114px + env(safe-area-inset-left,0px))}
 .lev-deit-grade{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:34px;gap:4px;min-height:0}
@@ -771,6 +776,12 @@ body.foco .partitura{gap:10px}
         <div class="lev-grade" id="levSel" role="group" aria-label="Levada antes da virada"></div>
         <p class="nota" id="levInfo"></p>
       </div>
+      <div class="leitura" id="mixBox" hidden>
+        <p class="lev-tit">Figuras da mistura</p>
+        <div class="mix-grade" id="mixSel" role="group" aria-label="Figuras da mistura"></div>
+        <div class="leit-linha"><button type="button" class="btn-linha" id="btnNovaMix">Nova mistura</button></div>
+        <p class="nota" id="mixInfo"></p>
+      </div>
       <div class="vista" id="vistaBox">
         <div class="seg seg-mini" id="segVista" role="group" aria-label="Como mostrar a partitura">
           <button type="button" data-v="foto">Foto da folha</button>
@@ -793,6 +804,11 @@ body.foco .partitura{gap:10px}
       <div class="leit-deit lev-deit" id="levDeit" role="group" aria-label="Levada" hidden>
         <span class="leit-deit-t" aria-hidden="true">Levada</span>
         <div class="lev-deit-grade" id="levDeitSel" role="group" aria-label="Levada antes da virada"></div>
+      </div>
+      <div class="leit-deit" id="mixDeit" role="group" aria-label="Mistura" hidden>
+        <span class="leit-deit-t" aria-hidden="true">Mistura</span>
+        <div class="leit-deit-niv" id="mixDeitSel" role="group" aria-label="Figuras da mistura"></div>
+        <button type="button" class="leit-deit-nova" id="mixDeitNova" aria-label="Nova mistura" title="Nova mistura"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M21 4v6h-6M20.5 15a8.6 8.6 0 1 1-2-8.9L21 10"/></svg><span>Nova</span></button>
       </div>
       <p class="nota-foto" id="notaFoto" hidden>A foto mostra a versão original. A grade e o som seguem as suas edições.</p>
       <div class="grade-wrap"><div class="grade" id="grade"></div></div>
@@ -1019,7 +1035,7 @@ const GAP={1:[3,1],2:[2,2],3:[1,3]};
 const PROX={'.':'x','x':'X','X':'g','g':'f','f':'.'};
 const hit=c=>!!c&&c!=='.';
 let edicoesMao={};
-const maoDe=ex=>ex.__leit||ex.__lev?ex.mao:(edicoesMao[ex.id]||ex.mao);
+const maoDe=ex=>ex.__leit||ex.__lev||ex.__mix?ex.mao:(edicoesMao[ex.id]||ex.mao);
 const temMao=ex=>{const m=maoDe(ex);return !!m&&[...m].some(t=>t&&t!=='.');};
 const maoEm=(ex,i)=>{
   const m=maoDe(ex);let t=m?m[i]:'';if(!t||t==='.')return '';
@@ -1036,7 +1052,7 @@ const ABAS=CONTEUDO.categorias.map(c=>({id:c.id,nome:c.nome}));
 const EX_POR_ID=new Map();FOLHAS.forEach(l=>l.exercicios.forEach(e=>EX_POR_ID.set(e.id,{ex:e,l})));
 
 /* ---------- Estado salvo ---------- */
-const PADRAO={metaDia:20,durHoje:30,gap:0,sorteio:false,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
+const PADRAO={metaDia:20,durHoje:30,gap:0,sorteio:false,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,mixNivel:1,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
 const LIMITES={inicio:[30,300],fim:[30,300],passo:[1,30],reps:[1,64],bpmFixo:[30,300]};
 let cfg=Object.assign({},PADRAO,LS.get('cfg',{}));
 cfg.mix=Object.assign({},PADRAO.mix,cfg.mix||{});
@@ -1050,6 +1066,7 @@ let sel=LS.get('sel',{lista:'folha-1',ex:0});
 let editando=false;
 const salvaCfg=()=>LS.set('cfg',cfg);
 if(!Number.isInteger(cfg.leitSemente)||cfg.leitSemente<1){cfg.leitSemente=novaSemente();salvaCfg();}
+if(!Number.isInteger(cfg.mixSemente)||cfg.mixSemente<1){cfg.mixSemente=novaSemente();salvaCfg();}
 (function(){const c=LS.get('cfg',{})||{};if(c.durHoje==null&&(c.treinoMin===15||c.treinoMin===30))cfg.durHoje=c.treinoMin;})();
 
 function listas(){
@@ -1058,7 +1075,7 @@ function listas(){
   return l;
 }
 function lista(id){const ls=listas();return ls.find(l=>l.id===id)||ls[0];}
-function exDe(lid,i){const l=lista(lid);return comLevada(comLeitura(l.exercicios[clamp(i,0,l.exercicios.length-1)]),l);}
+function exDe(lid,i){const l=lista(lid);return comLevada(comMistura(comLeitura(l.exercicios[clamp(i,0,l.exercicios.length-1)])),l);}
 function exAtual(){return exDe(sel.lista,sel.ex);}
 /* Onde está um exercício pelo código fixo (id). A lista e a posição podem mudar quando o conteúdo é reorganizado. */
 function ondeEsta(id){
@@ -1077,7 +1094,7 @@ function comId(lid,i){return {lista:lid,ex:i,id:(exDe(lid,i)||{}).id};}
 function salvaSel(){LS.set('sel',comId(sel.lista,sel.ex));}
 const cacheTr=new Map();
 function trilhas(ex){
-  if(ex.__leit||ex.__lev)return ex.trilhas;
+  if(ex.__leit||ex.__lev||ex.__mix)return ex.trilhas;
   if(edicoes[ex.id])return edicoes[ex.id];
   if(!ex.acentos)return ex.trilhas;
   const modo=cfg.acentoTec||'grupo',chaveC=ex.id+'|'+modo;
@@ -1232,6 +1249,89 @@ function levadaIds(l){
   const o=levadaEscolhida(l),atual=o?o.ex.id:'';
   const alvo=levPend==null?atual:(levadaEscolhida(l,levPend)||{ex:{id:''}}).ex.id;
   return {atual,alvo};
+}
+/* ---------- Mistura de figuras ----------
+   Exercício com "mistura" (de 1 compasso, em 4/4, com subs): o app sorteia a figura de cada tempo entre as dos
+   módulos de Figuras, até a do nível escolhido (cfg.mixNivel: 1 colcheia ... 7 fusa). Em "respiro" um dos tempos
+   (nunca o 1) é uma semínima, para se reorganizar; em "continua" só a figura. A figura nova do nível aparece em
+   todo compasso. A mistura muda a cada andamento novo e com Nova mistura; tocando, a troca de nível ou a mistura
+   nova entram no começo da próxima volta (mixPend), como na leitura. As mãos alternam o compasso inteiro, e o
+   total de notas é sempre par, para a volta seguinte recomeçar com a direita. */
+const NIVEIS_MIX=[{n:1,fig:2,nome:'Colcheia'},{n:2,fig:3,nome:'Tercina'},{n:3,fig:4,nome:'Semicolcheia'},{n:4,fig:5,nome:'Quintina'},{n:5,fig:6,nome:'Sextina'},{n:6,fig:7,nome:'Septina'},{n:7,fig:8,nome:'Fusa'}];
+const cacheMix=new Map();
+let mixPend=null;
+function geraMistura(nivel,respiro,semente){
+  const r=sorteador(semente^(nivel*2654435761)^(respiro?40503:69069));
+  const nova=NIVEIS_MIX[nivel-1].fig,figs=NIVEIS_MIX.filter(x=>x.n<=nivel).map(x=>x.fig);
+  const pool=nivel===1?[1,2]:figs,peso=f=>f===nova?2:1,tot=pool.reduce((a,f)=>a+peso(f),0);
+  const sorteia=()=>{let x=r()*tot;for(const f of pool){if((x-=peso(f))<0)return f;}return pool[pool.length-1];};
+  for(let tent=0;tent<120;tent++){
+    const b=[sorteia(),sorteia(),sorteia(),sorteia()];
+    if(respiro&&nivel>1)b[1+Math.floor(r()*3)]=1;                 /* um tempo de respiro, fora do 1 */
+    const fig=b.filter(q=>q!==1);
+    if(!b.includes(nova))continue;                               /* a figura nova do nível sempre aparece */
+    if(nivel>1&&new Set(fig).size<2)continue;                    /* pelo menos duas figuras diferentes */
+    if(nivel===1&&(!b.includes(1)||b[0]===1&&b[1]===1))continue;
+    if(b.reduce((a,q)=>a+q,0)%2)continue;                       /* total par: a volta recomeça com a direita */
+    return b;
+  }
+  return nivel===1?[2,1,2,1]:respiro?(nova%2?[nova,1,2,2]:[nova,1,3,2]):[nova,2,nova,2];
+}
+function comMistura(ex){
+  if(!ex||!ex.mistura||ex.__mix)return ex;
+  const niv=clamp(cfg.mixNivel||1,1,NIVEIS_MIX.length),resp=ex.mistura!=='continua',chave=niv+'|'+resp+'|'+cfg.mixSemente,c=cacheMix.get(ex.id);
+  if(c&&c.chave===chave)return c.ex;
+  const subs=geraMistura(niv,resp,cfg.mixSemente),n=subs.reduce((a,q)=>a+q,0);
+  const d=Object.assign({},ex,{sub:1,subs,trilhas:{sn:subs.map(q=>'X'+'x'.repeat(q-1)).join('')},
+    mao:Array.from({length:n},(_,i)=>'DE'[i%2]).join(''),__mix:{nivel:niv,subs}});
+  delete d.__g;
+  cacheMix.set(ex.id,{chave,ex:d});
+  return d;
+}
+function aplicaMistura(op){
+  if(op.nivel!=null)cfg.mixNivel=clamp(op.nivel,1,NIVEIS_MIX.length);
+  if(op.nova)cfg.mixSemente=novaSemente();
+  salvaCfg();
+}
+function mudaMistura(op){
+  if(!eng||eng.tipo==='contagem'){const p=Object.assign({},mixPend,op);mixPend=null;aplicaMistura(p);renderPartitura();return;}
+  const p=Object.assign({},mixPend);if(op.nivel!=null)p.nivel=op.nivel;if(op.nova)p.nova=true;
+  mixPend=p;renderMistura();renderLegenda();
+}
+/* nível atual e o que vai entrar ({nivel, nova, muda}) */
+function misturaAlvo(){
+  const atual=clamp(cfg.mixNivel||1,1,NIVEIS_MIX.length),p=mixPend||{},alvo=p.nivel!=null?clamp(p.nivel,1,NIVEIS_MIX.length):atual;
+  return {atual,alvo,nova:!!p.nova,muda:alvo!==atual||!!p.nova};
+}
+function textoMistura(ex){
+  if(!ex.__mix)return '';
+  const a=misturaAlvo();
+  if(a.muda)return a.alvo!==a.atual?`, até a ${NIVEIS_MIX[a.alvo-1].nome.toLowerCase()} na próxima volta`:', mistura nova na próxima volta';
+  return `, até a ${NIVEIS_MIX[a.atual-1].nome.toLowerCase()}`;
+}
+/* botões de nível (1 a 7) da caixa da tela normal e da coluna da tela cheia; tracejado = entra na próxima volta */
+function preencheMistura(s,nomes){
+  if(s.dataset.k!==String(nomes)){
+    s.dataset.k=String(nomes);
+    s.innerHTML=NIVEIS_MIX.map(x=>`<button type="button" data-v="${x.n}" aria-label="Até a ${esc(x.nome.toLowerCase())}" title="Até a ${esc(x.nome.toLowerCase())}">${nomes?`<b>${x.n}</b> ${esc(x.nome)}`:x.n}</button>`).join('');
+  }
+  const a=misturaAlvo();
+  $$('button',s).forEach(b=>{const v=+b.dataset.v;b.setAttribute('aria-pressed',v===a.atual?'true':'false');b.classList.toggle('pend',v===a.alvo&&a.alvo!==a.atual);});
+}
+function renderMistura(){
+  const ex=exAtual(),box=$('#mixBox');box.hidden=!ex.__mix;if(box.hidden)return;
+  preencheMistura($('#mixSel'),true);
+  const a=misturaAlvo(),nv=NIVEIS_MIX[a.atual-1];
+  $('#btnNovaMix').classList.toggle('pend',a.nova);
+  const pend=!a.muda?'':a.alvo!==a.atual?`O nível ${a.alvo} entra na próxima volta. `:'A mistura nova entra na próxima volta. ';
+  $('#mixInfo').textContent=pend+`Nível ${a.atual}: figuras até a ${nv.nome.toLowerCase()}. Cada tempo sorteia uma delas${ex.mistura!=='continua'?', com um tempo de semínima para respirar':''}. A mistura muda a cada andamento novo.`;
+}
+function renderMixDeit(ex){
+  const box=$('#mixDeit'),pode=!!ex.__mix;
+  box.hidden=!pode;document.body.classList.toggle('com-mistura',pode);
+  if(!pode)return;
+  preencheMistura($('#mixDeitSel'),false);
+  $('#mixDeitNova').classList.toggle('pend',misturaAlvo().nova);
 }
 /* Exercícios com figura diferente em cada tempo (subs = notas por tempo) */
 function gradeVar(ex){
@@ -1463,6 +1563,7 @@ function parar(){
   if(abaAtiva==='rotina')renderColecao();
   if(leitPend){const op=leitPend;leitPend=null;aplicaLeitura(op);renderPartitura();renderAjustes();}
   if(levPend!=null){cfg.virLevada=levPend;levPend=null;salvaCfg();renderPartitura();renderAjustes();}
+  if(mixPend){const op=mixPend;mixPend=null;aplicaMistura(op);renderPartitura();}
 }
 function agenda(){
   if(!eng)return;
@@ -1505,6 +1606,7 @@ function inicioCompasso(){
   if(eng.pend){const mudou=eng.pend.lista!==eng.lista;eng.lista=eng.pend.lista;eng.ex=eng.pend.ex;eng.pend=null;eng.ordem=null;eng.faixa=null;eng.noDegrau=0;eng.fase=0;eng.crashProx=true;if(mudou)eng.bpm=cfg.progressao?cfg.inicio:cfg.bpmFixo;}
   if(leitPend){aplicaLeitura(leitPend);leitPend=null;fila.push({t:eng.t,releitura:true});}
   if(levPend!=null){cfg.virLevada=levPend;levPend=null;salvaCfg();fila.push({t:eng.t,releitura:true});}
+  if(mixPend){aplicaMistura(mixPend);mixPend=null;fila.push({t:eng.t,releitura:true});}
   if(eng.contagem>0){eng.contagem--;eng.tipo='contagem';return;}
   eng.ouvindo=!cfg.ouvir||eng.noDegrau%2===0;
   if(eng.fase<nLevada(eng.lista)){eng.tipo='levada';eng.crashAgora=eng.fase===0&&eng.crashProx;}
@@ -1532,6 +1634,7 @@ function fimCompasso(){
   eng.noDegrau=0;
   registra(exDe(eng.lista,eng.ex),eng.bpm);
   if(cfg.leitTroca&&exDe(eng.lista,eng.ex).__leit){novaLeitura();fila.push({t:eng.t,releitura:true});}
+  if(exDe(eng.lista,eng.ex).__mix){cfg.mixSemente=novaSemente();salvaCfg();fila.push({t:eng.t,releitura:true});}
   const l=lista(eng.lista),varios=l.exercicios.length>1;
   const emLista=cfg.lista&&!eng.rotina;
   /* folha inteira: na ordem da lista ou, com "Sortear a ordem", numa ordem sorteada que passa por todos antes de repetir */
@@ -2133,12 +2236,12 @@ function renderCabecalho(){
   $('#exFolha').textContent=l.titulo+(edicoes[ex.id]||edicoesMao[ex.id]?', com edições suas':'');
 }
 function renderPartitura(){
-  if(editando&&(exAtual().__leit||exAtual().__lev))editando=false;
-  renderCabecalho();renderLeitura();renderLevada();renderLegenda();notacao();renderGrade();renderEditar();
+  if(editando&&(exAtual().__leit||exAtual().__lev||exAtual().__mix))editando=false;
+  renderCabecalho();renderLeitura();renderLevada();renderMistura();renderLegenda();notacao();renderGrade();renderEditar();
   $('.bpm-u').textContent=exAtual().compasso[1]===8?'BPM (colcheia)':'BPM';
   atualizaBtnRotina();atualizaFav();
   const b=$('#btnEditar');b.setAttribute('aria-pressed',editando?'true':'false');b.textContent=editando?'Concluir edição':'Editar notas';
-  b.hidden=!!exAtual().subs||!!exAtual().__leit||!!exAtual().__lev;if(exAtual().subs&&editando){editando=false;}
+  b.hidden=!!exAtual().subs||!!exAtual().__leit||!!exAtual().__lev||!!exAtual().__mix;if(exAtual().subs&&editando){editando=false;}
 }
 function vizinhoEx(dir){
   /* numa área principal a sequência atravessa os passos dela (na Leitura: Figuras, Leitura na caixa, Sistemas) */
@@ -2153,13 +2256,13 @@ function vizinhoEx(dir){
 function renderLegenda(){
   const ex=exAtual();
   $('#legNome').textContent=ex.nome;
-  $('#legInfo').textContent=lista(sel.lista).titulo+textoLeitura(ex)+textoLevada(ex);
+  $('#legInfo').textContent=lista(sel.lista).titulo+textoLeitura(ex)+textoLevada(ex)+textoMistura(ex);
   const emSessao=!!(eng&&eng.rotina);
   [['#btnAnt',-1,'Exercício anterior'],['#btnProx',1,'Próximo exercício']].forEach(([q,d,txt])=>{
     const v=emSessao?null:vizinhoEx(d),b=$(q);
     b.disabled=!v;b.setAttribute('aria-label',v?`${txt}: ${exDe(v.lista,v.ex).nome}`:txt);
   });
-  renderLeitDeit(ex);renderLevDeit(ex);
+  renderLeitDeit(ex);renderLevDeit(ex);renderMixDeit(ex);
 }
 /* texto da leitura na faixa de cima da tela de leitura, como "nível 2: contratempo" */
 function textoLeitura(ex){
@@ -2407,6 +2510,8 @@ $('#btnNovaLeit').addEventListener('click',()=>mudaLeitura({nova:true}));
 $('#leitDeitNiv').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const v=+b.dataset.v;mudaLeitura(v===0?{on:false}:{nivel:v});});
 $('#leitDeitNova').addEventListener('click',()=>mudaLeitura({nova:true}));
 ['#levSel','#levDeitSel'].forEach(q=>$(q).addEventListener('click',e=>{const b=e.target.closest('button');if(b)mudaLevada(b.dataset.v);}));
+['#mixSel','#mixDeitSel'].forEach(q=>$(q).addEventListener('click',e=>{const b=e.target.closest('button');if(b)mudaMistura({nivel:+b.dataset.v});}));
+['#btnNovaMix','#mixDeitNova'].forEach(q=>$(q).addEventListener('click',()=>mudaMistura({nova:true})));
 $('#btnFixar').addEventListener('click',()=>{const id=exAtual().id;fixando=fixando===id?null:id;renderLeitura();});
 $('#btnCancFixar').addEventListener('click',()=>{fixando=null;renderLeitura();});
 $('#fixarComp').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;fixarComp=+b.dataset.v;renderLeitura();});
@@ -2709,6 +2814,10 @@ document.addEventListener('keydown',e=>{
     if(e.key==='n'||e.key==='N'){if(leituraAlvo(ex).on){e.preventDefault();mudaLeitura({nova:true});}}
     else if(v===0){if(!semBase(lista(sel.lista).exercicios[sel.ex])){e.preventDefault();mudaLeitura({on:false});}}
     else if(v<=maxNivelLeit(ex)){e.preventDefault();mudaLeitura({nivel:v});}
+  }
+  else if(/^[1-7nN]$/.test(e.key)&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&document.body.classList.contains('leitor')&&exAtual().__mix){
+    /* na mistura: 1 a 7 escolhem até que figura entra, N pede uma mistura nova */
+    e.preventDefault();mudaMistura(e.key==='n'||e.key==='N'?{nova:true}:{nivel:+e.key});
   }
   else if(e.key==='Escape'&&leitorManual){if(!desempilha('leitor'))fechaLeitor();}
 });

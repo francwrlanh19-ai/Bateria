@@ -1,0 +1,20 @@
+{
+  "id": "fig-mistura",
+  "categoria": "figuras",
+  "ordem": 80,
+  "nivel": 3,
+  "andamento": {
+    "inicio": 45,
+    "fim": 80,
+    "passo": 5,
+    "reps": 4
+  },
+  "vozUnica": true,
+  "panMao": true,
+  "titulo": "Mistura de figuras",
+  "descricao": "O app sorteia a figura de cada tempo entre as dos módulos. Escolha até que figura entra, de 1 (colcheia) a 7 (fusa); a figura do nível aparece em todo compasso. Com respiro, um tempo é semínima para você se reorganizar; sem respiro, as figuras se emendam. A mistura muda a cada andamento novo.",
+  "exercicios": [
+    {"id":"mx-1","num":1,"nome":"Mistura com respiro","compasso":[4,4],"sub":1,"subs":[1,1,1,1],"mistura":"respiro","mao":"DEDE","trilhas":{"sn":"XXXX"}},
+    {"id":"mx-2","num":2,"nome":"Mistura sem respiro","compasso":[4,4],"sub":1,"subs":[1,1,1,1],"mistura":"continua","mao":"DEDE","trilhas":{"sn":"XXXX"}}
+  ]
+}

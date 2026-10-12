@@ -69,6 +69,7 @@ Arquivo `conteudo/grupos/<id>.json`, com o nome do arquivo igual ao `id`:
 - `barras` (opcional): número de compassos, para exercícios de 2 ou 4 compassos.
 - Total de casas = `barras × compasso[0] × sub`. Cada trilha precisa ter exatamente esse tamanho.
 - `subs`, no lugar de `sub`, serve para figura diferente em cada tempo: `"subs":[4,5,4,5]` com `"sub":1`. O total de casas é a soma. É usado para quintinas e septinas e mostra a régua em vez da grade.
+- `mistura` (opcional): `"respiro"` ou `"continua"`. O app sorteia a figura de cada tempo (colcheia a fusa, até o nível que a pessoa escolhe de 1 a 7) e ignora as notas do JSON, que só guardam o lugar: use `"compasso":[4,4],"sub":1,"subs":[1,1,1,1],"mao":"DEDE","trilhas":{"sn":"XXXX"}`. Com `"respiro"`, um dos tempos 2 a 4 é semínima. Exemplo: `mx-1` e `mx-2` em `fig-mistura.json`.
 
 ## 4. Trilhas e símbolos
 

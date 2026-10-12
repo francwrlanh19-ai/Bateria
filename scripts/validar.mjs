@@ -116,6 +116,13 @@ export function validar() {
         if ((ex.barras || 1) !== 1) E(`${P}: o sistema com leitura precisa ter 1 compasso (o app repete o sistema embaixo da leitura)`);
       }
 
+      // Mistura de figuras: o app sorteia a figura de cada tempo (as notas no JSON são só um lugar guardado)
+      if (ex.mistura != null) {
+        if (!['respiro', 'continua'].includes(ex.mistura)) E(`${P}: "mistura" precisa ser "respiro" ou "continua"`);
+        if (num !== 4 || den !== 4 || !Array.isArray(ex.subs) || ex.subs.length !== 4) E(`${P}: a mistura precisa de compasso 4/4 com "subs" de 4 tempos`);
+        if (ex.leitura != null) E(`${P}: a mistura não usa "leitura"`);
+      }
+
       if (ex.mao) {
         const maos = Array.isArray(ex.mao) ? ex.mao : [...ex.mao];
         if (maos.length !== casas) E(`${P}: "mao" tem ${maos.length} casas, deveria ter ${casas}`);
