@@ -1,0 +1,23 @@
+{
+  "id": "fig-quintina",
+  "categoria": "figuras",
+  "ordem": 40,
+  "nivel": 3,
+  "andamento": {
+    "inicio": 40,
+    "fim": 80,
+    "passo": 4,
+    "reps": 8
+  },
+  "vozUnica": true,
+  "panMao": true,
+  "titulo": "Quintina",
+  "descricao": "Cinco notas por tempo. Primeiro com respiro: a quintina num tempo e uma semínima no outro, para você se reorganizar. Depois só quintinas e, por fim, a quintina ligada às figuras de base: colcheia, tercina e semicolcheia.",
+  "exercicios": [
+    {"id":"f57-1","num":1,"nome":"Quintina com respiro","compasso":[4,4],"sub":1,"subs":[5,1,5,1],"mao":"DEDEDEDEDEDE","trilhas":{"sn":"XxxxxXXxxxxX"}},
+    {"id":"fg-5","num":2,"nome":"Quintinas","compasso":[4,4],"sub":1,"subs":[5,5,5,5],"mao":"DEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxXxxxxXxxxxXxxxx"}},
+    {"id":"fc-5-2","num":3,"nome":"Quintina e colcheia","compasso":[4,4],"sub":1,"subs":[5,2,5,2],"mao":"DEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxXxXxxxxXx"}},
+    {"id":"fc-5-3","num":4,"nome":"Quintina e tercina","compasso":[4,4],"sub":1,"subs":[5,3,5,3],"mao":"DEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxXxxXxxxxXxx"}},
+    {"id":"f57-2","num":5,"nome":"Semicolcheia e quintina","compasso":[4,4],"sub":1,"subs":[4,5,4,5],"mao":"DEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxXxxxxXxxxXxxxx"}}
+  ]
+}

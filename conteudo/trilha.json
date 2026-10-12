@@ -5,44 +5,44 @@
     {
       "id": "primeiros-passos",
       "nome": "Primeiros passos",
-      "objetivo": "Tocar junto com o metrônomo: toques simples e duplos, semínimas e colcheias, a primeira levada de rock, o 6/8 das baladas e a primeira virada.",
-      "itens": ["mc-1", "mc-2", "fg-1", "fg-2", "rk-1", "wv-2", "w68-1", "w68-2"]
+      "objetivo": "Tocar junto com o metrônomo: toques simples e duplos, semínimas e colcheias (a colcheia primeiro com respiro), a primeira levada de rock, o 6/8 das baladas e a primeira virada.",
+      "itens": ["mc-1", "mc-2", "fg-1", "fc-2-1", "fg-2", "rk-1", "wv-2", "w68-1", "w68-2"]
     },
     {
       "id": "levadas-do-culto",
       "nome": "Levadas do culto",
-      "objetivo": "Levadas de worship com o bumbo no contratempo, o balanço do shuffle e as primeiras coordenações em colcheias. Nas mãos, acento e tercinas; duas viradas novas. Nos tons, os primeiros tribais.",
-      "itens": ["mc-3", "aa-1", "tc-1", "fg-3", "fg-4", "ft-1", "ft-4", "wl-A", "wv-9", "sh-1", "rk-2", "wl-B", "w68-3", "wv-7", "sh-2", "rk-3", "rk-4", "tn-1", "tn-2", "tn68-1", "tn-3", "tn68-2"]
+      "objetivo": "Levadas de worship com o bumbo no contratempo, o balanço do shuffle e as primeiras coordenações em colcheias. Nas mãos, acento e tercinas; no ritmo, a tercina e a semicolcheia, primeiro com respiro e depois ligadas às outras figuras de base. Duas viradas novas e, nos tons, os primeiros tribais.",
+      "itens": ["mc-3", "aa-1", "tc-1", "fc-3-1", "fg-3", "fc-3-2", "fc-4-1", "fg-4", "fc-4-2", "fc-4-3", "ft-1", "ft-4", "wl-A", "wv-9", "sh-1", "rk-2", "wl-B", "w68-3", "wv-7", "sh-2", "rk-3", "rk-4", "tn-1", "tn-2", "tn68-1", "tn-3", "tn68-2"]
     },
     {
       "id": "semicolcheias",
       "nome": "Semicolcheias no bumbo e na caixa",
-      "objetivo": "O bumbo e a caixa passam a cair nas semicolcheias, e as levadas de worship ficam mais cheias. Nas mãos, acentos fora do tempo; no ritmo, as fusas que aparecem nas viradas. Nos tons, os tribais em semicolcheia.",
-      "itens": ["mc-4", "aa-2", "mc-5", "aa-3", "fg-8", "rk-5", "wl-C", "wv-4", "rk-6", "wl-D", "rk-7", "wv-1", "rk-8", "wl-E", "rk-9", "rk-10", "tn-4", "tn-5", "tn68-3", "tn-6", "tn-7"]
+      "objetivo": "O bumbo e a caixa passam a cair nas semicolcheias, e as levadas de worship ficam mais cheias. Nas mãos, acentos fora do tempo; no ritmo, as fusas que aparecem nas viradas, primeiro com respiro. Nos tons, os tribais em semicolcheia.",
+      "itens": ["mc-4", "aa-2", "mc-5", "aa-3", "fc-8-1", "fg-8", "rk-5", "wl-C", "wv-4", "rk-6", "wl-D", "rk-7", "wv-1", "rk-8", "wl-E", "rk-9", "rk-10", "tn-4", "tn-5", "tn68-3", "tn-6", "tn-7"]
     },
     {
       "id": "grooves-e-paradiddle",
       "nome": "Grooves e paradiddle",
-      "objetivo": "Levadas de rock mais cheias, os grooves de semicolcheia e o paradiddle dividido entre chimbal e caixa. No ritmo, quintinas e sextinas.",
-      "itens": ["mc-6", "aa-4", "fg-5", "fg-6", "pd-1", "pd-2", "pd-3", "pd-4", "pd-5", "rk-11", "f1-e1", "wv-3", "rk-12", "f1-e2", "rk-13", "f1-e3", "wv-6", "rk-14", "f1-e4", "rk-15", "rk-16"]
+      "objetivo": "Levadas de rock mais cheias, os grooves de semicolcheia e o paradiddle dividido entre chimbal e caixa. No ritmo, quintinas e sextinas: com respiro, sozinhas e ligadas à colcheia e à tercina.",
+      "itens": ["mc-6", "aa-4", "f57-1", "fg-5", "fc-5-2", "fc-5-3", "fc-6-1", "fg-6", "fc-6-2", "fc-6-3", "pd-1", "pd-2", "pd-3", "pd-4", "pd-5", "rk-11", "f1-e1", "wv-3", "rk-12", "f1-e2", "rk-13", "f1-e3", "wv-6", "rk-14", "f1-e4", "rk-15", "rk-16"]
     },
     {
       "id": "pes-fixos",
       "nome": "Pés fixos, mãos livres",
-      "objetivo": "Independência: os pés repetem o padrão do samba enquanto as mãos mudam. Começa o afrobeat, com o chimbal em colcheia e duas semicolcheias.",
-      "itens": ["tc-2", "tc-3", "fg-7", "ft-2", "ost-1", "si2-17", "si2-18", "si2-19", "si2-20", "si2-21", "si2-22", "ab-1", "ab-2", "wv-5", "ab-3", "ab-4", "ab-5", "ab-6"]
+      "objetivo": "Independência: os pés repetem o padrão do samba enquanto as mãos mudam. Começa o afrobeat, com o chimbal em colcheia e duas semicolcheias. No ritmo, a septina com respiro, sozinha e ligada à colcheia e à tercina.",
+      "itens": ["tc-2", "tc-3", "f57-4", "fg-7", "fc-7-2", "fc-7-3", "ft-2", "ost-1", "si2-17", "si2-18", "si2-19", "si2-20", "si2-21", "si2-22", "ab-1", "ab-2", "wv-5", "ab-3", "ab-4", "ab-5", "ab-6"]
     },
     {
       "id": "samba-e-afrobeat",
       "nome": "Samba e afrobeat",
-      "objetivo": "O resto do Samba Independence, os primeiros grooves de samba e mais afrobeat. No ritmo, a descida de 8 a 5 notas e as quintinas e septinas com respiro.",
-      "itens": ["ft-3", "f57-1", "f57-4", "si2-23", "si2-24", "si2-25", "si2-26", "si2-27", "sg-4", "ab-7", "sg-5", "ab-8", "sg-6", "ab-9", "sg-2", "ab-10", "ab-11", "ab-12"]
+      "objetivo": "O resto do Samba Independence, os primeiros grooves de samba e mais afrobeat. No ritmo, a descida de 8 a 5 notas, as quiálteras ligadas à semicolcheia e a fusa ligada à colcheia e à tercina.",
+      "itens": ["ft-3", "f57-2", "fc-6-4", "fc-7-4", "fc-8-2", "fc-8-3", "si2-23", "si2-24", "si2-25", "si2-26", "si2-27", "sg-4", "ab-7", "sg-5", "ab-8", "sg-6", "ab-9", "sg-2", "ab-10", "ab-11", "ab-12"]
     },
     {
       "id": "desafios",
       "nome": "Desafios",
       "objetivo": "Os grooves de samba e de afrobeat mais cheios, a virada mais rápida e as quiálteras combinadas, como quintina com septina e septina com fusa.",
-      "itens": ["f57-2", "f57-3", "f57-5", "f57-6", "f57-7", "sg-7", "ab-13", "sg-1", "ab-14", "wv-8", "sg-3", "ab-15", "ab-16", "ab-17", "ab-18"]
+      "itens": ["f57-3", "f57-7", "f57-5", "fc-8-4", "f57-6", "sg-7", "ab-13", "sg-1", "ab-14", "wv-8", "sg-3", "ab-15", "ab-16", "ab-17", "ab-18"]
     },
     {
       "id": "sistemas-com-leitura",

@@ -1,0 +1,24 @@
+{
+  "id": "fig-semicolcheia",
+  "categoria": "figuras",
+  "ordem": 30,
+  "nivel": 2,
+  "andamento": {
+    "inicio": 50,
+    "fim": 90,
+    "passo": 5,
+    "reps": 4
+  },
+  "vozUnica": true,
+  "panMao": true,
+  "titulo": "Semicolcheia",
+  "descricao": "Quatro notas por tempo. Com respiro, sozinha e ligada às figuras de base, a colcheia e a tercina. No fim, a escada de 1 a 4 notas subindo e descendo.",
+  "exercicios": [
+    {"id":"fc-4-1","num":1,"nome":"Semicolcheia com respiro","compasso":[4,4],"sub":1,"subs":[4,1,4,1],"mao":"DEDEDEDEDE","trilhas":{"sn":"XxxxXXxxxX"}},
+    {"id":"fg-4","num":2,"nome":"Semicolcheias","compasso":[4,4],"sub":1,"subs":[4,4,4,4],"mao":"DEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxXxxxXxxxXxxx"}},
+    {"id":"fc-4-2","num":3,"nome":"Semicolcheia e colcheia","compasso":[4,4],"sub":1,"subs":[4,2,4,2],"mao":"DEDEDEDEDEDE","trilhas":{"sn":"XxxxXxXxxxXx"}},
+    {"id":"fc-4-3","num":4,"nome":"Semicolcheia e tercina","compasso":[4,4],"sub":1,"subs":[4,3,4,3],"mao":"DEDEDEDEDEDEDE","trilhas":{"sn":"XxxxXxxXxxxXxx"}},
+    {"id":"ft-1","num":5,"nome":"Subindo de 1 a 4","compasso":[4,4],"sub":1,"subs":[1,2,3,4],"mao":"DEDEDEDEDE","trilhas":{"sn":"XXxXxxXxxx"}},
+    {"id":"ft-4","num":6,"nome":"Descendo de 4 a 1","compasso":[4,4],"sub":1,"subs":[4,3,2,1],"mao":"DEDEDEDEDE","trilhas":{"sn":"XxxxXxxXxX"}}
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "fig-tercina",
+  "categoria": "figuras",
+  "ordem": 20,
+  "nivel": 2,
+  "andamento": {
+    "inicio": 50,
+    "fim": 90,
+    "passo": 5,
+    "reps": 4
+  },
+  "vozUnica": true,
+  "panMao": true,
+  "titulo": "Tercina",
+  "descricao": "Três notas por tempo (conte 1 & a). Primeiro com respiro, depois só tercinas e, por fim, a tercina ligada à colcheia.",
+  "exercicios": [
+    {"id":"fc-3-1","num":1,"nome":"Tercina com respiro","compasso":[4,4],"sub":1,"subs":[3,1,3,1],"mao":"DEDEDEDE","trilhas":{"sn":"XxxXXxxX"}},
+    {"id":"fg-3","num":2,"nome":"Tercinas","compasso":[4,4],"sub":1,"subs":[3,3,3,3],"mao":"DEDEDEDEDEDE","trilhas":{"sn":"XxxXxxXxxXxx"}},
+    {"id":"fc-3-2","num":3,"nome":"Tercina e colcheia","compasso":[4,4],"sub":1,"subs":[3,2,3,2],"mao":"DEDEDEDEDE","trilhas":{"sn":"XxxXxXxxXx"}}
+  ]
+}

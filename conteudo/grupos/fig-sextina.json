@@ -1,0 +1,24 @@
+{
+  "id": "fig-sextina",
+  "categoria": "figuras",
+  "ordem": 50,
+  "nivel": 3,
+  "andamento": {
+    "inicio": 40,
+    "fim": 80,
+    "passo": 4,
+    "reps": 8
+  },
+  "vozUnica": true,
+  "panMao": true,
+  "titulo": "Sextina",
+  "descricao": "Seis notas por tempo. Com respiro, sozinha, ligada às figuras de base (colcheia, tercina e semicolcheia) e, por fim, à quintina.",
+  "exercicios": [
+    {"id":"fc-6-1","num":1,"nome":"Sextina com respiro","compasso":[4,4],"sub":1,"subs":[6,1,6,1],"mao":"DEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxXXxxxxxX"}},
+    {"id":"fg-6","num":2,"nome":"Sextinas","compasso":[4,4],"sub":1,"subs":[6,6,6,6],"mao":"DEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxXxxxxxXxxxxxXxxxxx"}},
+    {"id":"fc-6-2","num":3,"nome":"Sextina e colcheia","compasso":[4,4],"sub":1,"subs":[6,2,6,2],"mao":"DEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxXxXxxxxxXx"}},
+    {"id":"fc-6-3","num":4,"nome":"Sextina e tercina","compasso":[4,4],"sub":1,"subs":[6,3,6,3],"mao":"DEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxXxxXxxxxxXxx"}},
+    {"id":"fc-6-4","num":5,"nome":"Sextina e semicolcheia","compasso":[4,4],"sub":1,"subs":[6,4,6,4],"mao":"DEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxXxxxXxxxxxXxxx"}},
+    {"id":"f57-3","num":6,"nome":"Quintina e sextina","compasso":[4,4],"sub":1,"subs":[5,6,5,6],"mao":"DEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxXxxxxxXxxxxXxxxxx"}}
+  ]
+}

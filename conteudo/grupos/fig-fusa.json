@@ -1,0 +1,26 @@
+{
+  "id": "fig-fusa",
+  "categoria": "figuras",
+  "ordem": 70,
+  "nivel": 4,
+  "andamento": {
+    "inicio": 40,
+    "fim": 80,
+    "passo": 4,
+    "reps": 8
+  },
+  "vozUnica": true,
+  "panMao": true,
+  "titulo": "Fusa",
+  "descricao": "Oito notas por tempo. Com respiro, sozinha, ligada às figuras de base (colcheia, tercina e semicolcheia) e à septina. No fim, a escada de 5 a 8 notas subindo e descendo.",
+  "exercicios": [
+    {"id":"fc-8-1","num":1,"nome":"Fusa com respiro","compasso":[4,4],"sub":1,"subs":[8,1,8,1],"mao":"DEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxxXXxxxxxxxX"}},
+    {"id":"fg-8","num":2,"nome":"Fusas","compasso":[4,4],"sub":1,"subs":[8,8,8,8],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxxXxxxxxxxXxxxxxxxXxxxxxxx"}},
+    {"id":"fc-8-2","num":3,"nome":"Fusa e colcheia","compasso":[4,4],"sub":1,"subs":[8,2,8,2],"mao":"DEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxxXxXxxxxxxxXx"}},
+    {"id":"fc-8-3","num":4,"nome":"Fusa e tercina","compasso":[4,4],"sub":1,"subs":[8,3,8,3],"mao":"DEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxxXxxXxxxxxxxXxx"}},
+    {"id":"fc-8-4","num":5,"nome":"Fusa e semicolcheia","compasso":[4,4],"sub":1,"subs":[8,4,8,4],"mao":"DEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxxXxxxXxxxxxxxXxxx"}},
+    {"id":"f57-6","num":6,"nome":"Septina e fusa","compasso":[4,4],"sub":1,"subs":[7,8,7,8],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxXxxxxxxxXxxxxxxXxxxxxxx"}},
+    {"id":"ft-2","num":7,"nome":"Subindo de 5 a 8","compasso":[4,4],"sub":1,"subs":[5,6,7,8],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxXxxxxxXxxxxxxXxxxxxxx"}},
+    {"id":"ft-3","num":8,"nome":"Descendo de 8 a 5","compasso":[4,4],"sub":1,"subs":[8,7,6,5],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxxXxxxxxxXxxxxxXxxxx"}}
+  ]
+}

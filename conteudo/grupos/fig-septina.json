@@ -1,0 +1,25 @@
+{
+  "id": "fig-septina",
+  "categoria": "figuras",
+  "ordem": 60,
+  "nivel": 4,
+  "andamento": {
+    "inicio": 40,
+    "fim": 80,
+    "passo": 4,
+    "reps": 8
+  },
+  "vozUnica": true,
+  "panMao": true,
+  "titulo": "Septina",
+  "descricao": "Sete notas por tempo. Com respiro, sozinha, ligada às figuras de base (colcheia, tercina e semicolcheia) e, por fim, à quintina e à sextina.",
+  "exercicios": [
+    {"id":"f57-4","num":1,"nome":"Septina com respiro","compasso":[4,4],"sub":1,"subs":[7,1,7,1],"mao":"DEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxXXxxxxxxX"}},
+    {"id":"fg-7","num":2,"nome":"Septinas","compasso":[4,4],"sub":1,"subs":[7,7,7,7],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxXxxxxxxXxxxxxxXxxxxxx"}},
+    {"id":"fc-7-2","num":3,"nome":"Septina e colcheia","compasso":[4,4],"sub":1,"subs":[7,2,7,2],"mao":"DEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxXxXxxxxxxXx"}},
+    {"id":"fc-7-3","num":4,"nome":"Septina e tercina","compasso":[4,4],"sub":1,"subs":[7,3,7,3],"mao":"DEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxXxxXxxxxxxXxx"}},
+    {"id":"fc-7-4","num":5,"nome":"Septina e semicolcheia","compasso":[4,4],"sub":1,"subs":[7,4,7,4],"mao":"DEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxxXxxxXxxxxxxXxxx"}},
+    {"id":"f57-7","num":6,"nome":"Quintina e septina","compasso":[4,4],"sub":1,"subs":[5,7,5,7],"mao":"DEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxXxxxxxxXxxxxXxxxxxx"}},
+    {"id":"f57-5","num":7,"nome":"Sextina e septina","compasso":[4,4],"sub":1,"subs":[6,7,6,7],"mao":"DEDEDEDEDEDEDEDEDEDEDEDEDE","trilhas":{"sn":"XxxxxxXxxxxxxXxxxxxXxxxxxx"}}
+  ]
+}

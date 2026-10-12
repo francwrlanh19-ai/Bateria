@@ -1,0 +1,21 @@
+{
+  "id": "fig-colcheia",
+  "categoria": "figuras",
+  "ordem": 10,
+  "nivel": 1,
+  "andamento": {
+    "inicio": 50,
+    "fim": 90,
+    "passo": 5,
+    "reps": 4
+  },
+  "vozUnica": true,
+  "panMao": true,
+  "titulo": "Semínima e colcheia",
+  "descricao": "Uma e duas notas por tempo. Primeiro as semínimas; depois a colcheia com respiro, com uma semínima entre os tempos de colcheia, e por fim só colcheias.",
+  "exercicios": [
+    {"id":"fg-1","num":1,"nome":"Semínimas","compasso":[4,4],"sub":1,"subs":[1,1,1,1],"mao":"DEDE","trilhas":{"sn":"XXXX"}},
+    {"id":"fc-2-1","num":2,"nome":"Colcheia com respiro","compasso":[4,4],"sub":1,"subs":[2,1,2,1],"mao":"DEDEDE","trilhas":{"sn":"XxXXxX"}},
+    {"id":"fg-2","num":3,"nome":"Colcheias","compasso":[4,4],"sub":1,"subs":[2,2,2,2],"mao":"DEDEDEDE","trilhas":{"sn":"XxXxXxXx"}}
+  ]
+}
