@@ -140,6 +140,29 @@ export function validar() {
     if (!lv) erros.push(`${arquivo}: "levadas" cita o exercício "${id}", que não existe`);
     else if ((lv.barras || 1) !== 1 || lv.subs) erros.push(`${arquivo}: a levada "${id}" precisa ter 1 compasso, sem "subs"`);
   }
+  // Repertório do culto (opcional): as músicas da igreja, com andamento, levada e virada do app
+  if (fs.existsSync(path.join(raiz, 'conteudo/repertorio.json'))) {
+    const rep = lerJson('conteudo/repertorio.json', null);
+    const R = m => erros.push(`repertorio.json: ${m}`);
+    if (!rep || !Array.isArray(rep.musicas)) R('precisa de "musicas", uma lista (pode ficar vazia)');
+    else {
+      const idsMus = new Set();
+      rep.musicas.forEach((m, i) => {
+        const P = `música ${(m && m.id) || '#' + (i + 1)}`;
+        if (!m || typeof m !== 'object') { R(`${P}: precisa ser um objeto`); return; }
+        if (!m.id || /\s/.test(m.id)) R(`${P}: "id" vazio ou com espaço`);
+        else if (idsMus.has(m.id)) R(`${P}: id repetido`);
+        else idsMus.add(m.id);
+        if (!m.nome || typeof m.nome !== 'string') R(`${P}: falta "nome"`);
+        if (m.bpm != null && !(Number.isInteger(m.bpm) && m.bpm >= 30 && m.bpm <= 300)) R(`${P}: "bpm" precisa ser um número inteiro de 30 a 300`);
+        for (const k of ['levada', 'virada']) if (m[k] != null && !idsExercicio.has(m[k])) R(`${P}: "${k}" cita o exercício "${m[k]}", que não existe`);
+        if (m.link != null && !/^https:\/\/\S+$/.test(m.link)) R(`${P}: "link" precisa começar com https://`);
+        const conhecidos = ['id', 'nome', 'artista', 'bpm', 'levada', 'virada', 'notas', 'link'];
+        for (const k of Object.keys(m)) if (!conhecidos.includes(k)) R(`${P}: campo desconhecido "${k}"`);
+      });
+    }
+  }
+
   // Trilha de estudo: etapas com os exercícios na ordem de estudo (cada exercício entra uma vez só)
   const avisos = [];
   let nEtapas = 0;

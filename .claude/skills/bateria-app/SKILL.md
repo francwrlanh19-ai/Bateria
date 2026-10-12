@@ -15,7 +15,8 @@ description: Mantém e publica o app "Estudo de bateria" (repositório GitHub fr
 ```
 app/                    o aplicativo (index.html, amostras.js com os sons, vendor/vexflow, ícones, manifest)
 conteudo/areas.json        áreas do início (Leitura e Levadas e viradas, as principais; Outros)
-conteudo/trilha.json       trilha de estudo: os ids dos exercícios em 7 etapas, na ordem de estudo
+conteudo/trilha.json       trilha de estudo: os ids dos exercícios em 9 etapas, na ordem de estudo
+conteudo/repertorio.json   repertório do culto: músicas da igreja com BPM, levada e virada (ids de exercícios)
 conteudo/categorias.json   categorias (id, area, nome, descrição, cor; "rotina" e "meus" são especiais)
 conteudo/grupos/<id>.json  um arquivo por lista de exercícios
 scripts/validar.mjs     confere os JSON
@@ -63,6 +64,14 @@ O site é público. Não publique fotos ou recortes de partituras de terceiros (
 - Para pedidos diretos ("faça um hub", "melhore para Android"), aplique, teste e publique.
 - Não quebre os dados salvos dos usuários: chaves `bateria.*` do localStorage e IDs de exercício. Rotina, "continuar" e memória de cada aba guardam o id do exercício, então mover grupos de categoria ou reordenar é seguro; trocar um id não é.
 - Teste sempre com `montar.mjs` e `conferir.py` antes de publicar.
+
+## Repertório do culto
+
+Quando o usuário mandar músicas da igreja para o repertório, entram em `conteudo/repertorio.json` (formato em `references/formato-json.md`, seção 9) e ficam iguais para todos. Para cada música:
+- Procure o BPM e o compasso em fontes confiáveis (página oficial da multitrack, sites de BPM). Se as fontes discordarem ou não houver, pergunte ao usuário em vez de chutar. Em 6/8, o BPM do app é o da colcheia (60 na semínima pontuada = 180).
+- Escolha a levada e a virada entre os exercícios do app, no mesmo compasso, e explique a escolha na resposta. Se nenhuma servir, diga isso e sugira transcrever uma levada nova.
+- Não publique partituras, cifras nem letras de terceiros. O `link` só aponta para páginas oficiais ou que o usuário mandou.
+- O `id` da música é fixo, como o dos exercícios.
 
 ## Problemas comuns
 

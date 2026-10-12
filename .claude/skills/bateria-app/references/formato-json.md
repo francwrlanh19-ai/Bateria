@@ -9,6 +9,7 @@
 6. Recursos especiais (exemplos)
 7. Checklist antes de publicar
 8. trilha.json
+9. repertorio.json
 
 ## 1. areas.json e categorias.json
 
@@ -26,6 +27,7 @@ As áreas atuais são `leitura` e `levadas` (as duas com `"principal": true`: ca
 - `cor` usa as variáveis do app: `--sn` azul, `--hh` dourado, `--tom` verde, `--cym` roxo, `--bd` vermelho, `--ft` marrom, `--rd` turquesa, `--hp` cinza, `--brass` latão, `--muted`.
 - `rotina` e `meus` têm `"especial": true`. Não remova essas duas.
 - `ditado` (Ditado rítmico) também é especial, mas tem `area` (`leitura`): o início mostra como um passo da Leitura, e a tela é feita pelo app, sem grupos. Não fica no treino de hoje nem na trilha.
+- `repertorio` (Repertório do culto) é especial do mesmo jeito, com `area` `levadas`: as músicas vêm de `conteudo/repertorio.json` e das que cada pessoa cria no celular.
 - Para criar categoria nova, acrescente na posição desejada. O `id` não pode ter espaço.
 
 ## 2. Grupo
@@ -137,4 +139,20 @@ A trilha de estudo põe os exercícios em etapas, na ordem em que vale estudá-l
 - `itens` são ids de exercício, e cada exercício entra uma vez só na trilha inteira.
 - Exercício fora da trilha não quebra nada, mas o validador avisa e ele vai para o fim da fila do treino de hoje.
 - A meta de cada exercício é o andamento final da lista dele (`andamento.fim`, ou o que a pessoa ajustou). Uma versão anterior da trilha tinha uma meta por exercício; essas metas ficaram no histórico do Git (commit 20cf114) e só devem voltar se o usuário pedir, depois de conferir os números.
+
+## 9. repertorio.json
+
+As músicas que a igreja toca, iguais para todos que usam o app (cada pessoa ainda pode criar as dela no celular):
+```json
+{"musicas":[
+  {"id":"bondade-de-deus","nome":"Bondade de Deus","artista":"Isaías Saad","bpm":68,"levada":"wl-B","virada":"wv-3",
+   "notas":"Intro só no chimbal; refrão na condução","link":"https://..."}
+]}
+```
+- `id` (fixo, sem espaço) e `nome` são obrigatórios; o resto é opcional.
+- `bpm`: inteiro de 30 a 300, no andamento da levada escolhida. Em 6/8 o app conta a colcheia: 60 na semínima pontuada = 180.
+- `levada` e `virada`: ids de exercícios que existem. "Treinar" toca a levada 3 minutos e a virada 2, no `bpm` da música; a virada só entra se tiver o mesmo compasso da levada. Se a virada for de uma lista com `levadas` e a levada da música estiver nela, essa levada vai antes da virada.
+- `notas`: a estrutura da música para o baterista (intro, verso, refrão, ponte, final), em texto curto.
+- `link`: só `https://`, para página oficial ou que o usuário mandou. Nada de partitura, cifra ou letra de terceiros no repositório.
+- O validador recusa id repetido, BPM fora da faixa, exercício que não existe, link sem https e campo desconhecido.
 

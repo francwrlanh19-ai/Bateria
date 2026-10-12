@@ -36,6 +36,14 @@
     "cor": "--cym"
   },
   {
+    "id": "repertorio",
+    "area": "levadas",
+    "nome": "Repertório do culto",
+    "descricao": "As músicas da igreja com BPM, levada e virada para treinar",
+    "cor": "--cym",
+    "especial": true
+  },
+  {
     "id": "tecnica",
     "area": "outros",
     "nome": "Técnica",

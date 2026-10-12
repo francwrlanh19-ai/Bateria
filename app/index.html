@@ -476,6 +476,40 @@ body.foco .leitura{display:none}
 .dit-bpm .btn-linha{width:44px;padding:0;font-size:20px;line-height:1}
 .dit-linha .seg-mini{flex:0 1 auto;min-width:0}
 .dit-linha .seg-mini button{min-width:46px}
+/* Repertório do culto: músicas com BPM, levada e virada; formulário; cartões */
+.rep-topo{display:grid;gap:12px}
+.rep-desc{color:var(--muted);font-size:14px;line-height:1.45}
+.rep-desc b{color:var(--ink)}
+.rep-acoes{display:flex;flex-wrap:wrap;gap:8px}
+.rep-sec{display:grid;gap:2px}
+.mus-lista{display:grid;gap:10px}
+.mus{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:grid;gap:10px;min-width:0}
+.mus-cab{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.mus-tit{min-width:0}
+.mus-tit h3{font-family:var(--f-display);font-weight:800;font-size:21px;line-height:1.1;overflow-wrap:anywhere}
+.mus-tit p{font-size:14px;color:var(--muted);margin-top:2px}
+.mus-bpm{display:grid;justify-items:end;line-height:1;flex:none}
+.mus-bpm b{font-family:var(--f-display);font-weight:800;font-size:26px;font-variant-numeric:tabular-nums}
+.mus-bpm small{font-size:11.5px;font-weight:700;color:var(--muted);margin-top:2px}
+.mus-ex{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.mus-exb{appearance:none;display:grid;gap:1px;text-align:left;background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:7px 10px;color:inherit;min-width:0}
+.mus-exb small{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.mus-exb b{font-size:15px;line-height:1.2}
+.mus-exb span{font-size:12.5px;color:var(--muted);line-height:1.25}
+.mus-exb:disabled{opacity:.6}
+.mus-notas{font-size:14px;line-height:1.4;white-space:pre-line;overflow-wrap:anywhere}
+.mus-acoes{display:flex;flex-wrap:wrap;gap:8px}
+.mus-acoes a.btn-linha{color:inherit;text-decoration:none;display:inline-flex;align-items:center}
+.mus-treina{display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:8px 16px}
+.mus-treina svg{width:18px;height:18px}
+.mus .copia-msg{margin:0}
+.mus-form{background:var(--surface);border:1.5px solid var(--ink);border-radius:16px;padding:14px;display:grid;gap:10px;min-width:0}
+.mus-form h3{font-family:var(--f-display);font-weight:800;font-size:21px;line-height:1.1}
+.mus-form .campo input,.mus-form .campo select{min-width:0;width:100%}
+.mus-form textarea{border:1.5px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 10px;color:var(--ink);font:inherit;font-size:15px;resize:vertical;width:100%}
+.mus-form-acoes{display:flex;flex-wrap:wrap;gap:8px}
+.mus-erro{color:var(--bd);font-weight:600;font-size:14px}
+.mus-exclui{margin-left:auto}
 /* Convite para instalar o app */
 .instalar{background:var(--surface);border:2px solid var(--brass);border-radius:16px;padding:14px;display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px 12px;align-items:center}
 .instalar img{width:52px;height:52px;border-radius:12px}
@@ -1593,7 +1627,7 @@ function iniciar(op){
   eng={lista:sel.lista,ex:sel.ex,passo:0,t:ac.currentTime+0.1,bpm:cfg.progressao?cfg.inicio:cfg.bpmFixo,
        noDegrau:0,contagem:cfg.contagem,tipo:'contagem',ouvindo:true,fim:false,pend:null,fase:0,crashProx:true,crashAgora:false};
   if(cfg.lista&&cfg.sorteio&&!(op&&op.sessao)&&lista(sel.lista).exercicios.length>1){eng.ordem=novaOrdem(lista(sel.lista).exercicios.length,sel.ex);eng.iOrdem=0;}
-  if(op&&op.sessao){eng.rotina=Object.assign({i:0,inicioT:eng.t},op.sessao);eng.faixa=faixaDe(eng.rotina.itens[0]);if(eng.faixa&&cfg.progressao)eng.bpm=eng.faixa.ini;}
+  if(op&&op.sessao){eng.rotina=Object.assign({i:0,inicioT:eng.t},op.sessao);eng.faixa=faixaDe(eng.rotina.itens[0]);if(eng.faixa&&(cfg.progressao||eng.rotina.tipo==='musica'))eng.bpm=eng.faixa.ini;}
   fila.length=0;$('#aviso').hidden=true;
   $('#estado').textContent=cfg.contagem?'Contagem':'Tocando';$('#rep').textContent='';
   relogio=setInterval(agenda,25);agenda();
@@ -1667,7 +1701,7 @@ function fimCompasso(){
       const n=its[prox];eng.rotina.i=prox;eng.rotina.inicioT=eng.t;
       carregaAndamento(n.lista);eng.faixa=faixaDe(n);
       eng.lista=n.lista;eng.ex=n.ex;eng.noDegrau=0;eng.fase=0;eng.crashProx=true;eng.contagem=1;
-      eng.bpm=cfg.progressao?iniBpm():cfg.bpmFixo;
+      eng.bpm=cfg.progressao||(eng.rotina.tipo==='musica'&&eng.faixa)?iniBpm():cfg.bpmFixo;
       fila.push({t:eng.t,troca:{lista:n.lista,ex:n.ex},rotina:prox});
       return;
     }
@@ -1737,7 +1771,7 @@ function aplica(ev){
     const ex=exDe(ev.lista,ev.ex);parar();
     const av=$('#aviso'),ss=ev.sessao;
     if(ev.fimRotina&&ss&&ss.tipo==='hoje')concluiHoje();
-    av.textContent=ev.fimRotina&&ss?`${ss.tipo==='hoje'?'Treino de hoje concluído':`Rotina "${ss.nome}" concluída`}: ${ss.n} ${ss.n===1?'exercício':'exercícios'}, ${ss.min} minutos.`:cfg.lista?`Meta concluída: a folha inteira a ${ev.bpm} BPM.`:`Meta concluída: ${ex.nome} a ${ev.bpm} BPM.`;av.hidden=false;
+    av.textContent=ev.fimRotina&&ss?`${ss.tipo==='hoje'?'Treino de hoje concluído':ss.tipo==='musica'?`"${ss.nome}" treinada no andamento da música`:`Rotina "${ss.nome}" concluída`}: ${ss.n} ${ss.n===1?'exercício':'exercícios'}, ${ss.min} minutos.`:cfg.lista?`Meta concluída: a folha inteira a ${ev.bpm} BPM.`:`Meta concluída: ${ex.nome} a ${ev.bpm} BPM.`;av.hidden=false;
     return;
   }
   if(ev.releitura){renderPartitura();return;}
@@ -1765,7 +1799,7 @@ function aplica(ev){
       const vir=!!lista(ev.lista).virada;
       $('#estado').textContent=cfg.ouvir?(ev.ouvindo?'Ouça':'Sua vez'):(vir?'Virada':'Tocando');
       if(ev.calado)$('#estado').textContent='Sem clique';
-      $('#rep').textContent=ev.rt?`${ev.rt.tipo==='hoje'?'Treino':'Rotina'} ${ev.rt.i+1} de ${ev.rt.n}, faltam ${Math.floor(ev.rt.resta/60)}:${String(Math.floor(ev.rt.resta%60)).padStart(2,'0')}`:`Repetição ${r} de ${cfg.reps}`;
+      $('#rep').textContent=ev.rt?`${ev.rt.tipo==='hoje'?'Treino':ev.rt.tipo==='musica'?'Música':'Rotina'} ${ev.rt.i+1} de ${ev.rt.n}, faltam ${Math.floor(ev.rt.resta/60)}:${String(Math.floor(ev.rt.resta%60)).padStart(2,'0')}`:`Repetição ${r} de ${cfg.reps}`;
     }
   }
   if(ev.inicioComp&&ev.passo!==0&&ev.tipo==='toca'&&cfg.gap){
@@ -2186,6 +2220,7 @@ function renderColecao(){
   if(abaAtiva!=='ditado')paraDitado();
   if(abaAtiva==='trilha'){renderTrilha(box);return;}
   if(abaAtiva==='ditado'){renderDitado(box);return;}
+  if(abaAtiva==='repertorio'){renderRepertorio(box);return;}
   const ls=listas().filter(l=>abaDe(l)===abaAtiva);
   let mostrados=0;
   if(tela==='categoria'&&ls.some(l=>l.exercicios.length))box.append(barraFiltro());
@@ -2697,6 +2732,7 @@ function renderHub(){
   const sq=$('#seqTopo'),nsq=diasSeguidos();
   if(sq){sq.hidden=!nsq;sq.textContent=`🔥 ${nsq}`;sq.title=`${nsq} ${nsq===1?'dia seguido':'dias seguidos'} de estudo`;sq.setAttribute('aria-label',sq.title);}
   const rec=cartaoRecebida();if(rec)h.append(rec);
+  const rm=cartaoMusicasRecebidas();if(rm)h.append(rm);
   const inst=cartaoInstalar();if(inst)h.append(inst);
   /* Treino de hoje, últimos 7 dias e continuar */
   const topo=el('div','hub-topo'),par=el('div','hub-par');
@@ -2707,14 +2743,14 @@ function renderHub(){
   const res=el('div','busca-res');res.id='buscaRes';res.hidden=true;h.append(res);
   /* Áreas: as principais (Leitura, Levadas e viradas) primeiro, com as categorias numeradas como passos; depois Outros */
   const caixa=el('div','areas');caixa.id='areasHub';
-  const cats=CONTEUDO.categorias.filter(c=>!c.especial||c.id==='ditado');
+  const cats=CONTEUDO.categorias.filter(c=>!c.especial||c.id==='ditado'||c.id==='repertorio');
   const grupos=AREAS.length?AREAS:[{id:'',nome:'Categorias'}];
   grupos.forEach(ar=>{
     const cs=cats.filter(c=>!ar.id||c.area===ar.id);if(!cs.length)return;
     const sec=el('section','area'+(ar.principal?' area-principal':''));sec.style.setProperty('--c',`var(${ar.cor||'--muted'})`);
     const hid='area-'+(ar.id||'todas');sec.setAttribute('aria-labelledby',hid);
     sec.innerHTML=`<div class="area-topo"><span class="area-ico" aria-hidden="true">${esc(ar.icone||'')}</span><h2 id="${esc(hid)}">${esc(ar.nome)}</h2>${ar.descricao?`<p>${esc(ar.descricao)}</p>`:''}</div>`;
-    const linha=(c,n)=>c.id==='ditado'?linhaDitado(c,n):linhaCat(c,n);
+    const linha=(c,n)=>c.id==='ditado'?linhaDitado(c,n):c.id==='repertorio'?linhaRepertorio(c,n):linhaCat(c,n);
     if(ar.principal){const ps=el('div','passos');cs.forEach((c,i)=>ps.append(linha(c,i+1)));sec.append(ps);}
     else cs.forEach(c=>sec.append(linha(c)));
     caixa.append(sec);
@@ -3544,6 +3580,224 @@ function linhaDitado(c,passo){
   b.innerHTML=`<h3>${esc(c.nome)}</h3><p>${esc(c.descricao||'')}</p><small class="cat-info">${partes.join(', ')}</small><span class="cat-barra" aria-hidden="true"><i class="d" style="width:${(dom/NIVEIS_LEIT.length*100).toFixed(1)}%"></i></span>`;
   b.setAttribute('aria-label',`${passo?`Passo ${passo}: `:''}${c.nome}. ${partes.join(', ')}`);
   b.addEventListener('click',()=>{abaAtiva=c.id;filtroCat='todos';mudaTela('categoria');});
+  return b;
+}
+
+/* ---------- Repertório do culto ----------
+   As músicas que a igreja toca, com andamento, levada e virada do app. Duas fontes: as do site
+   (conteudo/repertorio.json, iguais para todos) e as deste aparelho (LS 'musicas': a pessoa cria, edita e envia por
+   link). "Treinar" toca a levada e depois a virada no andamento da música (sessão do tipo 'musica', com o andamento
+   fixo mesmo sem progressão). Partitura e Vídeo abrem uma busca na internet: o app não guarda partituras de ninguém. */
+const REP=(CONTEUDO.repertorio&&Array.isArray(CONTEUDO.repertorio.musicas)?CONTEUDO.repertorio.musicas:[]).filter(m=>m&&m.id&&m.nome);
+let musicas=LS.get('musicas',[]);
+if(!Array.isArray(musicas))musicas=[];
+musicas=musicas.filter(m=>m&&typeof m==='object'&&m.id&&m.nome);
+let musEdit=null;                        /* música aberta no formulário: o id, ou 'nova' */
+const salvaMusicas=()=>LS.set('musicas',musicas);
+const novoIdMusica=()=>'mu-'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const CATS_LEITURA=new Set(CONTEUDO.categorias.filter(c=>c.area==='leitura').map(c=>c.id));
+function infoEx(id){const p=id&&ondeEsta(id);if(!p)return null;const l=lista(p.lista);return {p,l,ex:l.exercicios[p.ex]};}
+function compassoMus(m){const o=infoEx(m.levada)||infoEx(m.virada);return o?o.ex.compasso:null;}
+const mesmoCompasso=(a,b)=>!a||!b||(a.ex.compasso[0]===b.ex.compasso[0]&&a.ex.compasso[1]===b.ex.compasso[1]);
+/* música vinda de fora (formulário, link): só campos conhecidos, tamanhos limitados, ids que existem e link https */
+function normMusica(o){
+  const txt=(v,n)=>typeof v==='string'?v.trim().slice(0,n):typeof v==='number'?String(v):'';
+  const nome=txt(o.nome,60);if(!nome)return null;
+  const m={nome},art=txt(o.artista,60),bpm=Math.round(+o.bpm),notas=txt(o.notas,400),link=txt(o.link,300);
+  if(art)m.artista=art;
+  if(bpm>=30&&bpm<=300)m.bpm=bpm;
+  ['levada','virada'].forEach(k=>{const id=txt(o[k],60);if(id&&ondeEsta(id))m[k]=id;});
+  if(notas)m.notas=notas;
+  if(/^https:\/\/[^\s]+$/i.test(link))m.link=link;
+  return m;
+}
+function itensMusica(m){
+  const lev=infoEx(m.levada),vir=infoEx(m.virada),faixa=m.bpm?{ini:m.bpm,fim:m.bpm}:{},its=[];
+  if(lev)its.push(Object.assign({id:lev.ex.id,min:vir?3:4},faixa));
+  if(vir&&mesmoCompasso(lev,vir))its.push(Object.assign({id:vir.ex.id,min:lev?2:4},faixa));
+  return its;
+}
+function treinaMusica(m){
+  const its=itensMusica(m);if(!its.length)return;
+  /* numa lista de viradas com levadas, a levada da música passa a ser a levada antes da virada */
+  const vir=infoEx(m.virada);
+  if(vir&&m.levada&&levadasDe(vir.l).some(o=>o.ex.id===m.levada)&&cfg.virLevada!==m.levada){cfg.virLevada=m.levada;salvaCfg();}
+  comecaSessao(its,{tipo:'musica',nome:m.nome});
+}
+function buscaMusica(m,onde){
+  const q=[m.nome,m.artista].filter(Boolean).join(' ');
+  return onde==='video'?'https://www.youtube.com/results?search_query='+encodeURIComponent(q+' bateria')
+    :'https://www.google.com/search?q='+encodeURIComponent(q+' partitura bateria');
+}
+function cartaoMusica(m,minha){
+  const lev=infoEx(m.levada),vir=infoEx(m.virada),its=itensMusica(m),c=compassoMus(m);
+  const art=el('article','mus'),info=[m.artista,c?c.join('/'):''].filter(Boolean).join(', ');
+  art.innerHTML=`<div class="mus-cab"><div class="mus-tit"><h3>${esc(m.nome)}</h3>${info?`<p>${esc(info)}</p>`:''}</div>${m.bpm?`<span class="mus-bpm"><b>${m.bpm}</b><small>BPM${c&&c[1]===8?' (colcheia)':''}</small></span>`:''}</div>`;
+  const exs=el('div','mus-ex');
+  [['Levada',lev,m.levada],['Virada',vir,m.virada]].forEach(([rot,o,id])=>{
+    if(!id)return;
+    const b=el('button','mus-exb');b.type='button';
+    if(o){
+      b.innerHTML=`<small>${rot}</small><b>${esc(o.ex.nome)}</b><span>${esc(o.l.titulo)}</span>`;
+      b.setAttribute('aria-label',`${rot}: ${o.ex.nome}, ${o.l.titulo}. Abrir o exercício`);
+      b.addEventListener('click',()=>{escolhe(o.p.lista,o.p.ex);mudaTela('treino');});
+    }else{b.disabled=true;b.innerHTML=`<small>${rot}</small><b>Não está neste celular</b>`;}
+    exs.append(b);
+  });
+  if(exs.children.length)art.append(exs);
+  if(lev&&vir&&!mesmoCompasso(lev,vir)){const p=el('p','nota');p.textContent='A virada está em outro compasso e fica de fora do treino.';art.append(p);}
+  if(m.notas){const p=el('p','mus-notas');p.textContent=m.notas;art.append(p);}
+  const ac=el('div','mus-acoes');
+  const tr=el('button','btn-primario mus-treina');tr.type='button';tr.disabled=!its.length;
+  tr.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg>Treinar';
+  tr.setAttribute('aria-label',`Treinar ${m.nome}`+(m.bpm?` a ${m.bpm} BPM`:''));
+  tr.addEventListener('click',()=>treinaMusica(m));ac.append(tr);
+  const link=(txt,href,rot)=>{const a=el('a','btn-linha');a.href=href;a.target='_blank';a.rel='noopener noreferrer';a.textContent=txt;a.setAttribute('aria-label',rot);ac.append(a);};
+  if(m.link)link('Link salvo',m.link,`Abrir o link salvo de ${m.nome}`);
+  link('Partitura',buscaMusica(m,'partitura'),`Procurar a partitura de ${m.nome} na internet`);
+  link('Vídeo',buscaMusica(m,'video'),`Procurar vídeos de ${m.nome} na internet`);
+  if(minha){const ed=el('button','btn-linha');ed.type='button';ed.textContent='Editar';ed.addEventListener('click',()=>{musEdit=m.id;renderColecao();});ac.append(ed);}
+  const en=el('button','btn-linha');en.type='button';en.textContent='Enviar';en.setAttribute('aria-label',`Enviar ${m.nome} por link`);
+  en.addEventListener('click',()=>enviaMusicas([m],art));ac.append(en);
+  art.append(ac);
+  if(!its.length&&minha){const p=el('p','nota');p.textContent='Para treinar, escolha a levada ou a virada em Editar.';art.append(p);}
+  return art;
+}
+function formMusica(m){
+  const nova=!m,v=m||{},f=el('form','mus-form');f.noValidate=true;
+  f.setAttribute('aria-label',nova?'Nova música':'Editar '+v.nome);
+  f.innerHTML=`<h3>${nova?'Nova música':'Editar música'}</h3>
+    <label class="campo">Nome<input name="nome" maxlength="60" autocomplete="off"></label>
+    <label class="campo">Artista ou ministério<input name="artista" maxlength="60" autocomplete="off"></label>
+    <label class="campo">Andamento da música (BPM)<input name="bpm" type="number" inputmode="numeric" min="30" max="300" step="1"></label>
+    <label class="campo">Levada<select name="levada"></select></label>
+    <label class="campo">Virada<select name="virada"></select></label>
+    <p class="nota mus-dica" hidden></p>
+    <label class="campo">Observações<textarea name="notas" maxlength="400" rows="3" placeholder="Ex.: intro só no chimbal, refrão na condução, ponte nos tons"></textarea></label>
+    <label class="campo">Link da partitura ou do vídeo (opcional)<input name="link" type="url" inputmode="url" maxlength="300" placeholder="https://"></label>
+    <p class="mus-erro" role="alert" hidden></p>
+    <div class="mus-form-acoes"><button type="submit" class="btn-primario">Salvar</button><button type="button" class="btn-linha" data-a="cancela">Cancelar</button>${nova?'':'<button type="button" class="btn-linha mus-exclui">Excluir</button>'}</div>`;
+  const F=n=>f.elements[n];
+  F('nome').value=v.nome||'';F('artista').value=v.artista||'';F('bpm').value=v.bpm||'';F('notas').value=v.notas||'';F('link').value=v.link||'';
+  /* levadas: tudo que não é leitura, técnica nem virada; viradas: as listas de viradas. Os criados por você entram nas duas */
+  const ehLevada=(l,e)=>abaDe(l)==='meus'||(!l.virada&&!e.subs&&!e.leitura&&!e.mistura&&!CATS_LEITURA.has(abaDe(l))&&abaDe(l)!=='tecnica');
+  const ehVirada=(l,e)=>abaDe(l)==='meus'||!!l.virada;
+  const preenche=(sel,filtro,atual,comp)=>{
+    let h='<option value="">Nenhuma</option>';
+    listas().forEach(l=>{
+      const es=l.exercicios.filter(e=>filtro(l,e)&&(!comp||(e.compasso[0]===comp[0]&&e.compasso[1]===comp[1])));if(!es.length)return;
+      h+=`<optgroup label="${esc(l.titulo)}">`+es.map(e=>`<option value="${esc(e.id)}">${esc(e.nome)}</option>`).join('')+'</optgroup>';
+    });
+    sel.innerHTML=h;sel.value=atual&&[...sel.options].some(o=>o.value===atual)?atual:'';
+  };
+  const dica=$('.mus-dica',f);
+  const atualiza=()=>{
+    const lev=infoEx(F('levada').value);
+    preenche(F('virada'),ehVirada,F('virada').value||v.virada,lev?lev.ex.compasso:null);
+    const seis=lev&&lev.ex.compasso[1]===8;
+    dica.hidden=!seis;
+    if(seis)dica.textContent=`A levada está em ${lev.ex.compasso.join('/')}: no app, o BPM é o da colcheia. Uma música a 60 BPM na semínima pontuada fica com 180.`;
+  };
+  preenche(F('levada'),ehLevada,v.levada,null);atualiza();
+  F('levada').addEventListener('change',atualiza);
+  const erro=$('.mus-erro',f),falha=(txt,campo)=>{erro.textContent=txt;erro.hidden=false;F(campo).focus();};
+  f.addEventListener('submit',e=>{
+    e.preventDefault();
+    const o=normMusica({nome:F('nome').value,artista:F('artista').value,bpm:F('bpm').value,levada:F('levada').value,virada:F('virada').value,notas:F('notas').value,link:F('link').value});
+    if(!o)return falha('Escreva o nome da música.','nome');
+    if(F('bpm').value.trim()&&!o.bpm)return falha('O andamento precisa ficar entre 30 e 300 BPM.','bpm');
+    if(F('link').value.trim()&&!o.link)return falha('O link precisa começar com https://','link');
+    if(nova)musicas.push(Object.assign({id:novoIdMusica()},o));
+    else{const i=musicas.findIndex(x=>x.id===v.id);if(i>=0)musicas[i]=Object.assign({id:v.id},o);}
+    salvaMusicas();musEdit=null;renderColecao();
+  });
+  $('[data-a="cancela"]',f).addEventListener('click',()=>{musEdit=null;renderColecao();});
+  const ex=$('.mus-exclui',f);
+  if(ex)duploToque(ex,'Toque de novo para excluir',()=>{musicas=musicas.filter(x=>x.id!==v.id);salvaMusicas();musEdit=null;renderColecao();});
+  return f;
+}
+const ordemMusica=(a,b)=>a.nome.localeCompare(b.nome,'pt',{sensitivity:'base'});
+function renderRepertorio(box){
+  const topo=el('div','lista rep-topo');
+  topo.innerHTML='<p class="rep-desc">As músicas do culto com o andamento, a levada e a virada. <b>Treinar</b> toca a levada e depois a virada no andamento da música. <b>Partitura</b> e <b>Vídeo</b> procuram a música na internet. Se não achar a partitura, escreva a levada em Meus exercícios e escolha ela aqui.</p>';
+  const ac=el('div','rep-acoes');
+  const add=el('button','btn-primario');add.type='button';add.textContent='Adicionar música';add.disabled=musEdit==='nova';
+  add.addEventListener('click',()=>{musEdit='nova';renderColecao();const i=$('.mus-form input[name="nome"]');if(i)i.focus();});
+  ac.append(add);
+  if(musicas.length>1){const en=el('button','btn-linha');en.type='button';en.textContent='Enviar todas';en.addEventListener('click',()=>enviaMusicas(musicas.slice().sort(ordemMusica),topo));ac.append(en);}
+  /* sem partitura na internet: a levada vai para Meus exercícios, e o voltar traz de volta ao repertório */
+  const esc2=el('button','btn-linha');esc2.type='button';esc2.textContent='Escrever uma levada';
+  esc2.addEventListener('click',()=>{try{history.pushState({tela:'categoria'},'');camadas.push({tela:'categoria',aba:'repertorio'});}catch(e){}abaAtiva='meus';filtroCat='todos';musEdit=null;aplicaTela('categoria');});
+  ac.append(esc2);
+  topo.append(ac);box.append(topo);
+  if(musEdit==='nova')box.append(formMusica(null));
+  if(REP.length){
+    const sec=el('section','lista rep-sec');
+    sec.innerHTML=`<div class="lista-topo"><h2>Repertório da igreja</h2><p>${REP.length} ${REP.length===1?'música':'músicas'}, iguais para todos que usam o app</p></div>`;
+    const ul=el('div','mus-lista');REP.slice().sort(ordemMusica).forEach(m=>ul.append(cartaoMusica(m,false)));sec.append(ul);box.append(sec);
+  }
+  const sec=el('section','lista rep-sec');
+  sec.innerHTML=`<div class="lista-topo"><h2>Minhas músicas</h2><p>${musicas.length?`${musicas.length} ${musicas.length===1?'música':'músicas'} neste celular`:'Nenhuma ainda. Toque em Adicionar música.'}</p></div>`;
+  const ul=el('div','mus-lista');
+  musicas.slice().sort(ordemMusica).forEach(m=>ul.append(musEdit===m.id?formMusica(m):cartaoMusica(m,true)));
+  sec.append(ul);box.append(sec);
+}
+/* Link das músicas: #musicas=1;<JSON em base64url> com [nome, artista, bpm, levada, virada, notas, link].
+   Levada ou virada criada no aparelho não vai: só existe nele. */
+function paraB64(t){const b=new TextEncoder().encode(t);let s='';b.forEach(x=>{s+=String.fromCharCode(x);});return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function deB64(t){try{const s=atob(t.replace(/-/g,'+').replace(/_/g,'/'));return new TextDecoder().decode(Uint8Array.from(s,c=>c.charCodeAt(0)));}catch(e){return null;}}
+const deFora=id=>id&&!/^meu-/.test(id)?id:'';
+function linkMusicas(ms){
+  const arr=ms.map(m=>[m.nome,m.artista||'',m.bpm||0,deFora(m.levada),deFora(m.virada),m.notas||'',m.link||'']);
+  return location.origin+location.pathname+'#musicas=1;'+paraB64(JSON.stringify(arr));
+}
+async function enviaMusicas(ms,caixa){
+  const url=linkMusicas(ms),n=ms.length;
+  const titulo=n===1?'Música: '+ms[0].nome:`Repertório: ${n} músicas`;
+  const texto=n===1?`"${ms[0].nome}"${ms[0].bpm?` a ${ms[0].bpm} BPM`:''} no app Estudo de bateria. Toque no link para guardar no seu repertório:`
+    :`${n} músicas do repertório no app Estudo de bateria. Toque no link para guardar no seu app:`;
+  const aviso=ms.some(m=>(m.levada&&!deFora(m.levada))||(m.virada&&!deFora(m.virada)))?' A levada ou a virada que você criou não vai junto, porque só existe neste celular.':'';
+  if(navigator.share){
+    try{await navigator.share({title:titulo,text:texto,url});if(aviso)msgCopia(caixa,aviso.trim());return;}
+    catch(e){if(e&&e.name==='AbortError')return;}
+  }
+  try{await navigator.clipboard.writeText(texto+' '+url);msgCopia(caixa,'Link copiado. Cole no WhatsApp para mandar aos músicos.'+aviso);}
+  catch(e){msgCopia(caixa,`Copie e envie este link:<span class="link-rot">${esc(url)}</span>${aviso}`);}
+}
+function leLinkMusicas(){
+  const m=/^#musicas=1;(.+)$/.exec(location.hash||'');if(!m)return null;
+  let arr=null;try{arr=JSON.parse(deB64(m[1])||'null');}catch(e){}
+  if(!Array.isArray(arr))return {musicas:[]};
+  return {musicas:arr.slice(0,300).map(a=>Array.isArray(a)?normMusica({nome:a[0],artista:a[1],bpm:a[2],levada:a[3],virada:a[4],notas:a[5],link:a[6]}):null).filter(Boolean)};
+}
+let musRecebidas=leLinkMusicas();
+window.addEventListener('hashchange',()=>{const r=leLinkMusicas();if(!r)return;musRecebidas=r;if(tela!=='hub')aplicaTela('hub');else renderHub();});
+const chaveMusica=m=>(m.nome+'|'+(m.artista||'')).toLocaleLowerCase('pt');
+function cartaoMusicasRecebidas(){
+  if(!musRecebidas)return null;
+  const r=musRecebidas,sec=el('section','recebida');sec.setAttribute('role','region');sec.setAttribute('aria-label','Músicas recebidas');
+  const fecha=()=>{musRecebidas=null;limpaHash();renderHub();};
+  const tem=new Set([...musicas,...REP].map(chaveMusica)),novas=r.musicas.filter(m=>!tem.has(chaveMusica(m))),n=r.musicas.length;
+  const nomes=r.musicas.slice(0,8).map(m=>m.nome),resto=n-nomes.length;
+  sec.innerHTML=`<span class="mini-rot">${n===1?'Música recebida':'Músicas recebidas'}</span><h2>${n===1?esc(r.musicas[0].nome):n?`${n} músicas`:'Link sem músicas'}</h2><p>${!n?'Não deu para ler as músicas deste link. Peça para enviarem de novo.'
+    :(n>1?esc(nomes.join(', '))+(resto>0?` e mais ${resto}`:'')+'. ':'')+(novas.length<n?`${n-novas.length===1?'Uma já está':`${n-novas.length} já estão`} no seu repertório${novas.length?' e fica de fora':''}.`:'')}</p>`;
+  const ac=el('div','copia-acoes');
+  if(novas.length){
+    const ok=el('button','btn-primario');ok.type='button';ok.textContent='Guardar no meu repertório';
+    ok.addEventListener('click',()=>{novas.forEach(m=>musicas.push(Object.assign({id:novoIdMusica()},m)));salvaMusicas();musRecebidas=null;limpaHash();abaAtiva='repertorio';musEdit=null;mudaTela('categoria');});
+    ac.append(ok);
+  }
+  const no=el('button','btn-linha');no.type='button';no.textContent=novas.length?'Agora não':'Entendi';no.addEventListener('click',fecha);ac.append(no);
+  sec.append(ac);
+  return sec;
+}
+/* cartão do início, como um passo de Levadas e viradas */
+function linhaRepertorio(c,passo){
+  const n=REP.length+musicas.length,partes=[n?`${n} ${n===1?'música':'músicas'}`:'Monte o repertório da sua igreja'];
+  const b=el('button','cat');b.type='button';b.style.setProperty('--c',`var(${c.cor||'--muted'})`);if(passo)b.dataset.passo=passo;
+  b.innerHTML=`<h3>${esc(c.nome)}</h3><p>${esc(c.descricao||'')}</p><small class="cat-info">${partes.join(', ')}</small>`;
+  b.setAttribute('aria-label',`${passo?`Passo ${passo}: `:''}${c.nome}. ${partes.join(', ')}`);
+  b.addEventListener('click',()=>{abaAtiva=c.id;filtroCat='todos';musEdit=null;mudaTela('categoria');});
   return b;
 }
 

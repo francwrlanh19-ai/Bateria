@@ -22,6 +22,8 @@ const areas = JSON.parse(fs.readFileSync(path.join(raiz, 'conteudo/areas.json'),
 const categorias = JSON.parse(fs.readFileSync(path.join(raiz, 'conteudo/categorias.json'), 'utf8'));
 const arqTrilha = path.join(raiz, 'conteudo/trilha.json');
 const trilha = fs.existsSync(arqTrilha) ? JSON.parse(fs.readFileSync(arqTrilha, 'utf8')) : null;
+const arqRep = path.join(raiz, 'conteudo/repertorio.json');
+const repertorio = fs.existsSync(arqRep) ? JSON.parse(fs.readFileSync(arqRep, 'utf8')) : null;
 const ordemCat = Object.fromEntries(categorias.map((c, i) => [c.id, i]));
 const dirG = path.join(raiz, 'conteudo/grupos');
 const grupos = fs.readdirSync(dirG).filter(f => f.endsWith('.json'))
@@ -29,7 +31,7 @@ const grupos = fs.readdirSync(dirG).filter(f => f.endsWith('.json'))
   .sort((a, b) => (ordemCat[a.categoria] - ordemCat[b.categoria]) || ((a.ordem ?? 999) - (b.ordem ?? 999)) || a.id.localeCompare(b.id));
 fs.writeFileSync(path.join(dist, 'conteudo.js'),
   '/* Gerado por scripts/montar.mjs a partir de conteudo/. Não edite à mão. */\n' +
-  'window.CONTEUDO=' + JSON.stringify({ areas, categorias, grupos, trilha }) + ';\n');
+  'window.CONTEUDO=' + JSON.stringify({ areas, categorias, grupos, trilha, repertorio }) + ';\n');
 
 // sw.js com versão calculada pelo conteúdo: os celulares atualizam sozinhos quando algo muda
 const listar = d => fs.readdirSync(d, { withFileTypes: true }).flatMap(e =>
