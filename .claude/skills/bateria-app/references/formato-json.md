@@ -25,6 +25,7 @@ As áreas atuais são `leitura` e `levadas` (as duas com `"principal": true`: ca
 - `area` é obrigatória (exceto em `rotina` e `meus`). O validador recusa categoria sem área ou com área desconhecida.
 - `cor` usa as variáveis do app: `--sn` azul, `--hh` dourado, `--tom` verde, `--cym` roxo, `--bd` vermelho, `--ft` marrom, `--rd` turquesa, `--hp` cinza, `--brass` latão, `--muted`.
 - `rotina` e `meus` têm `"especial": true`. Não remova essas duas.
+- `ditado` (Ditado rítmico) também é especial, mas tem `area` (`leitura`): o início mostra como um passo da Leitura, e a tela é feita pelo app, sem grupos. Não fica no treino de hoje nem na trilha.
 - Para criar categoria nova, acrescente na posição desejada. O `id` não pode ter espaço.
 
 ## 2. Grupo

@@ -431,6 +431,51 @@ body.foco .leitura{display:none}
 .etapa-cab[aria-expanded="true"] .etapa-seta{transform:rotate(90deg)}
 .etapa-corpo{display:grid;gap:12px;padding:0 0 14px}
 .etapa-obj{font-size:14px;color:var(--muted);line-height:1.4}
+/* Ditado rítmico: nível, a pergunta (Ouvir, pulsos, quatro partituras) e os ajustes */
+.dit-topo{display:grid;gap:10px}
+.dit-desc{color:var(--muted);font-size:14px;line-height:1.4}
+.dit-niv{max-width:360px}
+.dit-niv button{font-family:var(--f-display);font-weight:800;font-size:19px;padding:6px 0;position:relative;font-variant-numeric:tabular-nums}
+.dit-niv button i{font-style:normal;font-family:var(--f-body);font-size:11px;position:absolute;top:2px;right:5px;color:var(--tom)}
+.dit-niv button[aria-pressed="true"] i{color:inherit}
+.dit-info{font-size:14px;color:var(--muted);line-height:1.4}
+.dit-info b{color:var(--ink)}
+.dit-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;gap:12px}
+.dit-cab{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.dit-cab h2{font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1}
+.dit-seq{font-size:14px;font-weight:700;color:var(--tom)}
+.dit-ouvir{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
+.dit-play{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:176px}
+.dit-play svg{width:20px;height:20px}
+.dit-play[aria-pressed="true"]{background:var(--bd)}
+.dit-pulsos{display:flex;align-items:center;gap:8px}
+.dit-pulsos i{width:14px;height:14px;border-radius:50%;background:var(--cell-2);background:color-mix(in srgb,var(--muted) 28%,transparent)}
+.dit-pulsos i.on{background:var(--ink)}
+.dit-pulsos span{font-size:13.5px;font-weight:600;color:var(--muted);min-width:76px}
+.dit-msg{font-size:14.5px;line-height:1.4}
+.dit-msg.ok{color:var(--tom);font-weight:600}
+.dit-msg.erro{color:var(--bd);font-weight:600}
+.dit-ops{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+@media (min-width:700px){.dit-ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.dit-op{appearance:none;display:grid;grid-template-columns:30px minmax(0,1fr);align-items:center;gap:6px;background:var(--paper);color:#1d2329;border:2px solid var(--line);border-radius:12px;padding:4px 10px 4px 8px;text-align:left;width:100%;min-height:64px;transition:transform .08s ease-out}
+.dit-op:disabled{opacity:.5;cursor:default}
+.dit-op:not(:disabled):active{transform:scale(.98)}
+.dit-letra{font-family:var(--f-display);font-weight:800;font-size:22px;line-height:1;display:grid;justify-items:center;gap:3px}
+.dit-letra i{font-style:normal;font-family:var(--f-body);font-size:17px}
+.dit-vf svg{display:block;width:100%;height:auto}
+.dit-op.certa{border-color:#2E7A58;box-shadow:inset 0 0 0 1.5px #2E7A58}
+.dit-op.certa .dit-letra{color:#2E7A58}
+.dit-op.errada{border-color:#B0233A;box-shadow:inset 0 0 0 1.5px #B0233A}
+.dit-op.errada .dit-letra{color:#B0233A}
+.dit-acoes{display:flex;justify-content:flex-end}
+.dit-ajustes{display:grid;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.dit-linha{display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;font-weight:600;font-size:15px}
+.dit-bpm{display:flex;align-items:center;gap:8px}
+.dit-bpm output{font-family:var(--f-display);font-weight:800;font-size:24px;min-width:2.1em;text-align:center;font-variant-numeric:tabular-nums}
+.dit-bpm small{font-size:12px;font-weight:700;color:var(--muted);margin-left:-4px}
+.dit-bpm .btn-linha{width:44px;padding:0;font-size:20px;line-height:1}
+.dit-linha .seg-mini{flex:0 1 auto;min-width:0}
+.dit-linha .seg-mini button{min-width:46px}
 /* Convite para instalar o app */
 .instalar{background:var(--surface);border:2px solid var(--brass);border-radius:16px;padding:14px;display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px 12px;align-items:center}
 .instalar img{width:52px;height:52px;border-radius:12px}
@@ -1052,7 +1097,7 @@ const ABAS=CONTEUDO.categorias.map(c=>({id:c.id,nome:c.nome}));
 const EX_POR_ID=new Map();FOLHAS.forEach(l=>l.exercicios.forEach(e=>EX_POR_ID.set(e.id,{ex:e,l})));
 
 /* ---------- Estado salvo ---------- */
-const PADRAO={metaDia:20,durHoje:30,gap:0,sorteio:false,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,mixNivel:1,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
+const PADRAO={metaDia:20,durHoje:30,gap:0,sorteio:false,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,mixNivel:1,ditNivel:1,ditBpm:70,ditClique:true,ditVezes:2,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
 const LIMITES={inicio:[30,300],fim:[30,300],passo:[1,30],reps:[1,64],bpmFixo:[30,300]};
 let cfg=Object.assign({},PADRAO,LS.get('cfg',{}));
 cfg.mix=Object.assign({},PADRAO.mix,cfg.mix||{});
@@ -2138,7 +2183,9 @@ function renderColecao(){
   if(typeof marcaRolagem==='function')marcaRolagem(abas);
   const box=$('#listas');box.innerHTML='';
   if(abaAtiva==='rotina'){renderRotinas(box);return;}
+  if(abaAtiva!=='ditado')paraDitado();
   if(abaAtiva==='trilha'){renderTrilha(box);return;}
+  if(abaAtiva==='ditado'){renderDitado(box);return;}
   const ls=listas().filter(l=>abaDe(l)===abaAtiva);
   let mostrados=0;
   if(tela==='categoria'&&ls.some(l=>l.exercicios.length))box.append(barraFiltro());
@@ -2615,6 +2662,7 @@ function aplicaTela(t){
   if(tela==='treino'&&t!=='treino'&&eng)parar();
   if(t!=='treino'&&document.body.classList.contains('foco'))mostraFoco(false);
   if(t!=='treino')saiTelaCheiaDeitado();
+  if(t!=='categoria')paraDitado();
   tela=t;
   document.body.classList.remove('tela-hub','tela-categoria','tela-treino');document.body.classList.add('tela-'+t);
   atualizaLeitor(true);
@@ -2659,15 +2707,16 @@ function renderHub(){
   const res=el('div','busca-res');res.id='buscaRes';res.hidden=true;h.append(res);
   /* Áreas: as principais (Leitura, Levadas e viradas) primeiro, com as categorias numeradas como passos; depois Outros */
   const caixa=el('div','areas');caixa.id='areasHub';
-  const cats=CONTEUDO.categorias.filter(c=>!c.especial);
+  const cats=CONTEUDO.categorias.filter(c=>!c.especial||c.id==='ditado');
   const grupos=AREAS.length?AREAS:[{id:'',nome:'Categorias'}];
   grupos.forEach(ar=>{
     const cs=cats.filter(c=>!ar.id||c.area===ar.id);if(!cs.length)return;
     const sec=el('section','area'+(ar.principal?' area-principal':''));sec.style.setProperty('--c',`var(${ar.cor||'--muted'})`);
     const hid='area-'+(ar.id||'todas');sec.setAttribute('aria-labelledby',hid);
     sec.innerHTML=`<div class="area-topo"><span class="area-ico" aria-hidden="true">${esc(ar.icone||'')}</span><h2 id="${esc(hid)}">${esc(ar.nome)}</h2>${ar.descricao?`<p>${esc(ar.descricao)}</p>`:''}</div>`;
-    if(ar.principal){const ps=el('div','passos');cs.forEach((c,i)=>ps.append(linhaCat(c,i+1)));sec.append(ps);}
-    else cs.forEach(c=>sec.append(linhaCat(c)));
+    const linha=(c,n)=>c.id==='ditado'?linhaDitado(c,n):linhaCat(c,n);
+    if(ar.principal){const ps=el('div','passos');cs.forEach((c,i)=>ps.append(linha(c,i+1)));sec.append(ps);}
+    else cs.forEach(c=>sec.append(linha(c)));
     caixa.append(sec);
   });
   /* Neste celular: rotinas, exercícios criados e a cópia dos dados */
@@ -2804,6 +2853,7 @@ window.addEventListener('resize',()=>{$$('.abas,.chips').forEach(marcaRolagem);}
 
 document.addEventListener('keydown',e=>{
   const alvo=e.target;if(alvo&&(alvo.tagName==='INPUT'||alvo.tagName==='SELECT'||alvo.tagName==='TEXTAREA'))return;
+  if(tela==='categoria'&&abaAtiva==='ditado'){teclaDitado(e);return;}
   if(e.code==='Space'&&tela==='treino'&&!(alvo&&alvo.tagName==='BUTTON')){e.preventDefault();eng?parar():iniciar();}
   else if(e.key==='ArrowUp'){e.preventDefault();ajustaBpm(1);}
   else if(e.key==='ArrowDown'){e.preventDefault();ajustaBpm(-1);}
@@ -3142,11 +3192,11 @@ function diaDoDiario(){const k=diaHoje(),d=diario[k]||(diario[k]={seg:0,ex:{}});
 function noDiario(id){if(!id)return null;const d=diaDoDiario();return d.ex[id]||(d.ex[id]={seg:0});}
 function guardaEstudo(){LS.set('estudo',estudo);LS.set('diario',diario);}
 setInterval(()=>{
-  if(!eng)return;
+  if(!eng&&!(ditAtivo>Date.now()&&tela==='categoria'&&abaAtiva==='ditado'))return;
   if(estudo.dia!==diaHoje())estudo={dia:diaHoje(),seg:0};
   estudo.seg++;
   const d=diaDoDiario();d.seg=(d.seg||0)+1;
-  const e=noDiario((exDe(eng.lista,eng.ex)||{}).id);if(e){e.seg=(e.seg||0)+1;if(e.seg===1)cacheUlt=null;}
+  const e=eng&&noDiario((exDe(eng.lista,eng.ex)||{}).id);if(e){e.seg=(e.seg||0)+1;if(e.seg===1)cacheUlt=null;}
   if(estudo.seg%10===0)guardaEstudo();
   if(estudo.seg%15===0)renderHoje();
 },1000);
@@ -3287,6 +3337,214 @@ function renderTrilha(box){
     }
     box.append(sec);
   });
+}
+
+/* ---------- Ditado rítmico ----------
+   O app toca um compasso na caixa, com o clique, e mostra quatro partituras. O compasso sai do gerador da leitura,
+   nos mesmos 5 níveis (cfg.ditNivel). Entre as opções só mudam 2 tempos (níveis 1 e 2) ou 3 (níveis 3 a 5), e cada
+   tempo que muda aparece em metade das opções: não dá para achar a certa só olhando, é preciso ouvir.
+   Acertos por nível em LS 'ditado' ({nível: {ok, tot, seq, melhor}}); o nível fica dominado com DIT_DOMINA seguidas. */
+const DIT_DOMINA=10;
+let ditStats=LS.get('ditado',{});
+if(!ditStats||typeof ditStats!=='object'||Array.isArray(ditStats))ditStats={};
+let dit=null,ditTocando=null,ditAtivo=0;
+const celulasDe=l=>[0,1,2,3].map(b=>l.slice(b*4,b*4+4).replace(/x/g,'1').replace(/\./g,'0'));
+const linhaDeCelulas=cs=>cs.join('').replace(/1/g,'x').replace(/0/g,'.');
+function geraDitado(nivel,semente){
+  const r=sorteador(semente^0x2545F491),embaralha=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+  const certa=celulasDe(geraLeitura(4,4,nivel,semente)),pool=[],novas=new Set();
+  NIVEIS_LEIT.forEach(nv=>{if(nv.n<=nivel)nv.novas.forEach(c=>{pool.push(c);if(nv.n===nivel&&nivel>1)novas.add(c);});});
+  const k=nivel<=2?2:3,ham=(a,b)=>[...a].filter((ch,i)=>ch!==b[i]).length;
+  /* quem muda em cada opção (0 = como na certa): com 2 tempos, as quatro combinações; com 3, as que mudam 0 ou 2 */
+  const desenhos=k===2?[[0,0],[0,1],[1,0],[1,1]]:[[0,0,0],[0,1,1],[1,0,1],[1,1,0]];
+  let ops=null,bs=null;
+  for(let tent=0;tent<80;tent++){
+    /* tempos que mudam: primeiro os que têm a figura nova do nível */
+    bs=embaralha([0,1,2,3]).sort((a,b)=>(novas.has(certa[b])?1:0)-(novas.has(certa[a])?1:0)).slice(0,k);
+    const alt=bs.map(b=>{
+      /* a troca preferida difere numa nota só; pausa no tempo só nas primeiras tentativas */
+      const cs=pool.filter(c=>c!==certa[b]&&!(c==='0000'&&(tent>=40||(b===0&&nivel<=2)))).map(c=>[c,ham(c,certa[b])===1?3:1]);
+      let x=r()*cs.reduce((a,[,q])=>a+q,0);for(const [c,q] of cs){if((x-=q)<0)return c;}return cs[cs.length-1][0];
+    });
+    ops=desenhos.map(d=>{const cs=certa.slice();bs.forEach((b,j)=>{if(d[j])cs[b]=alt[j];});return cs;});
+    if(!ops.some(cs=>cs.filter(c=>c==='0000').length>1))break;   /* no máximo um tempo de pausa, como na leitura */
+  }
+  const ordem=embaralha([0,1,2,3]);
+  return {ops:ordem.map(i=>linhaDeCelulas(ops[i])),certa:ordem.indexOf(0),muda:bs.slice().sort((a,b)=>a-b)};
+}
+function novoDitado(){
+  const nivel=clamp(cfg.ditNivel||1,1,NIVEIS_LEIT.length),g=geraDitado(nivel,novaSemente());
+  dit=Object.assign(g,{nivel,resp:null,ouviu:false,q:dit&&dit.nivel===nivel?dit.q+1:1});
+}
+/* uma partitura de 1 compasso só com a caixa, em semicolcheias, para as opções */
+function pautaDitado(box,linha){
+  const VF=Vex.Flow,W=430,H=100,dm=mapaValores(1/16,4);
+  const r=new VF.Renderer(box,VF.Renderer.Backends.SVG);r.resize(W,H);const c=r.getContext();
+  const st=new VF.Stave(2,-6,W-6);st.addClef('percussion').addTimeSignature('4/4');st.setContext(c).draw();
+  const pausa=d=>{const n=new VF.StaveNote({keys:['b/4'],duration:d+'r',clef:'percussion'});if(d.includes('d'))VF.Dot.buildAndAttach([n],{all:true});return n;};
+  const notas=[],vigas=[];
+  for(let g=0;g<4;g++){
+    const on=[];for(let i=0;i<4;i++)if(linha[g*4+i]==='x')on.push(i);
+    if(!on.length){notas.push(pausa('q'));continue;}
+    if(on[0]>0)partes(on[0],dm).forEach(q=>notas.push(pausa(dm[q])));
+    const grp=[];
+    on.forEach((i,j)=>{
+      const len=(j+1<on.length?on[j+1]:4)-i,pd=partes(len,dm),dn=dm[pd[0]];
+      const n=new VF.StaveNote({keys:['c/5'],duration:dn,stem_direction:1,clef:'percussion'});
+      if(dn.includes('d'))VF.Dot.buildAndAttach([n],{all:true});
+      notas.push(n);if(dn!=='q')grp.push(n);
+      pd.slice(1).forEach(q=>notas.push(pausa(dm[q])));
+    });
+    if(grp.length>=2)vigas.push(new VF.Beam(grp));
+  }
+  const v=new VF.Voice({num_beats:4,beat_value:4}).setMode(VF.Voice.Mode.SOFT);v.addTickables(notas);
+  new VF.Formatter().joinVoices([v]).formatToStave([v],st);v.draw(c,st);vigas.forEach(b=>b.setContext(c).draw());
+  const svg=box.querySelector('svg');
+  if(svg){svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.removeAttribute('width');svg.removeAttribute('height');svg.style.width='100%';svg.style.height='auto';svg.setAttribute('aria-hidden','true');}
+}
+/* toca o compasso: contagem de um compasso e o ditado "vezes" vezes, com o clique nos tempos (ou só na contagem) */
+function tocaDitado(linha,vezes){
+  audio();novaSessao();chokeAberto=null;
+  const bpm=clamp(cfg.ditBpm||70,40,140),dt=60/bpm/4,t0=ac.currentTime+0.12,cont=16;
+  for(let p=0;p<cont;p+=4)clique(t0+p*dt,p===0,false);
+  for(let v=0;v<vezes;v++)for(let p=0;p<16;p++){
+    const t=t0+(cont+v*16+p)*dt;
+    if(p%4===0&&cfg.ditClique!==false)clique(t,p===0,false);
+    if(linha[p]==='x')toca('sn',t,'x');
+  }
+  ditTocando={t0,dt,cont,vezes,fim:t0+(cont+16*vezes)*dt};
+  ditAtivo=Date.now()+90000;
+  atualizaDitado();requestAnimationFrame(ditLaco);
+}
+function paraDitado(){
+  if(!ditTocando)return;
+  ditTocando=null;if(sessao&&ac)sessao.gain.setTargetAtTime(0,ac.currentTime,0.012);
+  atualizaDitado();
+}
+function ditLaco(){
+  if(!ditTocando)return;
+  const {t0,dt,cont,fim}=ditTocando,agora=ac.currentTime;
+  if(agora>=fim){ditTocando=null;atualizaDitado();return;}
+  const p=Math.floor((agora-t0)/dt),pul=$('#ditPulsos');
+  if(pul){
+    const bt=p<0?-1:Math.floor(p/4)%4;
+    $$('i',pul).forEach((x,i)=>x.classList.toggle('on',i===bt));
+    $('span',pul).textContent=p<0?'':p<cont?'Contagem':`${Math.floor((p-cont)/16)+1}ª vez`;
+  }
+  requestAnimationFrame(ditLaco);
+}
+function ouveDitado(){
+  if(ditTocando){paraDitado();return;}
+  if(!dit)novoDitado();
+  dit.ouviu=true;tocaDitado(dit.ops[dit.certa],clamp(cfg.ditVezes||2,1,3));
+}
+function respondeDitado(i){
+  if(!dit||!dit.ouviu)return;
+  if(dit.resp!=null){paraDitado();tocaDitado(dit.ops[i],1);return;}   /* depois de responder, cada opção toca a si mesma */
+  const ok=i===dit.certa,st=ditStats[dit.nivel]||(ditStats[dit.nivel]={ok:0,tot:0,seq:0,melhor:0});
+  paraDitado();dit.resp=i;st.tot++;
+  if(ok){st.ok++;st.seq++;st.melhor=Math.max(st.melhor,st.seq);}else st.seq=0;
+  LS.set('ditado',ditStats);ditAtivo=Date.now()+90000;
+  renderColecao();
+}
+function proximoDitado(){paraDitado();novoDitado();renderColecao();ouveDitado();}
+const LETRAS_DIT='ABCD';
+function textoStatsDit(st){
+  if(!st||!st.tot)return `Acerte ${DIT_DOMINA} seguidas para dominar o nível.`;
+  const dom=st.melhor>=DIT_DOMINA;
+  return `${st.ok} de ${st.tot} certos. Sequência: ${st.seq} (a melhor foi ${st.melhor}). `+(dom?'Nível dominado.':`Acerte ${DIT_DOMINA} seguidas para dominar.`);
+}
+/* estado dos botões e da mensagem, sem redesenhar as partituras (tocar, parar, pulsos) */
+function atualizaDitado(){
+  const b=$('#ditPlay');if(!b||!dit)return;
+  const tocando=!!ditTocando;
+  b.innerHTML=tocando?'<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 6h10v12H7z"/></svg>Parar'
+    :`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg>${dit.ouviu?'Ouvir de novo':'Ouvir'}`;
+  b.setAttribute('aria-pressed',tocando?'true':'false');
+  if(!tocando){const pul=$('#ditPulsos');if(pul){$$('i',pul).forEach(x=>x.classList.remove('on'));$('span',pul).textContent='';}}
+  $$('#ditOps .dit-op').forEach(o=>{o.disabled=!dit.ouviu;});
+  const m=$('#ditMsg');
+  if(m&&dit.resp==null)m.textContent=dit.ouviu?'Qual destas você ouviu? Ouça de novo quantas vezes quiser.':'Toque em Ouvir: primeiro vem um compasso de contagem, depois o ditado.';
+}
+function renderDitado(box){
+  const niv=clamp(cfg.ditNivel||1,1,NIVEIS_LEIT.length),st=ditStats[niv];
+  if(!dit||dit.nivel!==niv)novoDitado();
+  const topo=el('div','lista dit-topo');
+  topo.innerHTML=`<p class="dit-desc">O app toca um compasso na caixa, com o clique. Ouça e escolha a partitura que você ouviu. Os níveis são os mesmos da leitura.</p>`;
+  const seg=el('div','seg dit-niv');seg.setAttribute('role','group');seg.setAttribute('aria-label','Nível do ditado');
+  NIVEIS_LEIT.forEach(n=>{
+    const s=ditStats[n.n],dom=!!s&&s.melhor>=DIT_DOMINA,b=el('button');b.type='button';
+    b.innerHTML=`${n.n}${dom?'<i aria-hidden="true">✓</i>':''}`;
+    b.setAttribute('aria-label',`Nível ${n.n}: ${n.nome}${dom?', dominado':''}`);b.title=`Nível ${n.n}: ${n.nome}`;
+    b.setAttribute('aria-pressed',n.n===niv?'true':'false');
+    b.addEventListener('click',()=>{if(n.n===niv)return;paraDitado();cfg.ditNivel=n.n;salvaCfg();dit=null;renderColecao();});
+    seg.append(b);
+  });
+  const info=el('p','dit-info');info.innerHTML=`<b>Nível ${niv}: ${esc(NIVEIS_LEIT[niv-1].nome)}.</b> ${esc(textoStatsDit(st))}`;
+  topo.append(seg,info);box.append(topo);
+  /* a pergunta */
+  const card=el('section','lista dit-card');card.setAttribute('aria-labelledby','ditTit');
+  const seq=st&&st.seq?(st.seq===1?'✓ 1 certo':`✓ ${st.seq} certos seguidos`):'';
+  card.innerHTML=`<div class="dit-cab"><h2 id="ditTit">Ditado ${dit.q}</h2><span class="dit-seq">${esc(seq)}</span></div>
+    <div class="dit-ouvir"><button type="button" class="btn-primario dit-play" id="ditPlay" aria-pressed="false"></button>
+    <div class="dit-pulsos" id="ditPulsos" aria-hidden="true"><i></i><i></i><i></i><i></i><span></span></div></div>
+    <p class="dit-msg" id="ditMsg" role="status"></p>
+    <div class="dit-ops" id="ditOps" role="group" aria-label="Opções"></div>`;
+  const ops=$('#ditOps',card);
+  dit.ops.forEach((l,i)=>{
+    const o=el('button','dit-op');o.type='button';o.dataset.i=i;
+    const fim=dit.resp!=null?(i===dit.certa?' certa':i===dit.resp?' errada':''):'';
+    if(fim)o.className+=fim;
+    o.setAttribute('aria-label',`Opção ${LETRAS_DIT[i]}`+(fim===' certa'?', a certa':fim===' errada'?', a sua resposta':''));
+    o.innerHTML=`<span class="dit-letra">${LETRAS_DIT[i]}${fim===' certa'?'<i aria-hidden="true">✓</i>':fim===' errada'?'<i aria-hidden="true">✗</i>':''}</span><span class="dit-vf"></span>`;
+    o.addEventListener('click',()=>respondeDitado(i));
+    ops.append(o);
+  });
+  $('#ditPlay',card).addEventListener('click',ouveDitado);
+  if(dit.resp!=null){
+    const ok=dit.resp===dit.certa,m=$('#ditMsg',card),tempos=dit.muda.map(b=>b+1);
+    const onde=`As opções mudavam nos tempos ${tempos.slice(0,-1).join(', ')} e ${tempos[tempos.length-1]}.`;
+    m.textContent=(ok?'Acertou! ':`Não foi essa. A certa é a ${LETRAS_DIT[dit.certa]}. `)+onde+' Toque numa opção para ouvir.';
+    m.className='dit-msg '+(ok?'ok':'erro');
+    const ac2=el('div','dit-acoes'),pr=el('button','btn-primario');pr.type='button';pr.id='ditProx';pr.textContent='Próximo ditado';
+    pr.addEventListener('click',proximoDitado);ac2.append(pr);card.append(ac2);
+  }
+  box.append(card);
+  /* ajustes do ditado */
+  const aj=el('section','lista dit-ajustes');
+  aj.innerHTML=`<div class="dit-linha"><span>Andamento</span><div class="dit-bpm"><button type="button" class="btn-linha" data-d="-5" aria-label="Mais devagar">−</button><output>${clamp(cfg.ditBpm||70,40,140)}</output><small>BPM</small><button type="button" class="btn-linha" data-d="5" aria-label="Mais rápido">+</button></div></div>
+    <div class="dit-linha"><span>Clique</span><div class="seg seg-mini" data-k="ditClique" role="group" aria-label="Clique"><button type="button" data-v="1">No ditado</button><button type="button" data-v="0">Só na contagem</button></div></div>
+    <div class="dit-linha"><span>Vezes</span><div class="seg seg-mini" data-k="ditVezes" role="group" aria-label="Quantas vezes o ditado toca"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button></div></div>`;
+  $$('.dit-bpm button',aj).forEach(b=>b.addEventListener('click',()=>{cfg.ditBpm=clamp((cfg.ditBpm||70)+(+b.dataset.d),40,140);salvaCfg();$('.dit-bpm output',aj).textContent=cfg.ditBpm;}));
+  const marca=()=>{
+    $$('[data-k="ditClique"] button',aj).forEach(b=>b.setAttribute('aria-pressed',(b.dataset.v==='1')===(cfg.ditClique!==false)?'true':'false'));
+    $$('[data-k="ditVezes"] button',aj).forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===clamp(cfg.ditVezes||2,1,3)?'true':'false'));
+  };
+  $$('[data-k] button',aj).forEach(b=>b.addEventListener('click',()=>{const k=b.parentNode.dataset.k;cfg[k]=k==='ditClique'?b.dataset.v==='1':+b.dataset.v;salvaCfg();marca();}));
+  marca();box.append(aj);
+  /* partituras das opções (VexFlow) depois que a caixa está na página */
+  if(window.Vex&&Vex.Flow)$$('.dit-vf',card).forEach((v,i)=>{try{pautaDitado(v,dit.ops[i]);}catch(e){console.error(e);v.textContent=dit.ops[i];}});
+  atualizaDitado();
+}
+function teclaDitado(e){
+  const alvo=e.target,emBotao=alvo&&alvo.tagName==='BUTTON';
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(e.code==='Space'&&!emBotao){e.preventDefault();ouveDitado();return;}
+  const i='1234'.indexOf(e.key)>=0?'1234'.indexOf(e.key):'abcd'.indexOf(e.key.toLowerCase());
+  if(e.key.length===1&&i>=0){e.preventDefault();respondeDitado(i);return;}
+  if(e.key==='Enter'&&!emBotao&&dit&&dit.resp!=null){e.preventDefault();proximoDitado();}
+}
+/* cartão do início, como um passo da Leitura */
+function linhaDitado(c,passo){
+  const sts=NIVEIS_LEIT.map(n=>ditStats[n.n]).filter(Boolean),tot=sts.reduce((a,s)=>a+s.tot,0),ok=sts.reduce((a,s)=>a+s.ok,0);
+  const dom=NIVEIS_LEIT.filter(n=>ditStats[n.n]&&ditStats[n.n].melhor>=DIT_DOMINA).length,niv=clamp(cfg.ditNivel||1,1,NIVEIS_LEIT.length);
+  const partes=tot?[`Nível ${niv}`,`${ok} de ${tot} certos`]:['5 níveis, como a leitura'];
+  if(dom)partes.push(`${dom} ${dom===1?'nível dominado':'níveis dominados'}`);
+  const b=el('button','cat');b.type='button';b.style.setProperty('--c',`var(${c.cor||'--muted'})`);if(passo)b.dataset.passo=passo;
+  b.innerHTML=`<h3>${esc(c.nome)}</h3><p>${esc(c.descricao||'')}</p><small class="cat-info">${partes.join(', ')}</small><span class="cat-barra" aria-hidden="true"><i class="d" style="width:${(dom/NIVEIS_LEIT.length*100).toFixed(1)}%"></i></span>`;
+  b.setAttribute('aria-label',`${passo?`Passo ${passo}: `:''}${c.nome}. ${partes.join(', ')}`);
+  b.addEventListener('click',()=>{abaAtiva=c.id;filtroCat='todos';mudaTela('categoria');});
+  return b;
 }
 
 /* ---------- Treino de hoje: uma vaga para cada área; as áreas principais (Leitura, Levadas e viradas) ganham uma vaga por categoria ---------- */

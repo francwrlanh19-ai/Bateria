@@ -21,6 +21,14 @@
     "cor": "--sn"
   },
   {
+    "id": "ditado",
+    "area": "leitura",
+    "nome": "Ditado rítmico",
+    "descricao": "Ouça um compasso e escolha a partitura certa, nos níveis da leitura",
+    "cor": "--hh",
+    "especial": true
+  },
+  {
     "id": "viradas-levada",
     "area": "levadas",
     "nome": "Viradas com levada",
