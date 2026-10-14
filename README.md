@@ -58,6 +58,7 @@ Cada aparelho guarda os próprios recordes, rotinas, favoritos, diário de estud
 
 ## Uso diário
 
+- **Início**: abre com **Continuar** (o último exercício aberto) e logo as áreas principais, **Leitura** e **Levadas e viradas**. Depois vêm Outros, o Treino de hoje com os últimos 7 dias e Neste celular. A busca abre pelo botão 🔍 **Buscar** do topo.
 - **Treino de hoje** (15, 30 ou 45 minutos): um exercício de cada área. Primeiro o que você está treinando, depois o que pede revisão, depois o próximo novo na ordem da trilha. Cada exercício começa perto do seu recorde e sobe até a meta da lista.
 - **Clique que some** (Ajustes › Treino): 3 e 1, 2 e 2 ou 1 e 3 compassos com e sem clique. Nos compassos sem clique o app fica em silêncio e a pessoa segura o tempo sozinha.
 - **Sortear a ordem** (Ajustes › Treino): com *Tocar a folha inteira*, os exercícios vêm em ordem sorteada, passando por todos antes de repetir. Bom para as viradas.

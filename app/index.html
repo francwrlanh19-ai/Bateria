@@ -333,9 +333,6 @@ body.foco .leitura{display:none}
 .nivel{font-size:12.5px;font-weight:600;color:var(--muted);border:1.5px solid var(--line);border-radius:999px;padding:1px 9px;white-space:nowrap;align-self:center}
 .lista-topo .fonte{flex-basis:100%;font-size:13px}
 /* Uso diário: treino de hoje, semana, busca, estados, filtros e rotinas */
-.hub-topo{display:grid;gap:12px;grid-template-columns:minmax(0,1fr);align-items:start}
-.hub-par{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
-@media (min-width:900px){.hub-topo{grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr)}.hub-topo .hub-par{grid-template-columns:minmax(0,1fr)}}
 .hoje-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;display:grid;gap:10px;min-width:0}
 .hoje-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:10px 12px;flex-wrap:wrap}
 .hoje-cab>div{min-width:0;flex:1 1 180px}
@@ -363,9 +360,6 @@ body.foco .leitura{display:none}
 .mini-rot{font-size:12.5px;font-weight:600;color:var(--muted)}
 .mini>b{font-family:var(--f-display);font-weight:800;font-size:26px;line-height:1.05;overflow-wrap:anywhere}
 .mini>small{font-size:13px;color:var(--muted);line-height:1.3}
-.mini.continuar{appearance:none;background:var(--painel);color:var(--painel-txt);border-color:transparent}
-.mini.continuar .mini-rot,.mini.continuar>small{color:inherit;opacity:.75}
-.mini-ir{margin-top:auto;padding-top:8px;font-size:14px;font-weight:700;color:var(--brass)}
 .sem-barras{position:relative;display:flex;align-items:flex-end;gap:4px;height:44px;margin:6px 0 2px}
 .sem-barras span{flex:1;border-radius:3px 3px 1px 1px;background:var(--cell-2);background:color-mix(in srgb,var(--muted) 28%,transparent)}
 .sem-barras span.parcial{background:var(--hh)}
@@ -752,11 +746,19 @@ body.foco .partitura{gap:10px}
 .hub .btn-linha:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
 
 /* semana e continuar */
-.hub-par{gap:12px}
+.continuar-fino{appearance:none;display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;text-align:left;border:0;border-radius:20px;padding:10px 16px 10px 10px;background:var(--painel);color:var(--painel-txt);box-shadow:0 5px 0 color-mix(in srgb,var(--painel) 70%,#000);margin-bottom:5px;transition:transform .06s ease-out,box-shadow .06s ease-out}
+.continuar-fino:active{transform:translateY(4px);box-shadow:0 1px 0 color-mix(in srgb,var(--painel) 70%,#000)}
+.cf-play{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--pad);color:var(--pad-txt)}
+.cf-play svg{width:22px;height:22px;margin-left:2px}
+.cf-txt{display:grid;min-width:0;line-height:1.2}
+.cf-rot{font-size:12.5px;font-weight:600;opacity:.75}
+.cf-txt b{font-family:var(--f-display);font-weight:800;font-size:21px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cf-txt small{font-size:13px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cf-seta{font-size:30px;line-height:1;opacity:.55}
+.chip-busca{cursor:pointer}
+.chip-busca[aria-expanded="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
 .mini{border-radius:22px;border:2px solid var(--line);padding:14px}
 .mini>b{font-size:30px;font-weight:800;line-height:1.05}
-.mini.continuar{border:0;box-shadow:0 5px 0 color-mix(in srgb,var(--painel) 70%,#000);margin-bottom:5px}
-.mini.continuar:active{transform:translateY(4px);box-shadow:0 1px 0 color-mix(in srgb,var(--painel) 70%,#000)}
 .semana>small{color:var(--fogo);font-weight:700}
 .sem-barras span{border-radius:5px 5px 2px 2px}
 
@@ -797,7 +799,7 @@ body.foco .partitura{gap:10px}
 <div class="app">
   <header class="topo">
     <h1 class="marca">Estudo de bateria</h1>
-    <div class="chips-topo"><span class="chip-topo chip-fogo" id="seqTopo" hidden></span><p class="hoje chip-topo" id="hoje">Hoje: 0 min</p></div>
+    <div class="chips-topo"><span class="chip-topo chip-fogo" id="seqTopo" hidden></span><p class="hoje chip-topo" id="hoje">Hoje: 0 min</p><button type="button" class="chip-topo chip-busca" id="btnBusca" aria-expanded="false" aria-label="Buscar exercício">🔍 Buscar</button></div>
   </header>
   <div class="barra-nav" id="barraNav" hidden>
     <button type="button" class="btn-icone voltar" id="btnVoltar" aria-label="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></svg></button>
@@ -2727,6 +2729,12 @@ function voltaTela(){
   aplicaTela(tela==='treino'?'categoria':'hub');
 }
 $('#btnVoltar').addEventListener('click',voltaTela);
+$('#btnBusca').addEventListener('click',()=>{
+  const abrir=!(buscaAberta||buscaTxt);
+  buscaAberta=abrir;if(!abrir)buscaTxt='';
+  renderHub();
+  if(abrir){const i=$('#busca');if(i)i.focus();}
+});
 function renderHub(){
   const h=$('#hub');h.innerHTML='';
   const sq=$('#seqTopo'),nsq=diasSeguidos();
@@ -2734,14 +2742,15 @@ function renderHub(){
   const rec=cartaoRecebida();if(rec)h.append(rec);
   const rm=cartaoMusicasRecebidas();if(rm)h.append(rm);
   const inst=cartaoInstalar();if(inst)h.append(inst);
-  /* Treino de hoje, últimos 7 dias e continuar */
-  const topo=el('div','hub-topo'),par=el('div','hub-par');
-  par.append(cartaoSemana(),cartaoContinuar());
-  topo.append(cartaoHoje(),par);h.append(topo);
-  /* Busca: quando tem texto, os resultados aparecem no lugar das áreas */
-  h.append(caixaBusca());
+  /* Busca: abre pelo botão do topo (ou quando já tem texto); os resultados aparecem no lugar do resto */
+  const abreBusca=buscaAberta||!!buscaTxt,bb=$('#btnBusca');
+  if(bb)bb.setAttribute('aria-expanded',abreBusca?'true':'false');
+  if(abreBusca)h.append(caixaBusca());
   const res=el('div','busca-res');res.id='buscaRes';res.hidden=true;h.append(res);
-  /* Áreas: as principais (Leitura, Levadas e viradas) primeiro, com as categorias numeradas como passos; depois Outros */
+  /* Continuar (o último exercício aberto) numa faixa fina, e logo depois as áreas */
+  h.append(barraContinuar());
+  /* Áreas: as principais (Leitura, Levadas e viradas) primeiro, com as categorias numeradas como passos; depois Outros,
+     o treino de hoje com os últimos 7 dias e, por fim, Neste celular */
   const caixa=el('div','areas');caixa.id='areasHub';
   const cats=CONTEUDO.categorias.filter(c=>!c.especial||c.id==='ditado'||c.id==='repertorio');
   const grupos=AREAS.length?AREAS:[{id:'',nome:'Categorias'}];
@@ -2755,6 +2764,7 @@ function renderHub(){
     else cs.forEach(c=>sec.append(linha(c)));
     caixa.append(sec);
   });
+  caixa.append(cartaoHoje(),cartaoSemana());
   /* Neste celular: rotinas, exercícios criados e a cópia dos dados */
   const cel=el('section','area area-celular');cel.style.setProperty('--c','var(--muted)');cel.setAttribute('aria-labelledby','area-celular');
   cel.innerHTML='<div class="area-topo"><span class="area-ico" aria-hidden="true">📱</span><h2 id="area-celular">Neste celular</h2><p>Suas rotinas, seus exercícios e uma cópia dos dados</p></div>';
@@ -3933,16 +3943,18 @@ function cartaoSemana(){
   sec.append(bm);
   return sec;
 }
-function cartaoContinuar(){
+/* Continuar: faixa fina no topo do início, com o último exercício aberto */
+function barraContinuar(){
   const ex=exAtual(),l=lista(sel.lista);
-  const b=el('button','mini continuar');b.type='button';
-  b.innerHTML=`<span class="mini-rot">Continuar</span><b>${esc(ex.nome)}</b><small>${esc(l.titulo)}</small><span class="mini-ir">Abrir treino</span>`;
+  const b=el('button','continuar-fino');b.type='button';b.id='hubCont';
+  b.innerHTML=`<span class="cf-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13l11-6.5z"/></svg></span><span class="cf-txt"><span class="cf-rot">Continuar</span><b>${esc(ex.nome)}</b><small>${esc(l.titulo)}</small></span><span class="cf-seta" aria-hidden="true">›</span>`;
+  b.setAttribute('aria-label',`Continuar: ${ex.nome}, ${l.titulo}`);
   b.addEventListener('click',()=>mudaTela('treino'));
   return b;
 }
 
 /* ---------- Busca ---------- */
-let buscaTxt='';
+let buscaTxt='',buscaAberta=false;
 const semAcento=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 function marcasDe(ex,l){
   const t=[],tr=ex.trilhas||{},tudo=Object.values(tr).join(''),sb=ex.subs||[],tem=q=>ex.sub===q||sb.includes(q);
@@ -3989,6 +4001,7 @@ function caixaBusca(){
 function aplicaBusca(){
   const res=$('#buscaRes'),areas=$('#areasHub');if(!res||!areas)return;
   const q=semAcento(buscaTxt).trim();res.innerHTML='';
+  const cont=$('#hubCont');if(cont)cont.hidden=!!q;
   if(!q){res.hidden=true;areas.hidden=false;return;}
   const termos=q.split(/\s+/),achados=indiceBusca().filter(r=>termos.every(t=>r.txt.includes(t)));
   areas.hidden=true;res.hidden=false;
