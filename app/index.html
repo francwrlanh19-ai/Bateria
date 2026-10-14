@@ -631,7 +631,12 @@ body.leitor .papel{position:fixed;inset:0;z-index:30;border-radius:0;box-shadow:
 body.leitor .papel-in{width:100%;max-width:min(100%,calc((100vh - 64px) * var(--asp,3)));max-width:min(100%,calc((100dvh - 64px) * var(--asp,3)))}
 body.leitor .legenda-deit{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;position:fixed;z-index:31;
   top:calc(5px + env(safe-area-inset-top,0px));left:calc(10px + env(safe-area-inset-left,0px));right:calc(10px + env(safe-area-inset-right,0px));color:#4a5058}
-body.leitor-manual .leg-fechar{display:grid}
+body.leitor-manual .leg-fechar,body.leitor-travado .leg-fechar{display:grid}
+/* ajustes abertos pela engrenagem da tela de leitura: a folha sobe por cima da partitura */
+body.leitor.com-ajustes .lateral{display:block !important}
+body.leitor.com-ajustes .lateral>.andamento{display:none !important}
+body.leitor.com-ajustes .veu{display:block !important}
+@media (min-width:960px){#btnAjustesLeitor{display:none}}
 .leg-lado{display:flex;gap:8px}
 .leg-centro{min-width:0;text-align:center}
 .leg-centro p{margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -649,6 +654,17 @@ body.leitor .tp-lado{flex:0 0 48px;height:48px;width:100%;background:rgba(29,35,
 body.leitor .tp-play{flex:none;width:100%;height:88px;max-height:none;flex-direction:column;gap:6px;font-size:15px;background:rgba(29,35,41,.62);color:#fff}
 body.leitor .tp-play[aria-pressed="true"]{background:rgba(214,64,85,.68)}
 body.leitor .transporte:has(.tp-play[aria-pressed="true"]){opacity:.6}
+/* contagem: o número do tempo, grande, dentro do botão Parar, e "de 4" embaixo; some quando o exercício começa */
+.tp-play.contando{background:var(--bd);color:#fff}
+.conta-n{font-family:var(--f-display);font-weight:800;font-size:46px;line-height:.85;font-variant-numeric:tabular-nums}
+.conta-de{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+body.leitor .tp-play.contando{background:rgba(214,64,85,.94);gap:2px}
+body.leitor .conta-n{font-size:58px}
+body.leitor .conta-de{font-size:10.5px}
+body.leitor .transporte:has(.tp-play.contando){opacity:1}
+.tp-play.bate .conta-n{animation:bate .24s ease-out}
+@keyframes bate{from{transform:scale(1.28)}to{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.tp-play.bate .conta-n{animation:none}}
 body.leitor .tp-bpm{display:grid;place-items:center;gap:2px;line-height:1;order:2;padding:2px 0;color:#1d2329}
 .tp-bpm output{font-family:var(--f-display);font-weight:800;font-size:30px;font-variant-numeric:tabular-nums}
 .tp-bpm span{font-size:11px;font-weight:700;letter-spacing:.04em;opacity:.7}
@@ -873,7 +889,7 @@ body.foco .partitura{gap:10px}
         <div class="papel-in"><img class="foto" id="foto" alt="" hidden><div id="vf"></div><div class="cursor" id="cursor" hidden></div></div>
       </div>
       <div class="legenda-deit" id="legDeit">
-        <div class="leg-lado"><button type="button" class="leg-nav" id="btnAnt" aria-label="Exercício anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></svg></button></div>
+        <div class="leg-lado"><button type="button" class="leg-nav" id="btnAnt" aria-label="Exercício anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="leg-nav" id="btnAjustesLeitor" aria-label="Ajustes" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L15 3.5h-4l-.3 2.5a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4L6.6 11a7.5 7.5 0 0 0 0 2l-2 1.6 2 3.4 2.4-1c.5.4 1.1.7 1.7 1l.3 2.5h4l.3-2.5c.6-.3 1.2-.6 1.7-1l2.4 1 2-3.4-2.1-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" transform="translate(-1 0)"/></svg></button></div>
         <div class="leg-centro"><p class="leg-titulo" id="legNome"></p><p class="leg-sub"><span id="legInfo"></span><span class="leg-exec" id="legExec"></span></p></div>
         <div class="leg-lado"><button type="button" class="leg-nav" id="btnProx" aria-label="Próximo exercício"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></button><button type="button" class="leg-nav leg-fechar" id="btnFechaLeitor" aria-label="Sair da tela de leitura"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       </div>
@@ -960,6 +976,10 @@ body.foco .partitura{gap:10px}
         <div class="linha-sw">
           <span class="txt" id="lbSorteio"><b>Sortear a ordem</b><small>Com Tocar a folha inteira, os exercícios vêm fora de ordem e só repetem depois de passar por todos. Nas viradas, você lê em vez de decorar a sequência.</small></span>
           <button type="button" class="sw" role="switch" data-k="sorteio" aria-labelledby="lbSorteio"></button>
+        </div>
+        <div class="linha-sw" id="linhaDeitar">
+          <span class="txt" id="lbDeitar"><b>Deitar a tela ao tocar</b><small>No celular em pé, o Tocar deita a partitura em tela cheia. Ela fica deitada até você tocar no ✕ do topo ou no voltar do celular.</small></span>
+          <button type="button" class="sw" role="switch" data-k="deitar" aria-labelledby="lbDeitar"></button>
         </div>
         <div class="linha-sw">
           <span class="txt" id="lbOuvir"><b>Ouvir e repetir</b><small>Num compasso o app toca; no seguinte, só o clique e você toca.</small></span>
@@ -1133,7 +1153,7 @@ const ABAS=CONTEUDO.categorias.map(c=>({id:c.id,nome:c.nome}));
 const EX_POR_ID=new Map();FOLHAS.forEach(l=>l.exercicios.forEach(e=>EX_POR_ID.set(e.id,{ex:e,l})));
 
 /* ---------- Estado salvo ---------- */
-const PADRAO={metaDia:20,durHoje:30,gap:0,sorteio:false,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,mixNivel:1,ditNivel:1,ditBpm:70,ditClique:true,ditVezes:2,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
+const PADRAO={metaDia:20,durHoje:30,gap:0,sorteio:false,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,deitar:true,mixNivel:1,ditNivel:1,ditBpm:70,ditClique:true,ditVezes:2,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
 const LIMITES={inicio:[30,300],fim:[30,300],passo:[1,30],reps:[1,64],bpmFixo:[30,300]};
 let cfg=Object.assign({},PADRAO,LS.get('cfg',{}));
 cfg.mix=Object.assign({},PADRAO.mix,cfg.mix||{});
@@ -1678,7 +1698,8 @@ function agendaPasso(){
   fila.push({t,passo:p,sub,ini:tempo,nbt:nb,tipo:eng.tipo,ouvindo:eng.ouvindo,inicioComp,calado:!!eng.calado,posL:eng.ordem&&eng.ordem[eng.iOrdem]===eng.ex?eng.iOrdem:eng.ex,lista:eng.lista,ex:eng.ex,bpm:eng.bpm,noDegrau:eng.noDegrau,fase:eng.fase,nl:nLevada(eng.lista),rt:eng.rotina&&eng.rotina.itens[eng.rotina.i]?{i:eng.rotina.i,n:eng.rotina.itens.length,tipo:eng.rotina.tipo,resta:Math.max(0,eng.rotina.itens[eng.rotina.i].min*60-(t-eng.rotina.inicioT))}:null});
   eng.t+=60/eng.bpm/sub;
   eng.passo++;
-  if(eng.passo>=n){
+  /* a contagem dura um compasso da fórmula, mesmo quando o exercício tem 2 compassos */
+  if(eng.passo>=(eng.tipo==='contagem'?porComp:n)){
     eng.passo=0;fimCompasso();
     if(eng.fim)fila.push({t:eng.t,fim:true,fimRotina:!!eng.fimRotina,sessao:eng.rotina?{tipo:eng.rotina.tipo,nome:eng.rotina.nome,n:eng.rotina.itens.length,min:minDe(eng.rotina.itens)}:null,bpm:eng.bpm,lista:eng.lista,ex:eng.ex});
   }
@@ -1781,8 +1802,9 @@ function aplica(ev){
   const nb=ev.nbt!=null?ev.nbt:Math.floor(ev.passo/ev.sub)%exDe(ev.lista,ev.ex).compasso[0];
   if(ev.ini!=null?ev.ini:ev.passo%ev.sub===0){
     acendePulso(nb);
-    if(ev.tipo==='contagem'){$('#estado').textContent='Contagem';$('#rep').textContent=String(nb+1);}
+    if(ev.tipo==='contagem'){$('#estado').textContent='Contagem';$('#rep').textContent=String(nb+1);mostraConta(nb+1,exDe(ev.lista,ev.ex).compasso[0]);}
   }
+  if(ev.tipo!=='contagem'&&contando)atualizaPlay();
   marcaPasso(ev.tipo==='toca'?ev.passo:-1);
   if(ev.passo===0&&ev.tipo==='levada'){
     mostraBpm(ev.bpm);
@@ -2406,6 +2428,15 @@ function renderLevada(){
     ?`${o.ex.nome} do ${o.l.titulo} no primeiro compasso e a virada no segundo. A levada segue no começo do compasso da virada até ela começar, e o prato entra no 1 depois da virada.`
     :'Só a virada. Escolha uma levada para tocar a levada no primeiro compasso e a virada no segundo.');
 }
+/* contagem no botão Parar: o número do tempo (1 a 4; em 6/8, 1 a 6), que salta a cada tempo */
+let contando=false;
+function mostraConta(n,tot){
+  const b=$('#tpPlay');contando=true;
+  b.classList.add('contando');
+  b.innerHTML=`<b class="conta-n">${n}</b><small class="conta-de">de ${tot}</small>`;
+  b.setAttribute('aria-label',`Parar. Contagem: ${n} de ${tot}`);
+  b.classList.remove('bate');void b.offsetWidth;b.classList.add('bate');
+}
 function vaiVizinho(dir){const v=vizinhoEx(dir);if(!v||(eng&&eng.rotina))return;escolhe(v.lista,v.ex);atualizaNav();}
 function renderLegExec(){
   const av=$('#aviso'),e=$('#estado').textContent,r=$('#rep').textContent,box=$('#legExec');
@@ -2526,6 +2557,7 @@ function renderAndamento(){
 }
 function atualizaPlay(){
   const b=$('#tpPlay'),on=!!eng;
+  contando=false;b.classList.remove('contando','bate');b.removeAttribute('aria-label');
   b.setAttribute('aria-pressed',on?'true':'false');
   b.innerHTML=on
     ?'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2" fill="currentColor"/></svg><span>Parar</span>'
@@ -2566,6 +2598,7 @@ function mudaValor(k,d){
 function renderAjustes(){
   $('#andLista').textContent='Estes valores valem só para a lista '+lista(sel.lista).titulo+'. Cada lista guarda os seus.';
   $$('.sw').forEach(s=>s.setAttribute('aria-checked',cfg[s.dataset.k]?'true':'false'));
+  $('#linhaDeitar').hidden=!celular()||!podeTravar();
   STEPPERS.forEach(s=>{
     $('#o-'+s.k).textContent=cfg[s.k];
     const box=$(`.stp[data-k="${s.k}"]`);box.hidden=s.prog!==null&&s.prog!==cfg.progressao;
@@ -2814,13 +2847,15 @@ window.addEventListener('popstate',()=>{
 const telaPequena=()=>window.matchMedia('(max-width:959px)').matches;
 function mostraAjustes(on){
   $('#ajustes').classList.toggle('aberta',on);$('#veu').classList.toggle('aberto',on);
-  $('#tpAjustes').setAttribute('aria-expanded',on?'true':'false');
+  document.body.classList.toggle('com-ajustes',on);
+  $('#tpAjustes').setAttribute('aria-expanded',on?'true':'false');$('#btnAjustesLeitor').setAttribute('aria-expanded',on?'true':'false');
   if(on){$('#ajustes').scrollTop=0;$('#btnFecharAjustes').focus({preventScroll:true});}
-  else if(document.activeElement&&$('#ajustes').contains(document.activeElement))$('#tpAjustes').focus({preventScroll:true});
+  else if(document.activeElement&&$('#ajustes').contains(document.activeElement))(document.body.classList.contains('leitor')?$('#btnAjustesLeitor'):$('#tpAjustes')).focus({preventScroll:true});
 }
 function abreAjustes(){if(!telaPequena()){$('#ajustes').scrollIntoView({behavior:'smooth'});return;}mostraAjustes(true);empilha('ajustes');}
 function fechaAjustes(){if(!desempilha('ajustes'))mostraAjustes(false);}
 $('#tpAjustes').addEventListener('click',()=>{$('#ajustes').classList.contains('aberta')?fechaAjustes():abreAjustes();});
+$('#btnAjustesLeitor').addEventListener('click',()=>{$('#ajustes').classList.contains('aberta')?fechaAjustes():abreAjustes();});
 $('#btnFecharAjustes').addEventListener('click',fechaAjustes);
 $('#veu').addEventListener('click',fechaAjustes);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#ajustes').classList.contains('aberta'))fechaAjustes();});
@@ -2847,14 +2882,32 @@ function abreLeitor(){
   const d=document.documentElement;
   try{if(!document.fullscreenElement&&d.requestFullscreen)d.requestFullscreen({navigationUI:'hide'}).then(()=>{fsDeitado=true;}).catch(()=>{});}catch(e){}
 }
-function fechaLeitor(){leitorManual=false;atualizaLeitor();saiTelaCheiaDeitado();}
+function fechaLeitor(){leitorManual=false;destrava();atualizaLeitor();saiTelaCheiaDeitado();}
+/* Deitar ao tocar: com o celular em pé, o Tocar entra em tela cheia e trava a tela deitada (Android; o iPhone não deixa
+   travar e lá a tela gira com a mão). Parar não destrava: o ✕ do topo e o voltar do celular destravam e voltam em pé. */
+let travado=false;
+const celular=()=>window.matchMedia('(pointer:coarse)').matches&&Math.min(screen.width,screen.height)<=600;
+const podeTravar=()=>!!(document.documentElement.requestFullscreen&&window.screen&&screen.orientation&&screen.orientation.lock);
+function deitaAoTocar(){
+  if(cfg.deitar===false||travado||mqDeitado.matches||!celular()||!podeTravar()||!document.body.classList.contains('tela-treino'))return;
+  const ja=!!document.fullscreenElement;
+  let p;try{p=ja?Promise.resolve():document.documentElement.requestFullscreen({navigationUI:'hide'});}catch(e){return;}
+  Promise.resolve(p).then(()=>{if(!ja)fsDeitado=true;return screen.orientation.lock('landscape');})
+    .then(()=>{travado=true;document.body.classList.add('leitor-travado');empilha('leitor');})
+    .catch(()=>{if(!ja)saiTelaCheiaDeitado();});
+}
+function destrava(){
+  if(!travado)return;
+  travado=false;document.body.classList.remove('leitor-travado');
+  try{screen.orientation.unlock();}catch(e){}
+}
 function corDoSistema(){
   let m=document.getElementById('corDeitado');
   const branco=document.body.classList.contains('leitor');
   if(branco&&!m){m=document.createElement('meta');m.name='theme-color';m.id='corDeitado';m.content='#FFFFFF';document.head.prepend(m);}
   if(!branco&&m)m.remove();
 }
-function saiTelaCheiaDeitado(){if(fsDeitado&&document.fullscreenElement&&!document.body.classList.contains('foco')&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});fsDeitado=false;}
+function saiTelaCheiaDeitado(){destrava();if(fsDeitado&&document.fullscreenElement&&!document.body.classList.contains('foco')&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});fsDeitado=false;}
 {const gira=()=>{if(!mqDeitado.matches&&!leitorManual)saiTelaCheiaDeitado();atualizaLeitor();};if(mqDeitado.addEventListener)mqDeitado.addEventListener('change',gira);else if(mqDeitado.addListener)mqDeitado.addListener(gira);}
 function mostraFoco(on){
   document.body.classList.toggle('foco',on);
@@ -2871,7 +2924,7 @@ $('#btnFoco').addEventListener('click',()=>{
   else{mostraFoco(true);empilha('foco');}
 });
 document.addEventListener('fullscreenchange',()=>{
-  if(!document.fullscreenElement){fsDeitado=false;if(leitorManual&&!desempilha('leitor'))fechaLeitor();}
+  if(!document.fullscreenElement){fsDeitado=false;if(travado){destrava();desempilha('leitor');}if(leitorManual&&!desempilha('leitor'))fechaLeitor();}
   if(!document.fullscreenElement&&document.body.classList.contains('foco')){if(!desempilha('foco'))mostraFoco(false);}
 });
 /* a linha inteira do interruptor responde ao toque */
@@ -2883,7 +2936,9 @@ $('#btnAnt').addEventListener('click',()=>vaiVizinho(-1));
 $('#btnProx').addEventListener('click',()=>vaiVizinho(1));
 $('#btnFechaLeitor').addEventListener('click',()=>{if(!desempilha('leitor'))fechaLeitor();});
 $('#tpPlay').addEventListener('click',()=>{
-  if(!mqDeitado.matches||!document.body.classList.contains('tela-treino')||document.fullscreenElement)return;
+  if(!document.body.classList.contains('tela-treino'))return;
+  if(!mqDeitado.matches){if(eng)deitaAoTocar();return;}
+  if(document.fullscreenElement)return;
   const d=document.documentElement;
   try{if(d.requestFullscreen)d.requestFullscreen({navigationUI:'hide'}).then(()=>{fsDeitado=true;}).catch(()=>{});}catch(e){}
 });
@@ -3116,6 +3171,7 @@ function comecaSessao(itens,info){
   renderPartitura();renderPulsos();renderAjustes();renderAndamento();
   if(tela!=='treino')mudaTela('treino');
   iniciar({sessao:Object.assign({itens},info||{})});
+  deitaAoTocar();
 }
 function renderRotinas(box){
   acertaRotinas();
