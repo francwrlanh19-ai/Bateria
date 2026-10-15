@@ -668,6 +668,7 @@ body.leitor .transporte:has(.tp-play.contando){opacity:1}
 .conta-grande.on{opacity:1;transition:opacity .08s}
 .conta-grande span{font-family:var(--f-display);font-weight:800;line-height:1;color:rgba(29,35,41,.1);font-variant-numeric:tabular-nums}
 .conta-grande.bate span{animation:contaPop .26s ease-out}
+.conta-grande.tocando span{color:rgba(29,35,41,.08)}
 @keyframes contaPop{from{transform:scale(1.1);opacity:.4}to{transform:scale(1);opacity:1}}
 @keyframes bate{from{transform:scale(1.28)}to{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){.tp-play.bate .conta-n,.conta-grande.bate span{animation:none}}
@@ -988,6 +989,10 @@ body.foco .partitura{gap:10px}
           <button type="button" class="sw" role="switch" data-k="deitar" aria-labelledby="lbDeitar"></button>
         </div>
         <div class="linha-sw">
+          <span class="txt" id="lbTempos"><b>Tempos na partitura</b><small>Depois da contagem, o número do tempo continua bem fraquinho no meio da partitura. Nos compassos sem clique ele some, para você segurar o tempo sozinho.</small></span>
+          <button type="button" class="sw" role="switch" data-k="tempos" aria-labelledby="lbTempos"></button>
+        </div>
+        <div class="linha-sw">
           <span class="txt" id="lbOuvir"><b>Ouvir e repetir</b><small>Num compasso o app toca; no seguinte, só o clique e você toca.</small></span>
           <button type="button" class="sw" role="switch" data-k="ouvir" aria-labelledby="lbOuvir"></button>
         </div>
@@ -1159,7 +1164,7 @@ const ABAS=CONTEUDO.categorias.map(c=>({id:c.id,nome:c.nome}));
 const EX_POR_ID=new Map();FOLHAS.forEach(l=>l.exercicios.forEach(e=>EX_POR_ID.set(e.id,{ex:e,l})));
 
 /* ---------- Estado salvo ---------- */
-const PADRAO={metaDia:20,durHoje:30,gap:0,sorteio:false,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,deitar:true,mixNivel:1,ditNivel:1,ditBpm:70,ditClique:true,ditVezes:2,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
+const PADRAO={metaDia:20,durHoje:30,gap:0,sorteio:false,progressao:true,inicio:60,fim:100,passo:5,reps:4,bpmFixo:80,lista:false,ouvir:false,contagem:1,leitOn:true,leitNivel:1,leitComp:2,leitTroca:true,deitar:true,tempos:true,mixNivel:1,ditNivel:1,ditBpm:70,ditClique:true,ditVezes:2,groove:true,clique:true,volGroove:0.9,volClique:0.7,vista:'foto',gravada:true,levada:1,afinacao:'natural',mix:{bd:1,sn:1,hh:1,hp:1,pr:1,tm:1}};
 const LIMITES={inicio:[30,300],fim:[30,300],passo:[1,30],reps:[1,64],bpmFixo:[30,300]};
 let cfg=Object.assign({},PADRAO,LS.get('cfg',{}));
 cfg.mix=Object.assign({},PADRAO.mix,cfg.mix||{});
@@ -1806,11 +1811,12 @@ function aplica(ev){
   if(ev.releitura){renderPartitura();return;}
   if(ev.troca){sel={lista:ev.troca.lista,ex:ev.troca.ex};salvaSel();if(ev.rotina==null||abaAtiva!=='rotina')abaAtiva=abaDe(lista(sel.lista));listaAnd=sel.lista;renderColecao();if(typeof atualizaNav==='function')atualizaNav();renderPartitura();renderPulsos();renderAjustes();renderAndamento();return;}
   const nb=ev.nbt!=null?ev.nbt:Math.floor(ev.passo/ev.sub)%exDe(ev.lista,ev.ex).compasso[0];
+  if(ev.tipo!=='contagem'&&contando)atualizaPlay();
   if(ev.ini!=null?ev.ini:ev.passo%ev.sub===0){
     acendePulso(nb);
     if(ev.tipo==='contagem'){$('#estado').textContent='Contagem';$('#rep').textContent=String(nb+1);mostraConta(nb+1,exDe(ev.lista,ev.ex).compasso[0]);}
+    else mostraTempo(ev.calado||cfg.tempos===false?0:nb+1);
   }
-  if(ev.tipo!=='contagem'&&contando)atualizaPlay();
   marcaPasso(ev.tipo==='toca'?ev.passo:-1);
   if(ev.passo===0&&ev.tipo==='levada'){
     mostraBpm(ev.bpm);
@@ -2444,7 +2450,14 @@ function mostraConta(n,tot){
   b.classList.remove('bate');void b.offsetWidth;b.classList.add('bate');
   /* o mesmo número, grande, sobre a partitura */
   const g=$('#contaGrande');$('span',g).textContent=n;
-  g.classList.add('on');tamContaGrande();g.classList.remove('bate');void g.offsetWidth;g.classList.add('bate');
+  g.classList.remove('tocando');g.classList.add('on');tamContaGrande();g.classList.remove('bate');void g.offsetWidth;g.classList.add('bate');
+}
+/* durante o exercício o número do tempo continua sobre a partitura, mais fraco e sem o salto; some nos compassos
+   sem clique (senão vira um metrônomo para os olhos) e com "Tempos na partitura" desligado */
+function mostraTempo(n){
+  const g=$('#contaGrande');
+  if(!n){g.classList.remove('on','tocando','bate');return;}
+  $('span',g).textContent=n;g.classList.remove('bate');g.classList.add('on','tocando');tamContaGrande();
 }
 /* tamanho do número sobre a partitura: na tela de leitura, pela altura da área de leitura; refeito quando a tela gira */
 function tamContaGrande(){
@@ -2573,7 +2586,7 @@ function renderAndamento(){
 }
 function atualizaPlay(){
   const b=$('#tpPlay'),on=!!eng;
-  contando=false;b.classList.remove('contando','bate');b.removeAttribute('aria-label');$('#contaGrande').classList.remove('on','bate');
+  contando=false;b.classList.remove('contando','bate');b.removeAttribute('aria-label');$('#contaGrande').classList.remove('on','bate','tocando');
   b.setAttribute('aria-pressed',on?'true':'false');
   b.innerHTML=on
     ?'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2" fill="currentColor"/></svg><span>Parar</span>'
