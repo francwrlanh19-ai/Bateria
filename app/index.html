@@ -663,8 +663,14 @@ body.leitor .conta-n{font-size:58px}
 body.leitor .conta-de{font-size:10.5px}
 body.leitor .transporte:has(.tp-play.contando){opacity:1}
 .tp-play.bate .conta-n{animation:bate .24s ease-out}
+/* contagem também sobre a partitura: número grande, cinza e bem transparente, para não atrapalhar a leitura */
+.conta-grande{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:2;opacity:0;transition:opacity .3s}
+.conta-grande.on{opacity:1;transition:opacity .08s}
+.conta-grande span{font-family:var(--f-display);font-weight:800;line-height:1;color:rgba(29,35,41,.1);font-variant-numeric:tabular-nums}
+.conta-grande.bate span{animation:contaPop .26s ease-out}
+@keyframes contaPop{from{transform:scale(1.1);opacity:.4}to{transform:scale(1);opacity:1}}
 @keyframes bate{from{transform:scale(1.28)}to{transform:scale(1)}}
-@media (prefers-reduced-motion:reduce){.tp-play.bate .conta-n{animation:none}}
+@media (prefers-reduced-motion:reduce){.tp-play.bate .conta-n,.conta-grande.bate span{animation:none}}
 body.leitor .tp-bpm{display:grid;place-items:center;gap:2px;line-height:1;order:2;padding:2px 0;color:#1d2329}
 .tp-bpm output{font-family:var(--f-display);font-weight:800;font-size:30px;font-variant-numeric:tabular-nums}
 .tp-bpm span{font-size:11px;font-weight:700;letter-spacing:.04em;opacity:.7}
@@ -886,7 +892,7 @@ body.foco .partitura{gap:10px}
         </div>
       </div>
       <div class="papel" id="papel">
-        <div class="papel-in"><img class="foto" id="foto" alt="" hidden><div id="vf"></div><div class="cursor" id="cursor" hidden></div></div>
+        <div class="papel-in"><img class="foto" id="foto" alt="" hidden><div id="vf"></div><div class="cursor" id="cursor" hidden></div><div class="conta-grande" id="contaGrande" aria-hidden="true"><span></span></div></div>
       </div>
       <div class="legenda-deit" id="legDeit">
         <div class="leg-lado"><button type="button" class="leg-nav" id="btnAnt" aria-label="Exercício anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="leg-nav" id="btnAjustesLeitor" aria-label="Ajustes" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L15 3.5h-4l-.3 2.5a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4L6.6 11a7.5 7.5 0 0 0 0 2l-2 1.6 2 3.4 2.4-1c.5.4 1.1.7 1.7 1l.3 2.5h4l.3-2.5c.6-.3 1.2-.6 1.7-1l2.4 1 2-3.4-2.1-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" transform="translate(-1 0)"/></svg></button></div>
@@ -2436,7 +2442,17 @@ function mostraConta(n,tot){
   b.innerHTML=`<b class="conta-n">${n}</b><small class="conta-de">de ${tot}</small>`;
   b.setAttribute('aria-label',`Parar. Contagem: ${n} de ${tot}`);
   b.classList.remove('bate');void b.offsetWidth;b.classList.add('bate');
+  /* o mesmo número, grande, sobre a partitura */
+  const g=$('#contaGrande');$('span',g).textContent=n;
+  g.classList.add('on');tamContaGrande();g.classList.remove('bate');void g.offsetWidth;g.classList.add('bate');
 }
+/* tamanho do número sobre a partitura: na tela de leitura, pela altura da área de leitura; refeito quando a tela gira */
+function tamContaGrande(){
+  const g=$('#contaGrande');if(!g.classList.contains('on'))return;
+  const r=$('.papel-in').getBoundingClientRect(),leitor=document.body.classList.contains('leitor'),alt=leitor?window.innerHeight-64:r.height;
+  $('span',g).style.fontSize=Math.max(48,Math.round(Math.min(alt*(leitor?.72:.95),r.width*(leitor?.42:.35))))+'px';
+}
+window.addEventListener('resize',()=>requestAnimationFrame(tamContaGrande));
 function vaiVizinho(dir){const v=vizinhoEx(dir);if(!v||(eng&&eng.rotina))return;escolhe(v.lista,v.ex);atualizaNav();}
 function renderLegExec(){
   const av=$('#aviso'),e=$('#estado').textContent,r=$('#rep').textContent,box=$('#legExec');
@@ -2557,7 +2573,7 @@ function renderAndamento(){
 }
 function atualizaPlay(){
   const b=$('#tpPlay'),on=!!eng;
-  contando=false;b.classList.remove('contando','bate');b.removeAttribute('aria-label');
+  contando=false;b.classList.remove('contando','bate');b.removeAttribute('aria-label');$('#contaGrande').classList.remove('on','bate');
   b.setAttribute('aria-pressed',on?'true':'false');
   b.innerHTML=on
     ?'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2" fill="currentColor"/></svg><span>Parar</span>'
