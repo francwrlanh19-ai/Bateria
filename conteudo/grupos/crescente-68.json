@@ -1,0 +1,22 @@
+{
+  "id": "crescente-68",
+  "categoria": "worship",
+  "ordem": 43,
+  "nivel": 2,
+  "andamento": {
+    "inicio": 90,
+    "fim": 150,
+    "passo": 5,
+    "reps": 2
+  },
+  "vozUnica": true,
+  "titulo": "Crescentes em 6/8",
+  "descricao": "As mesmas ideias para as baladas em 6/8. O andamento conta colcheias: o metrônomo clica 6 vezes por compasso. Os tempos fortes são o 1 e o 4, e é neles que o bumbo e os acentos se apoiam.",
+  "exercicios": [
+    {"id":"c68-1","num":1,"nome":"Surdo: pontuada, colcheia, semicolcheia","compasso":[6,8],"sub":2,"barras":4,"mao":["D","","","","","","D","","","","","","D","","D","","D","","D","","D","","D","","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"cr":"X...............................................","ft":"g.....g.....x.x.x.x.x.x.xxxxxxxxxxxxXXXXXXXXXXXX","bd":"x.....x.....x.....x.....x.....x.....x.....x....."}},
+    {"id":"c68-2","num":2,"nome":"Caixa: pontuada, colcheia, semicolcheia","compasso":[6,8],"sub":2,"barras":4,"mao":["D","","","","","","D","","","","","","D","","D","","D","","D","","D","","D","","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"cr":"X...............................................","sn":"x.....x.....x.x.x.x.x.x.xxxxxxxxxxxxXXXXXXXXXXXX","bd":"x.....x.....x.....x.....x.....x.....x.....x....."}},
+    {"id":"c68-3","num":3,"nome":"Surdo em colcheias, só volume","compasso":[6,8],"sub":2,"barras":4,"mao":["D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D",""],"trilhas":{"cr":"X...............................................","ft":"g.g.g.g.g.g.x.x.x.x.x.x.X.x.x.X.x.x.X.X.X.X.X.X.","bd":"x.....x.....x.....x.....x.....x.....x.....x....."}},
+    {"id":"c68-4","num":4,"nome":"Levada 6/8 que cresce","compasso":[6,8],"sub":2,"barras":4,"trilhas":{"cr":"....................................X.....X.....","rd":"........................x.x.x.x.x.x.............","hh":"x.....x.....x.x.x.x.x.x.........................","sn":"..................x...........x...........x.XXXX","bd":"x...........x...........x.....x.....x.....x....."}},
+    {"id":"c68-5","num":5,"nome":"Tom e surdo até a caixa","compasso":[6,8],"sub":2,"barras":4,"mao":["D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"cr":"X...............................................","sn":"....................................XXXXXXXXXXXX","t1":"......x.x.x.......x.x.x.......xxxxxx............","ft":"x.x.x.......x.x.x.......xxxxxx..................","bd":"x.....x.....x.....x.....x.....x.....x.....x....."}}
+  ]
+}

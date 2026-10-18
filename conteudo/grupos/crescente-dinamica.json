@@ -1,0 +1,24 @@
+{
+  "id": "crescente-dinamica",
+  "categoria": "worship",
+  "ordem": 41,
+  "nivel": 2,
+  "andamento": {
+    "inicio": 60,
+    "fim": 120,
+    "passo": 5,
+    "reps": 2
+  },
+  "vozUnica": true,
+  "titulo": "Crescentes de volume e de peças",
+  "descricao": "Outras formas de crescer: mesma figura com o volume subindo (nota fantasma, normal, acento), acentos que se multiplicam, peças que entram uma a uma, meio tempo virando tempo dobrado, prato em semínimas e a parada que segura a banda antes do refrão.",
+  "exercicios": [
+    {"id":"cd-1","num":1,"nome":"Só volume: fantasma, normal, acento","compasso":[4,4],"sub":4,"barras":4,"mao":["D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"cr":"X...............................................................","sn":"ggggggggggggggggxxxxxxxxxxxxxxxxXxxxXxxxXxxxXxxxXXXXXXXXXXXXXXXX","bd":"x...x...x...x...x...x...x...x...x...x...x...x...x...x...x...x..."}},
+    {"id":"cd-2","num":2,"nome":"Surdo em colcheias, só volume","compasso":[4,4],"sub":4,"barras":4,"mao":["D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D",""],"trilhas":{"cr":"X...............................................................","ft":"g.g.g.g.g.g.g.g.x.x.x.x.x.x.x.x.X.x.X.x.X.x.X.x.X.X.X.X.X.X.X.X.","bd":"x...x...x...x...x...x...x...x...x...x...x...x...x...x...x...x..."}},
+    {"id":"cd-3","num":3,"nome":"O acento se multiplica","compasso":[4,4],"sub":4,"barras":4,"mao":["D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"cr":"X...............................................................","sn":"XgggXgggXgggXgggXgXgXgXgXgXgXgXgXxXxXxXxXxXxXxXxXXXXXXXXXXXXXXXX","bd":"x...x...x...x...x...x...x...x...x...x...x...x...x...x...x...x..."}},
+    {"id":"cd-4","num":4,"nome":"A levada ganha uma peça por compasso","compasso":[4,4],"sub":4,"barras":4,"trilhas":{"cr":"................................................X...X...X...X...","hh":"x...x...x...x...x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.................","sn":"....................................x.......x.......X.......X...","bd":"x...............x.......x.......x.......x.......x...x...x...x..."}},
+    {"id":"cd-5","num":5,"nome":"Meio tempo, normal, dobrado","compasso":[4,4],"sub":4,"barras":4,"trilhas":{"cr":"X...............................................................","hh":"..x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.................","sn":"........x...........x.......x.....x...x...x...x.xxxxxxxxxxxxXXXX","bd":"x...............x.......x.......x...x...x...x...x...x...x...x..."}},
+    {"id":"cd-6","num":6,"nome":"Prato em semínimas e caixa subindo","compasso":[4,4],"sub":4,"barras":4,"trilhas":{"cr":"X...X...X...X...X...X...X...X...X...X...X...X...X...X...X...X...","sn":"....................x.......x...x.x.x.x.x.x.x.x.XXXXXXXXXXXXXXXX","bd":"x...x...x...x...x...x...x...x...x...x...x...x...x...x...x...x..."}},
+    {"id":"cd-7","num":7,"nome":"Crescente com parada antes do refrão","compasso":[4,4],"sub":4,"barras":4,"trilhas":{"cr":"X.......................................................X.......","sn":"x.x.x.x.x.x.x.x.xxxxxxxxxxxxxxxxXxxxXxxxXxxxXxxxXXXXXXXXX.......","bd":"x...x...x...x...x...x...x...x...x...x...x...x...x...x...x......."}}
+  ]
+}

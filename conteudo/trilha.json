@@ -12,13 +12,13 @@
       "id": "levadas-do-culto",
       "nome": "Levadas do culto",
       "objetivo": "Levadas de worship com o bumbo no contratempo, o balanço do shuffle e as primeiras coordenações em colcheias. Nas mãos, acento e tercinas; no ritmo, a tercina e a semicolcheia, primeiro com respiro e depois ligadas às outras figuras de base, e a primeira mistura sorteada. Duas viradas novas e, nos tons, os primeiros tribais.",
-      "itens": ["mc-3", "aa-1", "tc-1", "fc-3-1", "fg-3", "fc-3-2", "fc-4-1", "fg-4", "fc-4-2", "fc-4-3", "ft-1", "ft-4", "mx-1", "wl-A", "wv-9", "sh-1", "rk-2", "wl-B", "bu-1", "bu-2", "w68-3", "wv-7", "sh-2", "tb-1", "bu-4", "rk-3", "rk-4", "tn-1", "tn-2", "tn68-1", "tn-3", "tn68-2"]
+      "itens": ["mc-3", "aa-1", "tc-1", "fc-3-1", "fg-3", "fc-3-2", "fc-4-1", "fg-4", "fc-4-2", "fc-4-3", "ft-1", "ft-4", "mx-1", "wl-A", "wv-9", "sh-1", "rk-2", "wl-B", "bu-1", "bu-2", "w68-3", "wv-7", "sh-2", "tb-1", "bu-4", "rk-3", "rk-4", "tn-1", "tn-2", "tn68-1", "tn-3", "tn68-2", "cc-1", "cc-2", "cc-3", "cc-4", "cc-5", "cc-6", "c68-1", "c68-2", "c68-3", "c68-4", "c68-5"]
     },
     {
       "id": "semicolcheias",
       "nome": "Semicolcheias no bumbo e na caixa",
       "objetivo": "O bumbo e a caixa passam a cair nas semicolcheias, e as levadas de worship ficam mais cheias. Nas mãos, acentos fora do tempo; no ritmo, as fusas que aparecem nas viradas, primeiro com respiro. Nos tons, os tribais em semicolcheia.",
-      "itens": ["mc-4", "aa-2", "mc-5", "aa-3", "fc-8-1", "fg-8", "rk-5", "wl-C", "bu-3", "wv-4", "rk-6", "wl-D", "rk-7", "wv-1", "rk-8", "wl-E", "rk-9", "rk-10", "tn-4", "tn-5", "tn68-3", "tn-6", "tn-7"]
+      "itens": ["mc-4", "aa-2", "mc-5", "aa-3", "fc-8-1", "fg-8", "rk-5", "wl-C", "bu-3", "wv-4", "rk-6", "wl-D", "rk-7", "wv-1", "rk-8", "wl-E", "rk-9", "rk-10", "tn-4", "tn-5", "tn68-3", "tn-6", "tn-7", "cs-1", "cs-2", "cs-3", "cs-4", "cs-5", "cs-6", "cs-7", "cd-1", "cd-2", "cd-3", "cd-4", "cd-5", "cd-6", "cd-7"]
     },
     {
       "id": "grooves-e-paradiddle",

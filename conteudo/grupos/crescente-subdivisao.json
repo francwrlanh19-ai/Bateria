@@ -1,0 +1,24 @@
+{
+  "id": "crescente-subdivisao",
+  "categoria": "worship",
+  "ordem": 40,
+  "nivel": 2,
+  "andamento": {
+    "inicio": 60,
+    "fim": 110,
+    "passo": 5,
+    "reps": 2
+  },
+  "vozUnica": true,
+  "titulo": "Crescentes: a figura vai ficando mais curta",
+  "descricao": "A subida clássica para entrar no refrão ou na ponte: semínimas, depois colcheias, depois semicolcheias, e o último compasso todo acentuado. O bumbo marca os quatro tempos e o prato no 1 é a chegada. Comece bem leve e deixe o volume subir junto com as figuras.",
+  "exercicios": [
+    {"id":"cs-1","num":1,"nome":"Caixa: semínima, colcheia, semicolcheia","compasso":[4,4],"sub":4,"barras":4,"mao":["D","","","","D","","","","D","","","","D","","","","D","","D","","D","","D","","D","","D","","D","","D","","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"cr":"X...............................................................","sn":"g...g...g...g...x.x.x.x.x.x.x.x.xxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXX","bd":"x...x...x...x...x...x...x...x...x...x...x...x...x...x...x...x..."}},
+    {"id":"cs-2","num":2,"nome":"Surdo: semínima, colcheia, semicolcheia","compasso":[4,4],"sub":4,"barras":4,"mao":["D","","","","D","","","","D","","","","D","","","","D","","D","","D","","D","","D","","D","","D","","D","","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"cr":"X...............................................................","ft":"g...g...g...g...x.x.x.x.x.x.x.x.xxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXX","bd":"x...x...x...x...x...x...x...x...x...x...x...x...x...x...x...x..."}},
+    {"id":"cs-3","num":3,"nome":"Caixa e surdo juntos","compasso":[4,4],"sub":4,"barras":4,"trilhas":{"cr":"X...............................................................","sn":"x...x...x...x...x.x.x.x.x.x.x.x.xxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXX","ft":"x...x...x...x...x.x.x.x.x.x.x.x.xxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXX","bd":"x...x...x...x...x...x...x...x...x...x...x...x...x...x...x...x..."}},
+    {"id":"cs-4","num":4,"nome":"Começa no surdo, termina na caixa","compasso":[4,4],"sub":4,"barras":4,"mao":["D","","","","D","","","","D","","","","D","","","","D","","D","","D","","D","","D","","D","","D","","D","","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"cr":"X...............................................................","sn":"................................xxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXX","ft":"x...x...x...x...x.x.x.x.x.x.x.x.................................","bd":"x...x...x...x...x...x...x...x...x...x...x...x...x...x...x...x..."}},
+    {"id":"cs-5","num":5,"nome":"Andando pelos tons até a caixa","compasso":[4,4],"sub":4,"barras":4,"mao":["D","","","","D","","","","D","","","","D","","","","D","","D","","D","","D","","D","","D","","D","","D","","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"cr":"X...............................................................","sn":"................................xxxx............XXXXXXXXXXXXXXXX","t1":"........................x.x.x.x.....xxxx........................","t2":"................x.x.x.x.................xxxx....................","ft":"x...x...x...x...............................xxxx................","bd":"x...x...x...x...x...x...x...x...x...x...x...x...x...x...x...x..."}},
+    {"id":"cs-6","num":6,"nome":"Crescente curto em 2 compassos","compasso":[4,4],"sub":4,"barras":2,"mao":["D","","","","D","","","","D","","D","","D","","D","","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"cr":"X...............................","sn":"x...x...x.x.x.x.xxxxxxxxxxxxXXXX","bd":"x...x...x...x...x...x...x...x..."}},
+    {"id":"cs-7","num":7,"nome":"O bumbo sobe junto","compasso":[4,4],"sub":4,"barras":4,"mao":["D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"cr":"X...............................................................","sn":"x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.xxxxxxxxxxxxxxxxXXXXXXXXXXXXXXXX","bd":"x...x...x...x...x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x.x."}}
+  ]
+}

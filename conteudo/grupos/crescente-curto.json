@@ -1,0 +1,36 @@
+{
+  "id": "crescente-curto",
+  "categoria": "worship",
+  "ordem": 42,
+  "nivel": 2,
+  "andamento": {
+    "inicio": 60,
+    "fim": 110
+  },
+  "vozUnica": true,
+  "virada": true,
+  "levadas": [
+    "rk-5",
+    "rk-6",
+    "rk-7",
+    "rk-8",
+    "rk-9",
+    "rk-10",
+    "rk-11",
+    "rk-12",
+    "rk-13",
+    "rk-14",
+    "rk-15",
+    "rk-16"
+  ],
+  "titulo": "Crescentes curtos saindo da levada",
+  "descricao": "Subidas de um ou dois compassos, tocadas no lugar da virada. Escolha uma levada do Rock Beats 2: ela toca antes, a subida vem em seguida e o prato entra no 1 depois. Treine para sair da levada e voltar a ela sem perder o tempo.",
+  "exercicios": [
+    {"id":"cc-1","num":1,"nome":"Colcheia e semicolcheia na caixa","compasso":[4,4],"sub":4,"mao":["D","","D","","D","","D","","D","E","D","E","D","E","D","E"],"trilhas":{"sn":"x.x.x.x.xxxxXXXX","bd":"x...x...x...x..."}},
+    {"id":"cc-2","num":2,"nome":"Surdo e depois caixa","compasso":[4,4],"sub":4,"mao":["D","","D","","D","","D","","D","E","D","E","D","E","D","E"],"trilhas":{"sn":"........xxxxXXXX","ft":"g.g.x.x.........","bd":"x...x...x...x..."}},
+    {"id":"cc-3","num":3,"nome":"Semicolcheias, só volume","compasso":[4,4],"sub":4,"mao":["D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"sn":"ggggxxxxXxxxXXXX","bd":"x...x...x...x..."}},
+    {"id":"cc-4","num":4,"nome":"Bumbo em colcheias no fim","compasso":[4,4],"sub":4,"mao":["","","","","","","","","D","E","D","E","D","E","D","E"],"trilhas":{"sn":"........xxxxXXXX","bd":"x...x...x.x.x.x."}},
+    {"id":"cc-5","num":5,"nome":"Dois compassos: semínima até semicolcheia","compasso":[4,4],"sub":4,"barras":2,"mao":["D","","","","D","","","","D","","D","","D","","D","","D","E","D","E","D","E","D","E","D","E","D","E","D","E","D","E"],"trilhas":{"sn":"x...x...x.x.x.x.xxxxxxxxxxxxXXXX","bd":"x...x...x...x...x...x...x...x..."}},
+    {"id":"cc-6","num":6,"nome":"Surdo, tom e caixa","compasso":[4,4],"sub":4,"mao":["D","","D","","D","","D","","D","E","D","E","D","E","D","E"],"trilhas":{"sn":"............XXXX","t1":"........xxxx....","ft":"x.x.x.x.........","bd":"x...x...x...x..."}}
+  ]
+}
