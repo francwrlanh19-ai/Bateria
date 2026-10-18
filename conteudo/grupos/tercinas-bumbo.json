@@ -1,0 +1,21 @@
+{
+  "id": "tercinas-bumbo",
+  "categoria": "worship",
+  "ordem": 26,
+  "nivel": 3,
+  "andamento": {
+    "inicio": 45,
+    "fim": 80,
+    "passo": 5,
+    "reps": 4
+  },
+  "vozUnica": true,
+  "titulo": "Tercinas com o bumbo entre os tempos",
+  "descricao": "O chimbal toca tercinas o tempo todo. Primeiro o bumbo e a caixa caem nas notas da tercina; depois o bumbo, e por fim a caixa, caem no \"&\", na metade do tempo, entre a segunda e a terceira nota da tercina.",
+  "fonte": "Caderno do professor (transcrito de anotações à mão)",
+  "exercicios": [
+    {"id":"tb-1","num":"A","nome":"Tercinas A","compasso":[4,4],"sub":3,"trilhas":{"hh":"xxxxxxxxxxxx","sn":"...x.....x..","bd":"x....xx....."}},
+    {"id":"tb-2","num":"B","nome":"Tercinas B","compasso":[4,4],"sub":6,"trilhas":{"hh":"x.x.x.x.x.x.x.x.x.x.x.x.","sn":"......x...........x.....","bd":"x...........x..x........"}},
+    {"id":"tb-3","num":"C","nome":"Tercinas C","compasso":[4,4],"sub":6,"trilhas":{"hh":"x.x.x.x.x.x.x.x.x.x.x.x.","sn":"......x...........x..x..","bd":"x..x........x..........."}}
+  ]
+}

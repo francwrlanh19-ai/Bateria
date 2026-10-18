@@ -1873,10 +1873,13 @@ const FOTOS=window.FOTOS||{};
 const TAB_VAL=[[1/32,'32'],[3/64,'32d'],[1/16,'16'],[3/32,'16d'],[1/8,'8'],[3/16,'8d'],[1/4,'q'],[3/8,'qd'],[1/2,'h'],[3/4,'hd']];
 function mapaValores(frac,max){const m={};for(let n=1;n<=max;n++){const t=TAB_VAL.find(([v])=>Math.abs(v-n*frac)<1e-9);if(t)m[n]=t[1];}return m;}
 const composto=ex=>ex.compasso[1]===8&&ex.compasso[0]%3===0;
+/* sub 6 em 4/4 ("sexta"): a tercina de colcheias com a semicolcheia de tercina no meio, para o bumbo ou a caixa caírem
+   entre as notas da tercina (no "&", exatamente na metade do tempo). O tempo que só tem notas no 1 e no "&" é escrito
+   em colcheias normais; o resto vai numa chave de 3, com colcheias e semicolcheias de tercina */
 function escritaDe(ex){
-  const bv=ex.compasso[1],sub=ex.sub,grupo=(composto(ex)?3:1)*sub,tercina=bv===4&&sub===3;
-  const dmap=tercina?{3:'q'}:mapaValores(1/(bv*sub),grupo);
-  return {grupo,tercina,dmap,ok:tercina||Object.keys(dmap).length>0};
+  const bv=ex.compasso[1],sub=ex.sub,grupo=(composto(ex)?3:1)*sub,tercina=bv===4&&sub===3,sexta=bv===4&&sub===6;
+  const dmap=tercina?{3:'q'}:sexta?{3:'8',6:'q'}:mapaValores(1/(bv*sub),grupo);
+  return {grupo,tercina,sexta,dmap,ok:tercina||sexta||Object.keys(dmap).length>0};
 }
 /* Marcas de chimbal em cima da nota: o no aberto, + no fechado e ø no meio aberto, todas do mesmo tamanho
    ([símbolo da fonte Bravura, escala]) */
@@ -2021,9 +2024,9 @@ function notacao(){
           else if(g>0&&b0%porCompasso===0)notas.push(new VF.BarNote());
           const on=[];
           for(let s=0;s<G;s++){if(grupo.some(k=>hit(tr[k][b0+s])))on.push(s);}
-          const emTercina=ESC.tercina&&!(on.length===1&&on[0]===0);
-          const dm=emTercina?{1:'8',2:'q'}:ESC.dmap,ini=notas.length;
-          if(!on.length){notas.push(...pausas(G,dir,b0,ESC.tercina?{3:'q'}:dm));continue;}
+          const emTercina=ESC.tercina&&!(on.length===1&&on[0]===0),emSexta=ESC.sexta&&on.some(x=>x%3!==0);
+          const dm=emTercina?{1:'8',2:'q'}:emSexta?{1:'16',2:'8',3:'8d',4:'q',6:'qd'}:ESC.dmap,ini=notas.length;
+          if(!on.length){notas.push(...pausas(G,dir,b0,ESC.tercina?{3:'q'}:ESC.sexta?{6:'q'}:dm));continue;}
           if(on[0]>0)notas.push(...pausas(on[0],dir,b0,dm));
           const doGrupo=[];
           on.forEach((s,j)=>{
@@ -2050,7 +2053,7 @@ function notacao(){
             if(/^(8|16|32)/.test(dn))doGrupo.push(n);
           });
           if(doGrupo.length>=2)vigas.push({li,b:new VF.Beam(doGrupo)});
-          if(emTercina)tercinas.push({li,t:new VF.Tuplet(notas.slice(ini),{num_notes:3,notes_occupied:2})});
+          if(emTercina||emSexta)tercinas.push({li,t:new VF.Tuplet(notas.slice(ini),{num_notes:3,notes_occupied:2})});
         }
         linhasNotas.forEach((ns,li)=>{const v=new VF.Voice({num_beats:beats/NL,beat_value:ex.compasso[1]}).setMode(VF.Voice.Mode.SOFT);v.addTickables(ns);vozesL[li].push(v);});
       }
@@ -2139,6 +2142,7 @@ function conta(i,sub,bpc){
   if(sub===8)return s%2?'·':['','e','&','a'][s/2];
   if(sub===2)return '&';
   if(sub===3)return ['','&','a'][s];
+  if(sub===6)return ['','','·','&','·',''][s];
   return '';
 }
 const NOME_TOQUE={x:'nota',X:'acento',g:'nota fantasma',f:'flam','.':'vazio'};
@@ -2170,7 +2174,7 @@ function renderGrade(){
   colunas=Array.from({length:n},()=>[]);ultimaCol=-1;
   const linhas=ORDEM.filter(k=>k in tr);
   /* Com fusas (8 casas por tempo) a grade vira blocos de 2 tempos, para caber no celular */
-  const porBloco=sub>=8?2:bpc,pulados=[];
+  const porBloco=sub>=6?2:bpc,pulados=[];
   const vazio=(a,b)=>linhas.every(k=>!/[^.]/.test(tr[k].slice(a*sub,b*sub)));
   for(let b0=0;b0<beats;b0+=porBloco){
     const b1=Math.min(beats,b0+porBloco),i0=b0*sub,i1=b1*sub;
@@ -2178,7 +2182,7 @@ function renderGrade(){
     const bl=el('div','grade-bloco');bl.style.setProperty('--n',i1-i0);
     bl.append(el('span'));
     for(let i=i0;i<i1;i++){
-      const s=el('span','g-conta'+(i%sub===0?' g-tempo':'')+(sub>=8&&i%2?' g-fusa':''));s.textContent=conta(i,sub,bpc);bl.append(s);colunas[i].push(s);
+      const s=el('span','g-conta'+(i%sub===0?' g-tempo':'')+(sub>=8&&i%2||sub===6&&i%sub%2&&i%sub!==3?' g-fusa':''));s.textContent=conta(i,sub,bpc);bl.append(s);colunas[i].push(s);
     }
     if(temMao(ex)||editando){
       const r=el('span','g-mao-rot');r.textContent='Mãos';r.title='D = mão direita, E = mão esquerda';bl.append(r);
@@ -2230,6 +2234,7 @@ function renderDica(ex,tr){
   const tem=ch=>Object.values(tr).some(v=>v.includes(ch));
   const temFusa=ex.sub>=8&&Object.values(tr).some(v=>[...v].some((c,i)=>i%2===1&&c!=='.'));
   if(temFusa)t.push('Fusas: as casas com ponto (·) ficam no meio das semicolcheias. Cabem duas fusas no espaço de uma semicolcheia; na partitura, elas têm três traços.');
+  if(ex.sub===6&&ex.compasso[1]===4)t.push('Tercina com nota no meio: o chimbal toca a tercina (o tempo e os dois pontos ·) e o bumbo ou a caixa caem no "&", na metade exata do tempo, entre a segunda e a terceira nota da tercina. Conte "1 & 2 &" em voz alta e encaixe a tercina por cima, bem devagar.');
   if(tem('f'))t.push('Flam (eD): a esquerda toca bem fraquinho, quase junto, logo antes da direita.');
   if(tem('g'))t.push('Nota fantasma (entre parênteses): toque bem de leve.');
   d.hidden=!t.length;d.innerHTML=t.map(x=>`<span>${esc(x)}</span>`).join('');

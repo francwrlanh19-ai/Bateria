@@ -68,7 +68,7 @@ Arquivo `conteudo/grupos/<id>.json`, com o nome do arquivo igual ao `id`:
 - `id`: único em todo o app e **fixo para sempre**. Use um prefixo do grupo, como `rk-1`, `sg-3` ou `wv-2`.
 - `num`: o que aparece no botão (número ou letra, por exemplo `"A"`). `nome`: o título.
 - `compasso`: `[4,4]`, `[3,4]`, `[6,8]`…
-- `sub`: casas por tempo. Use 2 para colcheias, 3 para tercinas, 4 para semicolcheias e 8 para fusas. Em 6/8, é o número de casas por **colcheia**: 1 para colcheias, 2 para semicolcheias.
+- `sub`: casas por tempo. Use 2 para colcheias, 3 para tercinas, 4 para semicolcheias e 8 para fusas. Use 6 (em 4/4) para tercinas com uma nota no meio do tempo: o chimbal nas casas 0, 2 e 4 de cada tempo e o bumbo ou a caixa na casa 3, o "&" (exemplo: `tb-2` em `tercinas-bumbo.json`). A partitura escreve a tercina com a semicolcheia de tercina no meio, como nas folhas à mão. Em 6/8, é o número de casas por **colcheia**: 1 para colcheias, 2 para semicolcheias.
 - `barras` (opcional): número de compassos, para exercícios de 2 ou 4 compassos.
 - Total de casas = `barras × compasso[0] × sub`. Cada trilha precisa ter exatamente esse tamanho.
 - `subs`, no lugar de `sub`, serve para figura diferente em cada tempo: `"subs":[4,5,4,5]` com `"sub":1`. O total de casas é a soma. É usado para quintinas e septinas e mostra a régua em vez da grade.

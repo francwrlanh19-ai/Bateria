@@ -59,7 +59,8 @@ Na prática as medições saem cerca de 0,2 acima do valor teórico. Cabeças in
 - Nota entre parênteses no bumbo (opcional) vira `g` no `bd`. Avise o usuário.
 - X dentro de círculo pode ser chimbal com técnica especial. Use `hh` com `cabecas: {"hh":"g/5/x3"}` e pergunte o que o professor quis dizer.
 - "D"/"E" em maiúscula e minúscula: mantenha como na folha.
-- Quiálteras: 5 e 7 notas por tempo usam `subs`. Tercinas usam `sub: 3`.
+- Quiálteras: 5 e 7 notas por tempo usam `subs`. Tercinas usam `sub: 3`. Tercina com um traço curto de semicolcheia entre a 2ª e a 3ª nota, e uma haste no meio (bumbo ou caixa "entre os tempos"), usa `sub: 6`: tercina nas casas 0, 2 e 4, a nota do meio na casa 3.
+- Folhas à mão em papel pautado de caderno: as linhas do caderno não são a pauta. Compare a altura das cabeças entre si: as mais baixas são bumbo, as do meio caixa; X é chimbal. `+` em cima é chimbal fechado e `o` é aberto.
 
 ## 6. Imagens difíceis
 

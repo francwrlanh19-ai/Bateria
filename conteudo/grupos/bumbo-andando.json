@@ -1,0 +1,22 @@
+{
+  "id": "bumbo-andando",
+  "categoria": "worship",
+  "ordem": 25,
+  "nivel": 2,
+  "andamento": {
+    "inicio": 60,
+    "fim": 100,
+    "passo": 5,
+    "reps": 4
+  },
+  "vozUnica": true,
+  "titulo": "Bumbo andando e abertura de chimbal",
+  "descricao": "Chimbal em colcheias, caixa no 2 e no 4 e o bumbo andando pelos contratempos. Na abertura de chimbal, o chimbal abre no \"e\" do 2 e do 4 e fecha no tempo seguinte, como em Me Ama e Atos 2.",
+  "fonte": "Caderno do professor (transcrito de anotações à mão)",
+  "exercicios": [
+    {"id":"bu-1","num":"A","nome":"Bumbo andando A","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.......x...","bd":"x.....x...x....."}},
+    {"id":"bu-2","num":"B","nome":"Bumbo andando B","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x...","ho":"..............x.","sn":"....x.......x...","bd":"x.....x...x....."}},
+    {"id":"bu-3","num":"C","nome":"Bumbo andando C","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.......x...","bd":"x..x..x...x....."}},
+    {"id":"bu-4","num":"D","nome":"Abertura de chimbal","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x...x.x.x...","ho":"......x.......x.","sn":"....x.......x...","bd":"x.......x.x....."}}
+  ]
+}

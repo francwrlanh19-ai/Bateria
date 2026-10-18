@@ -12,19 +12,19 @@
       "id": "levadas-do-culto",
       "nome": "Levadas do culto",
       "objetivo": "Levadas de worship com o bumbo no contratempo, o balanço do shuffle e as primeiras coordenações em colcheias. Nas mãos, acento e tercinas; no ritmo, a tercina e a semicolcheia, primeiro com respiro e depois ligadas às outras figuras de base, e a primeira mistura sorteada. Duas viradas novas e, nos tons, os primeiros tribais.",
-      "itens": ["mc-3", "aa-1", "tc-1", "fc-3-1", "fg-3", "fc-3-2", "fc-4-1", "fg-4", "fc-4-2", "fc-4-3", "ft-1", "ft-4", "mx-1", "wl-A", "wv-9", "sh-1", "rk-2", "wl-B", "w68-3", "wv-7", "sh-2", "rk-3", "rk-4", "tn-1", "tn-2", "tn68-1", "tn-3", "tn68-2"]
+      "itens": ["mc-3", "aa-1", "tc-1", "fc-3-1", "fg-3", "fc-3-2", "fc-4-1", "fg-4", "fc-4-2", "fc-4-3", "ft-1", "ft-4", "mx-1", "wl-A", "wv-9", "sh-1", "rk-2", "wl-B", "bu-1", "bu-2", "w68-3", "wv-7", "sh-2", "tb-1", "bu-4", "rk-3", "rk-4", "tn-1", "tn-2", "tn68-1", "tn-3", "tn68-2"]
     },
     {
       "id": "semicolcheias",
       "nome": "Semicolcheias no bumbo e na caixa",
       "objetivo": "O bumbo e a caixa passam a cair nas semicolcheias, e as levadas de worship ficam mais cheias. Nas mãos, acentos fora do tempo; no ritmo, as fusas que aparecem nas viradas, primeiro com respiro. Nos tons, os tribais em semicolcheia.",
-      "itens": ["mc-4", "aa-2", "mc-5", "aa-3", "fc-8-1", "fg-8", "rk-5", "wl-C", "wv-4", "rk-6", "wl-D", "rk-7", "wv-1", "rk-8", "wl-E", "rk-9", "rk-10", "tn-4", "tn-5", "tn68-3", "tn-6", "tn-7"]
+      "itens": ["mc-4", "aa-2", "mc-5", "aa-3", "fc-8-1", "fg-8", "rk-5", "wl-C", "bu-3", "wv-4", "rk-6", "wl-D", "rk-7", "wv-1", "rk-8", "wl-E", "rk-9", "rk-10", "tn-4", "tn-5", "tn68-3", "tn-6", "tn-7"]
     },
     {
       "id": "grooves-e-paradiddle",
       "nome": "Grooves e paradiddle",
-      "objetivo": "Levadas de rock mais cheias, os grooves de semicolcheia e o paradiddle dividido entre chimbal e caixa. No ritmo, quintinas e sextinas: com respiro, sozinhas e ligadas à colcheia e à tercina.",
-      "itens": ["mc-6", "aa-4", "f57-1", "fg-5", "fc-5-2", "fc-5-3", "fc-6-1", "fg-6", "fc-6-2", "fc-6-3", "pd-1", "pd-2", "pd-3", "pd-4", "pd-5", "rk-11", "f1-e1", "wv-3", "rk-12", "f1-e2", "rk-13", "f1-e3", "wv-6", "rk-14", "f1-e4", "rk-15", "rk-16"]
+      "objetivo": "Levadas de rock mais cheias, os grooves de semicolcheia e o paradiddle dividido entre chimbal e caixa. No ritmo, quintinas e sextinas: com respiro, sozinhas e ligadas à colcheia e à tercina. E as tercinas com o bumbo e a caixa no \"&\", entre as notas da tercina.",
+      "itens": ["mc-6", "aa-4", "f57-1", "fg-5", "fc-5-2", "fc-5-3", "fc-6-1", "fg-6", "fc-6-2", "fc-6-3", "pd-1", "pd-2", "pd-3", "pd-4", "pd-5", "tb-2", "tb-3", "rk-11", "f1-e1", "wv-3", "rk-12", "f1-e2", "rk-13", "f1-e3", "wv-6", "rk-14", "f1-e4", "rk-15", "rk-16"]
     },
     {
       "id": "pes-fixos",
