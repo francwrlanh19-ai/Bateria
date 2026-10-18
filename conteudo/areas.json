@@ -1,5 +1,6 @@
 [
   {"id": "leitura", "nome": "Leitura", "descricao": "Destrava a coordenação: aprenda a ler bateria, um passo de cada vez", "cor": "--brass", "icone": "🎼", "principal": true},
   {"id": "levadas", "nome": "Levadas e viradas", "descricao": "Condução: a levada em cima e a virada embaixo, sem perder o tempo", "cor": "--cym", "icone": "🥁", "principal": true},
+  {"id": "alunos", "nome": "Alunos", "descricao": "Os exercícios do caderno de cada aluno", "cor": "--sn", "icone": "🎓", "separada": true},
   {"id": "outros", "nome": "Outros", "descricao": "Técnica, independência e estilos para o culto", "cor": "--rd", "icone": "🧩"}
 ]

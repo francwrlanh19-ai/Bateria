@@ -11,7 +11,7 @@
   },
   "vozUnica": true,
   "titulo": "Bumbo andando e abertura de chimbal",
-  "descricao": "Chimbal em colcheias, caixa no 2 e no 4 e o bumbo andando pelos contratempos. Na abertura de chimbal, o chimbal abre no \"e\" do 2 e do 4 e fecha no tempo seguinte, como em Me Ama e Atos 2.",
+  "descricao": "Chimbal em colcheias, caixa no 2 e no 4 e o bumbo andando pelos contratempos. Na abertura de chimbal, o chimbal abre no \"&\" do 2 e do 4 e fecha no tempo seguinte, como em Me Ama e Atos 2.",
   "fonte": "Caderno do professor (transcrito de anotações à mão)",
   "exercicios": [
     {"id":"bu-1","num":"A","nome":"Bumbo andando A","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x.x.x.x.x.x.","sn":"....x.......x...","bd":"x.....x...x....."}},

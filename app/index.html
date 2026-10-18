@@ -1865,9 +1865,15 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 
 /* ---------- Notação (VexFlow) ---------- */
 let posX=null,posLin=null,linhasNot=1,larguraCursor=3;
-/* celular deitado no treino: partitura de 2 compassos vira 2 linhas, um compasso em cima do outro */
 const mqDeitado=window.matchMedia('(orientation:landscape) and (max-height:560px)');
-function linhasPartitura(ex){const b=ex.barras||1;return document.body.classList.contains('leitor')&&b>=2&&b%2===0?2:1;}
+/* Compassos em cada linha da partitura: no máximo 2 por linha. Na tela de leitura, 2 compassos viram 2 linhas,
+   um em cima do outro; 3 compassos ficam 2 + 1 e 4 ficam 2 + 2 (em pé e deitado) */
+function linhasPartitura(ex){
+  const b=ex.barras||1;
+  if(b===2)return document.body.classList.contains('leitor')?[1,1]:[2];
+  const out=[];for(let r=b;r>0;r-=2)out.push(Math.min(2,r));
+  return out;
+}
 const FOTOS=window.FOTOS||{};
 /* Valores de nota por número de casas, conforme a fórmula de compasso e a subdivisão */
 const TAB_VAL=[[1/32,'32'],[3/64,'32d'],[1/16,'16'],[3/32,'16d'],[1/8,'8'],[3/16,'8d'],[1/4,'q'],[3/8,'qd'],[1/2,'h'],[3/4,'hd']];
@@ -1968,7 +1974,11 @@ function notacao(){
     const semi=beats*4/ex.compasso[1];
     const acentoCima=Object.keys(tr).some(k=>INSTR[k]&&tr[k].includes('X')&&(L.vozUnica||L.maosPes?!(k==='bd'||k==='hp'):INSTR[k].voz===1));
     const mao=temMao(ex),extraT=ESC.tercina?(mao?30:18):0,topoBase=(mao?(acentoCima?46:30):0)+extraT;
-    const NL=linhasPartitura(ex),passosLinha=total/NL;linhasNot=NL;
+    /* LB: compassos de cada linha; iniL: primeira casa de cada linha. A linha mais curta (a última dos 3 compassos)
+       fica com a pauta mais curta, para o compasso ter a mesma largura dos outros */
+    const LB=linhasPartitura(ex),NL=LB.length,BL=Math.max(...LB),porComp=bpc*sub;linhasNot=NL;
+    const iniL=LB.map((_,i)=>LB.slice(0,i).reduce((a,b)=>a+b,0)*porComp);
+    const linhaDe=p=>{let li=0;while(li+1<NL&&p>=iniL[li+1])li++;return li;};
     /* Tela de leitura: os tambores usados ganham o nome à esquerda da pauta, bem apagado, na altura de cada um.
        Dois nomes colados (Tom 1, Tom 2 e Caixa ficam a meio espaço um do outro) vão em duas colunas, e o de
        fora ganha um traço fino até a pauta. ML é a margem que a legenda ocupa. */
@@ -1985,7 +1995,7 @@ function notacao(){
       chaveL.forEach(o=>{o.dx=o.col?w0+10:0;});
       if(chaveL.length)ML=Math.ceil(8+w0+(w1?10+w1:0));
     }
-    const W=ML+470+Math.max(0,semi/NL-4)*105+(sub>=8?150:0);larguraCursor=16/W*100;
+    const W=ML+470+Math.max(0,semi*BL/barras-4)*105+(sub>=8?150:0);larguraCursor=16/W*100;
     const maosPes=!!L.maosPes,vozDe=k=>maosPes?(k==='bd'||k==='hp'?-1:1):INSTR[k].voz;
     const unica=!!L.vozUnica,porCompasso=bpc*sub,ACIMA=VF.Modifier.Position.ABOVE,ABAIXO=VF.Modifier.Position.BELOW;
     const fechaEm=fechamentosChimbal(tr,total);
@@ -2005,10 +2015,11 @@ function notacao(){
       const r=new VF.Renderer(box,VF.Renderer.Backends.SVG);r.resize(W,H);
       const c=r.getContext();
       /* uma pauta por linha: a fórmula de compasso só na primeira e o ritornelo só no fim da última */
-      const pautas=Array.from({length:NL},(_,li)=>{
+      const pautas=LB.map((nb,li)=>{
         const p=new VF.Stave(4+ML,6+topo+li*HL,W-10-ML);
         p.addClef('percussion');if(li===0)p.addTimeSignature(bpc+'/'+ex.compasso[1]);
         if(li===NL-1)p.setEndBarType((VF.BarlineType||VF.Barline.type).REPEAT_END);
+        if(nb<BL){const cab=p.getNoteStartX()-p.getX();p.setWidth(Math.round(cab+(W-10-ML-cab)*nb/BL));}
         return p;
       });
       const vozesL=Array.from({length:NL},()=>[]),vigas=[],tercinas=[];
@@ -2019,7 +2030,7 @@ function notacao(){
         if(!grupo.some(k=>/[^.]/.test(tr[k])))continue;
         const linhasNotas=Array.from({length:NL},()=>[]);let notas=linhasNotas[0];
         for(let g=0;g<total/G;g++){
-          const b0=g*G,li=Math.floor(b0/passosLinha);
+          const b0=g*G,li=linhaDe(b0);
           if(linhasNotas[li]!==notas)notas=linhasNotas[li];
           else if(g>0&&b0%porCompasso===0)notas.push(new VF.BarNote());
           const on=[];
@@ -2055,7 +2066,7 @@ function notacao(){
           if(doGrupo.length>=2)vigas.push({li,b:new VF.Beam(doGrupo)});
           if(emTercina||emSexta)tercinas.push({li,t:new VF.Tuplet(notas.slice(ini),{num_notes:3,notes_occupied:2})});
         }
-        linhasNotas.forEach((ns,li)=>{const v=new VF.Voice({num_beats:beats/NL,beat_value:ex.compasso[1]}).setMode(VF.Voice.Mode.SOFT);v.addTickables(ns);vozesL[li].push(v);});
+        linhasNotas.forEach((ns,li)=>{const v=new VF.Voice({num_beats:LB[li]*bpc,beat_value:ex.compasso[1]}).setMode(VF.Voice.Mode.SOFT);v.addTickables(ns);vozesL[li].push(v);});
       }
       if(!vozesL[0].length){pautas.forEach(p=>p.setContext(c).draw());break;}
       const caixas=vozesL.map((vs,li)=>{
@@ -2116,7 +2127,7 @@ function notacao(){
         const acc={};
         vozes.forEach(v=>v.getTickables().forEach(t=>{if(t.__passo==null)return;(acc[t.__passo]=acc[t.__passo]||[]).push(t.getAbsoluteX()+5);}));
         const pts=Object.keys(acc).map(Number).sort((a,b)=>a-b).map(p=>[p,acc[p].reduce((s,x)=>s+x,0)/acc[p].length]);
-        const p0=li*passosLinha,p1=p0+passosLinha;
+        const p0=iniL[li],p1=p0+LB[li]*porComp;
         pts.push([p1,pautas[li].getNoteEndX()]);
         for(let p=p0;p<p1;p++){
           let j=pts.findIndex(q=>q[0]>p);if(j<1)j=1;
@@ -3807,8 +3818,9 @@ function formMusica(m){
     <div class="mus-form-acoes"><button type="submit" class="btn-primario">Salvar</button><button type="button" class="btn-linha" data-a="cancela">Cancelar</button>${nova?'':'<button type="button" class="btn-linha mus-exclui">Excluir</button>'}</div>`;
   const F=n=>f.elements[n];
   F('nome').value=v.nome||'';F('artista').value=v.artista||'';F('bpm').value=v.bpm||'';F('notas').value=v.notas||'';F('link').value=v.link||'';
-  /* levadas: tudo que não é leitura, técnica nem virada; viradas: as listas de viradas. Os criados por você entram nas duas */
-  const ehLevada=(l,e)=>abaDe(l)==='meus'||(!l.virada&&!e.subs&&!e.leitura&&!e.mistura&&!CATS_LEITURA.has(abaDe(l))&&abaDe(l)!=='tecnica');
+  /* levadas: tudo que não é leitura, técnica de mãos (as listas com panMao, como o estudo de PAD) nem virada;
+     viradas: as listas de viradas. Os criados por você entram nas duas */
+  const ehLevada=(l,e)=>abaDe(l)==='meus'||(!l.virada&&!l.panMao&&!e.subs&&!e.leitura&&!e.mistura&&!CATS_LEITURA.has(abaDe(l))&&abaDe(l)!=='tecnica');
   const ehVirada=(l,e)=>abaDe(l)==='meus'||!!l.virada;
   const preenche=(sel,filtro,atual,comp)=>{
     let h='<option value="">Nenhuma</option>';
@@ -3929,12 +3941,14 @@ function linhaRepertorio(c,passo){
   return b;
 }
 
-/* ---------- Treino de hoje: uma vaga para cada área; as áreas principais (Leitura, Levadas e viradas) ganham uma vaga por categoria ---------- */
+/* ---------- Treino de hoje: uma vaga para cada área; as áreas principais (Leitura, Levadas e viradas) ganham uma vaga por categoria.
+   Área separada (Alunos: o caderno de cada aluno) fica de fora ---------- */
 const DURS={15:[3,4,4,4],30:[5,5,10,10],45:[10,10,10,15]};
 let planoHoje=LS.get('hoje',null);
 function vagasDoTreino(){
   const v=[];
   AREAS.forEach(a=>{
+    if(a.separada)return;
     const cs=CONTEUDO.categorias.filter(c=>c.area===a.id&&!c.especial);if(!cs.length)return;
     if(a.principal)cs.forEach(c=>v.push({id:c.id,cats:[c.id],nome:c.nome,icone:a.icone,cor:c.cor||a.cor,principal:true,area:a.id,areaNome:a.nome}));
     else v.push({id:a.id,cats:cs.map(c=>c.id),nome:a.nome,icone:a.icone,cor:a.cor,area:a.id,areaNome:a.nome});
@@ -4094,7 +4108,7 @@ function marcasDe(ex,l){
   if(tr.t1||tr.t2)t.push('tom tons');
   if(tr.rd)t.push('conducao');
   if(tr.cr)t.push('prato de ataque');
-  if((ex.barras||1)>1)t.push('2 compassos dois compassos');
+  if((ex.barras||1)>1){const b=ex.barras;t.push(`${b} compassos ${['','','dois','tres','quatro'][b]||''} compassos`);}
   if(ex.leitura)t.push('sistema sistemas leitura coordenacao independencia gary chester new breed');
   if(l.nivel)t.push('nivel '+l.nivel);
   return t.join(' ');

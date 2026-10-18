@@ -9,7 +9,7 @@ Site: https://francwrlanh19-ai.github.io/Bateria/
 ## Como funciona
 
 - `app/` é o aplicativo (interface, metrônomo, sons e partituras).
-- `conteudo/areas.json` lista as áreas do início: **Leitura** e **Levadas e viradas** (as principais) e **Outros**.
+- `conteudo/areas.json` lista as áreas do início: **Leitura** e **Levadas e viradas** (as principais), **Alunos** (o caderno de cada aluno) e **Outros**.
 - `conteudo/categorias.json` lista as categorias; cada uma fica dentro de uma área (`area`).
 - `conteudo/grupos/*.json` tem um arquivo por lista de exercícios.
 - `conteudo/trilha.json` é a trilha de estudo: os exercícios em nove etapas, na ordem em que vale estudá-los. Exercício novo precisa entrar numa etapa (o validador avisa quando algum fica de fora).
@@ -58,8 +58,8 @@ Cada aparelho guarda os próprios recordes, rotinas, favoritos, diário de estud
 
 ## Uso diário
 
-- **Início**: abre com **Continuar** (o último exercício aberto) e logo as áreas principais, **Leitura** e **Levadas e viradas**. Depois vêm Outros, o Treino de hoje com os últimos 7 dias e Neste celular. A busca abre pelo botão 🔍 **Buscar** do topo.
-- **Treino de hoje** (15, 30 ou 45 minutos): um exercício de cada área. Primeiro o que você está treinando, depois o que pede revisão, depois o próximo novo na ordem da trilha. Cada exercício começa perto do seu recorde e sobe até a meta da lista.
+- **Início**: abre com **Continuar** (o último exercício aberto) e logo as áreas principais, **Leitura** e **Levadas e viradas**. Depois vêm Alunos, Outros, o Treino de hoje com os últimos 7 dias e Neste celular. A busca abre pelo botão 🔍 **Buscar** do topo.
+- **Treino de hoje** (15, 30 ou 45 minutos): um exercício de cada área (Alunos fica de fora). Primeiro o que você está treinando, depois o que pede revisão, depois o próximo novo na ordem da trilha. Cada exercício começa perto do seu recorde e sobe até a meta da lista.
 - **Clique que some** (Ajustes › Treino): 3 e 1, 2 e 2 ou 1 e 3 compassos com e sem clique. Nos compassos sem clique o app fica em silêncio e a pessoa segura o tempo sozinha.
 - **Sortear a ordem** (Ajustes › Treino): com *Tocar a folha inteira*, os exercícios vêm em ordem sorteada, passando por todos antes de repetir. Bom para as viradas.
 - **Estados**: cada exercício fica *novo*, *treinando*, *dominado* (chegou no andamento final da lista) ou *revisar* (dominado e parado há 7 dias ou mais).
@@ -76,7 +76,8 @@ Créditos: sons de Virtuosity Drums (Versilian Studios, CC0); partituras desenha
 
 ## Áreas principais: leitura e levadas com viradas
 
-- `conteudo/areas.json` tem três áreas. As duas principais (`"principal": true`) vêm primeiro no início, com as categorias numeradas como passos: **Leitura** (Figuras, Leitura na caixa, Sistemas com leitura e Ditado rítmico), que destrava a coordenação, e **Levadas e viradas** (Viradas com levada), que trabalha a condução. Depois vem **Outros**, com o resto. No Treino de hoje cada área principal ganha um exercício de cada categoria, e Outros entra com um (hoje: três de leitura, um de levadas e viradas e um de outros). Os botões anterior e próximo da tela de leitura atravessam os passos da área principal.
+- `conteudo/areas.json` tem quatro áreas. As duas principais (`"principal": true`) vêm primeiro no início, com as categorias numeradas como passos: **Leitura** (Figuras, Leitura na caixa, Sistemas com leitura e Ditado rítmico), que destrava a coordenação, e **Levadas e viradas** (Viradas com levada), que trabalha a condução. Depois vem **Alunos**, com uma categoria para cada aluno (hoje, **Gabriel**), e por fim **Outros**, com o resto. No Treino de hoje cada área principal ganha um exercício de cada categoria, e Outros entra com um (hoje: três de leitura, um de levadas e viradas e um de outros). Os botões anterior e próximo da tela de leitura atravessam os passos da área principal.
+- **Alunos** (`"separada": true` em `areas.json`): os exercícios do caderno de cada aluno, numa categoria com o nome dele. A área separada fica fora do Treino de hoje e da trilha, para o caderno de um aluno não entrar no estudo dos outros. Exercício de aluno pode ter 3 ou 4 compassos (`barras`): a partitura põe no máximo 2 compassos por linha (3 compassos ficam 2 + 1).
 - **Figuras** tem um módulo por figura: Semínima e colcheia, Tercina, Semicolcheia, Quintina, Sextina, Septina e Fusa. Em cada um, a figura vem primeiro com respiro (uma semínima no tempo seguinte), depois sozinha e, por fim, ligada às figuras de base (colcheia, tercina e semicolcheia) e às vizinhas. Semicolcheia e Fusa terminam com a escada subindo e descendo.
 - **Mistura de figuras** (o último módulo de Figuras): o app sorteia a figura de cada tempo. A pessoa escolhe até que figura entra, de 1 (colcheia) a 7 (fusa), nos botões em cima da partitura ou na coluna da esquerda da tela de leitura (teclado: 1 a 7 e N para uma mistura nova). A figura do nível aparece em todo compasso; *com respiro*, um tempo é semínima. A mistura muda a cada andamento novo e com *Nova mistura*; tocando, a troca entra na próxima volta. No JSON, `"mistura": "respiro"` ou `"continua"`.
 - **Tela de leitura**: folha branca na tela inteira, com o título, anterior e próximo em cima e só o andamento e o Tocar à direita. A engrenagem do topo abre os ajustes por cima da partitura. À esquerda de cada linha da pauta, bem apagado, fica o nome de cada tambor usado (Tom 1, Tom 2, Caixa, Surdo, Bumbo e Pé), na altura da linha ou do espaço dele; quando dois nomes ficariam colados, um vai mais para fora, com um traço fino até a pauta. Liga sozinha com o celular deitado; no computador e no tablet, abre pelo botão de tela cheia (⛶) e fecha no ✕, no Esc ou no voltar.

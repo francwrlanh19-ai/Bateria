@@ -1,0 +1,19 @@
+{
+  "id": "gabriel-abertura",
+  "categoria": "gabriel",
+  "ordem": 10,
+  "nivel": 2,
+  "andamento": {
+    "inicio": 60,
+    "fim": 100,
+    "passo": 5,
+    "reps": 4
+  },
+  "vozUnica": true,
+  "titulo": "Abertura de chimbal",
+  "descricao": "A mesma levada do Worship: o chimbal abre no \"&\" do 2 e do 4 (o) e fecha no tempo seguinte (+).",
+  "fonte": "Caderno do professor (transcrito de anotações à mão)",
+  "exercicios": [
+    {"id":"gb-ab","num":"1","nome":"Abertura de chimbal","compasso":[4,4],"sub":4,"trilhas":{"hh":"x.x.x...x.x.x...","ho":"......x.......x.","sn":"....x.......x...","bd":"x.......x.x....."}}
+  ]
+}

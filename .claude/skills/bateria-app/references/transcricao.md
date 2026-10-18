@@ -60,7 +60,13 @@ Na prática as medições saem cerca de 0,2 acima do valor teórico. Cabeças in
 - X dentro de círculo pode ser chimbal com técnica especial. Use `hh` com `cabecas: {"hh":"g/5/x3"}` e pergunte o que o professor quis dizer.
 - "D"/"E" em maiúscula e minúscula: mantenha como na folha.
 - Quiálteras: 5 e 7 notas por tempo usam `subs`. Tercinas usam `sub: 3`. Tercina com um traço curto de semicolcheia entre a 2ª e a 3ª nota, e uma haste no meio (bumbo ou caixa "entre os tempos"), usa `sub: 6`: tercina nas casas 0, 2 e 4, a nota do meio na casa 3.
-- Folhas à mão em papel pautado de caderno: as linhas do caderno não são a pauta. Compare a altura das cabeças entre si: as mais baixas são bumbo, as do meio caixa; X é chimbal. `+` em cima é chimbal fechado e `o` é aberto.
+- Folhas à mão em papel pautado de caderno: as linhas do caderno não são a pauta. Compare a altura das cabeças entre si: as mais baixas são bumbo, as do meio caixa; X é chimbal. `+` em cima é chimbal fechado e `o` é aberto. X embaixo, com a haste para baixo, é o chimbal com o pé (`hp`, com `maosPes`).
+- Estudos de mãos no caderno (como o "Estudo do PAD" do Gabriel):
+  - "4x" em cima de um tempo: a figura se repete nos 4 tempos, então cada grupo vira um compasso, e a linha vira uma sequência de compassos (`barras`).
+  - Várias linhas de manulação embaixo da mesma figura: um compasso para cada linha, na ordem da folha.
+  - "D/E" com "1" e "2" em cima: na 1ª vez começa a direita, na 2ª a esquerda (dois compassos).
+  - "BPM 60" com "-3-3" ao lado: lido como começar em 60 e subir de 3 em 3 (`andamento.passo` 3). Confirme com o usuário.
+  - Manulação pela grade de semicolcheias (D nas casas 0 e 2, E nas 1 e 3): colcheia e duas semicolcheias dá "D D E"; duas semicolcheias e colcheia dá "D E D". Se a folha mostrar isso, está coerente.
 
 ## 6. Imagens difíceis
 

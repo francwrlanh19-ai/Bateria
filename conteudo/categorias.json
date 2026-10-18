@@ -107,6 +107,13 @@
     "cor": "--sn"
   },
   {
+    "id": "gabriel",
+    "area": "alunos",
+    "nome": "Gabriel",
+    "descricao": "Do caderno: abertura de chimbal, estudo do PAD e levadas",
+    "cor": "--sn"
+  },
+  {
     "id": "trilha",
     "nome": "Trilha de estudo",
     "descricao": "Os exercícios em nove etapas",

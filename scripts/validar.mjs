@@ -15,7 +15,7 @@ export function validar() {
     catch (e) { erros.push(`${rel}: ${e.code === 'ENOENT' ? 'arquivo não encontrado' : 'JSON inválido (' + e.message + ')'}`); return padrao; }
   };
 
-  // Áreas do início (Mãos, Ritmo e leitura, Coordenação, Levadas e viradas)
+  // Áreas do início (Leitura e Levadas e viradas, as principais; Alunos, separada; Outros)
   const areas = lerJson('conteudo/areas.json', []);
   const idsArea = new Set();
   if (!Array.isArray(areas) || !areas.length) erros.push('areas.json: precisa ser uma lista com pelo menos uma área');
@@ -25,11 +25,14 @@ export function validar() {
     else if (idsArea.has(a.id)) A('id repetido');
     else idsArea.add(a.id);
     if (!a.nome) A('falta "nome"');
+    if (a.principal && a.separada) A('não pode ser "principal" e "separada" ao mesmo tempo');
   });
+  // Área separada (Alunos: o caderno de cada aluno) fica fora do treino de hoje e da trilha
+  const areasSeparadas = new Set((Array.isArray(areas) ? areas : []).filter(a => a && a.separada).map(a => a.id));
 
   // Categorias: cada uma pertence a uma área; "rotina" e "meus" são especiais
   const categorias = lerJson('conteudo/categorias.json', []);
-  const idsCategoria = new Set(), especiais = new Set();
+  const idsCategoria = new Set(), especiais = new Set(), catsSeparadas = new Set();
   (Array.isArray(categorias) ? categorias : []).forEach((c, i) => {
     const C = m => erros.push(`categorias.json, categoria ${c.id || '#' + (i + 1)}: ${m}`);
     if (!c.id || /\s/.test(c.id)) C('"id" vazio ou com espaço');
@@ -39,6 +42,7 @@ export function validar() {
     if (c.especial) { especiais.add(c.id); return; }
     if (!c.area) C(`falta "area" (use uma destas, de conteudo/areas.json: ${[...idsArea].join(', ')})`);
     else if (!idsArea.has(c.area)) C(`área desconhecida "${c.area}" (as áreas ficam em conteudo/areas.json: ${[...idsArea].join(', ')})`);
+    else if (areasSeparadas.has(c.area)) catsSeparadas.add(c.id);
   });
   for (const id of ['rotina', 'meus']) if (!especiais.has(id)) erros.push(`categorias.json: a categoria especial "${id}" precisa existir, com "especial": true`);
 
@@ -47,7 +51,7 @@ export function validar() {
   const dir = path.join(raiz, 'conteudo/grupos');
   const idsGrupo = new Set();
   const idsExercicio = new Set();
-  const exPorId = new Map(), pedidosLevada = [];
+  const exPorId = new Map(), pedidosLevada = [], idsSeparados = new Set();
 
   for (const arquivo of fs.readdirSync(dir).filter(f => f.endsWith('.json')).sort()) {
     const E = m => erros.push(`${arquivo}: ${m}`);
@@ -85,7 +89,7 @@ export function validar() {
       const P = `exercício ${ex.id || '#' + (i + 1)}`;
       if (!ex.id) E(`${P}: falta "id"`);
       else if (idsExercicio.has(ex.id)) E(`${P}: id repetido (os ids precisam ser únicos em todo o app)`);
-      else { idsExercicio.add(ex.id); exPorId.set(ex.id, ex); }
+      else { idsExercicio.add(ex.id); exPorId.set(ex.id, ex); if (catsSeparadas.has(g.categoria)) idsSeparados.add(ex.id); }
       if (!ex.nome) E(`${P}: falta "nome"`);
       if (ex.nivel != null && !nivelOk(ex.nivel)) E(`${P}: "nivel" precisa ser um número inteiro de 1 a 5`);
 
@@ -183,11 +187,12 @@ export function validar() {
           const Q = `${P}, item ${j + 1}`;
           if (typeof id !== 'string' || !idsExercicio.has(id)) T(`${Q}: exercício desconhecido ${JSON.stringify(id)} (use o id do exercício, como "mc-1")`);
           else if (naTrilha.has(id)) T(`${Q}: "${id}" já está na trilha; cada exercício entra uma vez só`);
+          else if (idsSeparados.has(id)) T(`${Q}: "${id}" é de uma área separada (como Alunos), que fica fora da trilha`);
           else naTrilha.add(id);
         });
       });
       nEtapas = idsEtapa.size;
-      const fora = [...idsExercicio].filter(id => !naTrilha.has(id));
+      const fora = [...idsExercicio].filter(id => !naTrilha.has(id) && !idsSeparados.has(id));
       if (fora.length) avisos.push(`${fora.length} exercício(s) fora da trilha; decida em que etapa de conteudo/trilha.json eles entram: ${fora.join(', ')}`);
     }
   }

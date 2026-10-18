@@ -1,0 +1,24 @@
+{
+  "id": "gabriel-pad",
+  "categoria": "gabriel",
+  "ordem": 20,
+  "nivel": 2,
+  "andamento": {
+    "inicio": 60,
+    "fim": 90,
+    "passo": 3,
+    "reps": 2
+  },
+  "maosPes": true,
+  "panMao": true,
+  "titulo": "Estudo do PAD",
+  "descricao": "Comece em 60 BPM e suba de 3 em 3. Cada \"4x\" do caderno virou um compasso: a mesma figura nos 4 tempos, e cada compasso tem a sua manulação. Na C, o pé marca os tempos no chimbal e o 2º compasso começa com a esquerda. Com fone, a direita soa do lado direito e a esquerda do esquerdo.",
+  "fonte": "Caderno do professor (transcrito de anotações à mão)",
+  "exercicios": [
+    {"id":"gb-pa","num":"A","nome":"Semicolcheias: D, E, DE e ED","compasso":[4,4],"sub":4,"barras":4,"mao":"DDDDDDDDDDDDDDDDEEEEEEEEEEEEEEEEDEDEDEDEDEDEDEDEEDEDEDEDEDEDEDED","trilhas":{"sn":"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"}},
+    {"id":"gb-pb","num":"B","nome":"Colcheias e semicolcheias","compasso":[4,4],"sub":4,"barras":3,"mao":"D.D.D.D.DDDDDDDDE.E.E.E.EEEEEEEED.E.D.E.DEDEDEDE","trilhas":{"sn":"x.x.x.x.xxxxxxxxx.x.x.x.xxxxxxxxx.x.x.x.xxxxxxxx"}},
+    {"id":"gb-pc","num":"C","nome":"Tercinas com o pé no chimbal","compasso":[4,4],"sub":3,"barras":2,"mao":"DEDEDEDEDEDEEDEDEDEDEDED","trilhas":{"sn":"xxxxxxxxxxxxxxxxxxxxxxxx","hp":"x..x..x..x..x..x..x..x.."}},
+    {"id":"gb-pd","num":"D","nome":"Duas semicolcheias e colcheia","compasso":[4,4],"sub":4,"barras":3,"mao":"DDD.DDD.DDD.DDD.EEE.EEE.EEE.EEE.DED.DED.DED.DED.","trilhas":{"sn":"xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx."}},
+    {"id":"gb-pe","num":"E","nome":"Colcheia e duas semicolcheias","compasso":[4,4],"sub":4,"barras":3,"mao":"D.DDD.DDD.DDD.DDE.EEE.EEE.EEE.EED.DED.DED.DED.DE","trilhas":{"sn":"x.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xxx.xx"}}
+  ]
+}
