@@ -388,6 +388,20 @@ body.foco .leitura{display:none}
 .filtro{flex:0 0 auto;appearance:none;border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:14px;font-weight:600;min-height:40px;color:var(--muted)}
 .filtro[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
 .vazio-filtro{font-size:14px;color:var(--muted)}
+.aviso-versao{position:fixed;z-index:60;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));max-width:520px;margin:0 auto;display:flex;align-items:center;gap:12px;background:var(--painel);color:var(--painel-txt);border-radius:16px;padding:10px 10px 10px 16px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.aviso-versao[hidden]{display:none}
+.aviso-versao p{flex:1 1 auto;font-size:15px;line-height:1.3;font-weight:600}
+.aviso-versao small{display:block;font-weight:400;opacity:.75;font-size:13px}
+.aviso-versao .btn-primario{background:var(--brass);color:#1A2430;min-height:44px;padding:8px 16px;font-size:15px;flex:none}
+.aviso-versao .fecha-aviso{background:none;border:0;color:inherit;opacity:.7;font-size:22px;width:36px;height:44px;flex:none}
+.recebida.novidades{border-color:var(--brass)}
+.novidades ul{list-style:none;padding:0;display:grid;gap:6px;margin:2px 0}
+.novidades li button{appearance:none;width:100%;text-align:left;background:var(--cell);border:0;border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.3;color:inherit;display:grid;gap:2px}
+.novidades li button span{font-size:13px;color:var(--muted)}
+.novidades .btn-linha{justify-self:start;min-height:44px}
+.versao-linha{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.versao-linha p{font-size:14px;color:var(--muted)}
+.versao-linha .btn-linha{min-height:44px}
 .recebida{background:var(--surface);border:2px solid var(--sn);border-radius:16px;padding:14px;display:grid;gap:8px}
 .recebida h2{font-family:var(--f-display);font-weight:800;font-size:26px;line-height:1.05}
 .recebida p{font-size:14px;color:var(--muted);line-height:1.4}
@@ -829,6 +843,7 @@ body.foco .partitura{gap:10px}
     <div class="nav-txt"><p class="nav-sup" id="navSup"></p><h2 class="nav-tit" id="navTit"></h2></div>
   </div>
   <section class="hub" id="hub" aria-label="Início"></section>
+  <div class="aviso-versao" id="avisoVersao" role="status" hidden><p>Tem versão nova do app<small>Toque em Atualizar para receber as novidades</small></p><button type="button" class="btn-primario" id="btnAtualizar">Atualizar</button><button type="button" class="fecha-aviso" id="fechaAviso" aria-label="Fechar aviso">×</button></div>
 
   <main class="principal">
     <section class="colecao" aria-label="Exercícios">
@@ -2847,6 +2862,7 @@ function renderHub(){
   if(sq){sq.hidden=!nsq;sq.textContent=`🔥 ${nsq}`;sq.title=`${nsq} ${nsq===1?'dia seguido':'dias seguidos'} de estudo`;sq.setAttribute('aria-label',sq.title);}
   const rec=cartaoRecebida();if(rec)h.append(rec);
   const rm=cartaoMusicasRecebidas();if(rm)h.append(rm);
+  const nov=cartaoNovidades();if(nov)h.append(nov);
   const inst=cartaoInstalar();if(inst)h.append(inst);
   /* Busca: abre pelo botão do topo (ou quando já tem texto); os resultados aparecem no lugar do resto */
   const abreBusca=buscaAberta||!!buscaTxt,bb=$('#btnBusca');
@@ -2883,7 +2899,7 @@ function renderHub(){
   const b2=el('button','btn-linha');b2.type='button';b2.textContent='Restaurar cópia';b2.addEventListener('click',()=>pedeCopia(cp));
   acs.append(b1,b2);cp.append(info,acs);
   const li=linhaInstalar();if(li)cel.append(li);
-  cel.append(cp);caixa.append(cel);
+  cel.append(cp,linhaVersao());caixa.append(cel);
   h.append(caixa);
   aplicaBusca();
 }
@@ -4262,6 +4278,90 @@ if(navigator.getInstalledRelatedApps&&!rodandoComoApp()){
   navigator.getInstalledRelatedApps().then(apps=>{if(apps&&apps.length){jaInstalado=true;atualizaConvite();}}).catch(()=>{});
 }
 
+/* ---------- Versão nova: aviso com "Atualizar" e cartão de novidades ---------- */
+const VERSAO_APP='__VERSAO_APP__';
+let versaoNova=null;
+const SS={get(k){try{return sessionStorage.getItem('bateria.'+k);}catch(e){return null;}},set(k,v){try{sessionStorage.setItem('bateria.'+k,v);}catch(e){}}};
+async function procuraVersao(manual){
+  if(VERSAO_APP.startsWith('__')||!location.protocol.startsWith('http'))return null;
+  try{
+    const r=await fetch('versao.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return null;
+    const v=(await r.json()).versao;
+    if(v&&v!==VERSAO_APP){versaoNova=v;mostraAvisoVersao(manual);return v;}
+    versaoNova=null;$('#avisoVersao').hidden=true;return false;
+  }catch(e){return null;}
+}
+function mostraAvisoVersao(forcar){
+  if(!forcar&&SS.get('avisoFechado')===versaoNova)return;
+  $('#avisoVersao').hidden=false;
+}
+async function atualizaApp(btn){
+  if(btn){btn.disabled=true;btn.textContent='Atualizando…';}
+  try{parar();}catch(e){}
+  try{
+    const reg='serviceWorker' in navigator?await navigator.serviceWorker.getRegistration():null;
+    if(reg){
+      await reg.update().catch(()=>{});
+      const sw=reg.installing||reg.waiting;
+      if(sw){sw.postMessage('pular');await new Promise(ok=>{const v=()=>{if(sw.state==='activated'||sw.state==='redundant')ok();};sw.addEventListener('statechange',v);v();setTimeout(ok,20000);});}
+      /* se a versão nova não ficou guardada, apaga tudo e busca direto da internet */
+      const ks=await caches.keys();
+      if(versaoNova&&!ks.includes(versaoNova)){await Promise.all(ks.map(k=>caches.delete(k)));await reg.unregister();}
+    }
+  }catch(e){}
+  SS.set('atualizou','1');
+  location.reload();
+}
+/* Novidades: compara os exercícios de agora com os que este celular já conhecia */
+function idsConteudo(){return CONTEUDO.grupos.flatMap(g=>g.exercicios.map(e=>e.id));}
+function novidadesConteudo(){
+  const vistos=LS.get('vistos',null);
+  if(!Array.isArray(vistos)){LS.set('vistos',idsConteudo());return [];}
+  const ja=new Set(vistos),out=[];
+  CONTEUDO.grupos.forEach(g=>{const n=g.exercicios.filter(e=>!ja.has(e.id)).length;if(n)out.push({g,n,todo:n===g.exercicios.length});});
+  return out;
+}
+function cartaoNovidades(){
+  const nov=novidadesConteudo(),atualizou=SS.get('atualizou')==='1';
+  if(!nov.length&&!atualizou)return null;
+  const sec=el('section','recebida novidades');sec.setAttribute('aria-labelledby','novTit');
+  const tot=nov.reduce((a,x)=>a+x.n,0);
+  sec.innerHTML=`<h2 id="novTit">${nov.length?'Novidades no app':'App atualizado'}</h2><p>${nov.length?`${tot} ${tot===1?'exercício novo':'exercícios novos'}. Toque para abrir.`:'Você já está na versão mais nova. Desta vez não entraram exercícios novos, só melhorias no app.'}</p>`;
+  if(nov.length){
+    const ul=el('ul');
+    nov.slice(0,8).forEach(({g,n,todo})=>{
+      const li=el('li'),b=el('button');b.type='button';
+      b.innerHTML=`<div>${esc(nomeAba(g.categoria))} › <strong>${esc(g.titulo)}</strong></div><span>${todo?'Lista nova, ':''}${n} ${n===1?'exercício novo':'exercícios novos'}</span>`;
+      b.addEventListener('click',()=>{abaAtiva=g.categoria;filtroCat='todos';mudaTela('categoria');});
+      li.append(b);ul.append(li);
+    });
+    if(nov.length>8){const li=el('li');li.textContent=`e mais ${nov.length-8} listas`;ul.append(li);}
+    sec.append(ul);
+  }
+  const ok=el('button','btn-linha');ok.type='button';ok.textContent='Entendi';
+  ok.addEventListener('click',()=>{LS.set('vistos',idsConteudo());SS.set('atualizou','');sec.remove();});
+  sec.append(ok);
+  return sec;
+}
+function linhaVersao(){
+  const d=el('div','copia versao-linha');
+  const p=el('p');p.textContent=VERSAO_APP.startsWith('__')?'Versão de teste':'Versão '+VERSAO_APP.replace('bateria-','').slice(0,6);
+  const b=el('button','btn-linha');b.type='button';b.textContent='Procurar atualização';
+  b.addEventListener('click',async()=>{
+    b.disabled=true;b.textContent='Procurando…';
+    const v=await procuraVersao(true);
+    b.disabled=false;b.textContent=v?'Tem versão nova ↑':v===false?'Você está na mais nova ✓':'Sem internet agora';
+    setTimeout(()=>{b.textContent='Procurar atualização';},4000);
+  });
+  d.append(p,b);return d;
+}
+$('#btnAtualizar').addEventListener('click',e=>atualizaApp(e.currentTarget));
+$('#fechaAviso').addEventListener('click',()=>{SS.set('avisoFechado',versaoNova||'');$('#avisoVersao').hidden=true;});
+/* procura ao abrir, ao voltar para o app e a cada 30 minutos com o app aberto */
+procuraVersao();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){procuraVersao();navigator.serviceWorker&&navigator.serviceWorker.getRegistration().then(r=>r&&r.update()).catch(()=>{});}});
+setInterval(()=>{if(document.visibilityState==='visible')procuraVersao();},30*60*1000);
+
 /* ---------- Início ---------- */
 edicoesMao=LS.get('edicoesMao',{});
 if(!cfg.porLista[sel.lista]&&CAMPOS_AND.some(k=>cfg[k]!==AND_PADRAO[k]))cfg.porLista[sel.lista]=Object.fromEntries(CAMPOS_AND.map(k=>[k,cfg[k]]));
@@ -4274,7 +4374,7 @@ requestAnimationFrame(laco);
 </script>
 <script>
 if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
-  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{});});
 }
 </script>
 </body>

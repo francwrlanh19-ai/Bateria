@@ -1,12 +1,14 @@
 /* Gerado por scripts/montar.mjs. Guarda o app no aparelho para abrir sem internet. */
 const VERSAO='__VERSAO__';
 const ARQUIVOS=__ARQUIVOS__;
-self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSAO).then(c=>c.addAll(ARQUIVOS)));self.skipWaiting();});
+self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSAO).then(c=>c.addAll(ARQUIVOS.map(u=>new Request(u,{cache:'reload'})))));self.skipWaiting();});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==VERSAO).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',e=>{
   const r=e.request;if(r.method!=='GET')return;
   const url=new URL(r.url),mesmoSite=url.origin===location.origin,fonte=/fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
   if(!mesmoSite&&!fonte)return;
+  /* versao.json sempre vem da internet: é por ele que o app descobre que há versão nova */
+  if(mesmoSite&&url.pathname.endsWith('/versao.json'))return;
   /* responde com o que está guardado e atualiza em segundo plano */
   e.respondWith(caches.open(VERSAO).then(async c=>{
     const guardado=await c.match(r,{ignoreSearch:mesmoSite});
@@ -14,3 +16,4 @@ self.addEventListener('fetch',e=>{
     return guardado||rede;
   }));
 });
+self.addEventListener('message',e=>{if(e.data==='pular')self.skipWaiting();});

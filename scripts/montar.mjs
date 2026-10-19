@@ -44,6 +44,10 @@ const modelo = fs.readFileSync(path.join(raiz, 'scripts/sw.template.js'), 'utf8'
 fs.writeFileSync(path.join(dist, 'sw.js'), modelo
   .replace('__VERSAO__', versao)
   .replace('__ARQUIVOS__', JSON.stringify(['./', ...arquivos.map(a => './' + a)])));
+// O app sabe a própria versão e compara com versao.json (que nunca fica guardado no celular) para oferecer "Atualizar"
+const idx = path.join(dist, 'index.html');
+fs.writeFileSync(idx, fs.readFileSync(idx, 'utf8').replace('__VERSAO_APP__', versao));
+fs.writeFileSync(path.join(dist, 'versao.json'), JSON.stringify({ versao, data: new Date().toISOString() }) + '\n');
 
 for (const a of r.avisos || []) console.log('Aviso: ' + a);
 console.log(`Site montado em dist/ (${r.grupos} grupos, ${r.exercicios} exercícios, versão ${versao}).`);
