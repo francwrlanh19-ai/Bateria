@@ -13,7 +13,7 @@ description: Mantém e publica o app "Estudo de bateria" (repositório GitHub fr
 - **Publicação:** cada push na `main` dispara o workflow **Publicar**, que valida os JSON, monta `dist/` e publica, em cerca de 1 minuto. Se a validação falhar, nada é publicado e o site continua na versão anterior.
 
 ```
-app/                    o aplicativo (index.html, amostras.js com os sons, vendor/vexflow, ícones, manifest)
+app/                    o aplicativo (index.html, pad.html do Pad de louvor, amostras.js com os sons, vendor/vexflow, ícones, manifest)
 conteudo/areas.json        áreas do início (Leitura e Levadas e viradas, as principais; Alunos, separada; Outros)
 conteudo/trilha.json       trilha de estudo: os ids dos exercícios em 9 etapas, na ordem de estudo
 conteudo/repertorio.json   repertório do culto: músicas da igreja com BPM, levada e virada (ids de exercícios)

@@ -812,6 +812,7 @@ body.foco .partitura{gap:10px}
 .area-topo p{grid-column:2}
 .cat{grid-template-columns:12px minmax(0,1fr) auto;background:var(--surface);border:0;border-radius:18px;padding:12px 14px;min-height:0;box-shadow:0 3px 0 color-mix(in srgb,var(--c) 45%,transparent)}
 .cat+.cat,.area-topo+.cat{margin-top:0}
+a.cat{text-decoration:none;color:inherit}
 .area>.cat+.cat,.area>.cat+.copia,.area>.copia+.copia,.area>.cat+.inst-linha{margin-top:10px}
 .cat::before{grid-row:1;align-self:center;width:12px;height:12px;border-radius:50%}
 .cat h3{font-size:23px;font-weight:700;line-height:1.1}
@@ -1176,7 +1177,8 @@ const maoEm=(ex,i)=>{
 /* O conteúdo (categorias e grupos de exercícios) vem de conteudo/*.json, juntado em conteudo.js na montagem */
 const CONTEUDO=window.CONTEUDO||{categorias:[],grupos:[]};
 const FOLHAS=CONTEUDO.grupos.map(g=>{const {categoria,ordem,...r}=g;return Object.assign({aba:categoria},r);});
-const ABAS=CONTEUDO.categorias.map(c=>({id:c.id,nome:c.nome}));
+/* O Pad de louvor (categoria especial pad) é uma página à parte, pad.html: aparece só como linha no início, não como aba */
+const ABAS=CONTEUDO.categorias.filter(c=>c.id!=='pad').map(c=>({id:c.id,nome:c.nome}));
 /* exercício de qualquer lista pelo id, com a lista dele (as viradas buscam as levadas assim) */
 const EX_POR_ID=new Map();FOLHAS.forEach(l=>l.exercicios.forEach(e=>EX_POR_ID.set(e.id,{ex:e,l})));
 
@@ -2874,15 +2876,16 @@ function renderHub(){
   /* Áreas: as principais (Leitura, Levadas e viradas) primeiro, com as categorias numeradas como passos; depois Outros,
      o treino de hoje com os últimos 7 dias e, por fim, Neste celular */
   const caixa=el('div','areas');caixa.id='areasHub';
-  const cats=CONTEUDO.categorias.filter(c=>!c.especial||c.id==='ditado'||c.id==='repertorio');
+  const cats=CONTEUDO.categorias.filter(c=>!c.especial||c.id==='ditado'||c.id==='repertorio'||c.id==='pad');
   const grupos=AREAS.length?AREAS:[{id:'',nome:'Categorias'}];
   grupos.forEach(ar=>{
     const cs=cats.filter(c=>!ar.id||c.area===ar.id);if(!cs.length)return;
     const sec=el('section','area'+(ar.principal?' area-principal':''));sec.style.setProperty('--c',`var(${ar.cor||'--muted'})`);
     const hid='area-'+(ar.id||'todas');sec.setAttribute('aria-labelledby',hid);
     sec.innerHTML=`<div class="area-topo"><span class="area-ico" aria-hidden="true">${esc(ar.icone||'')}</span><h2 id="${esc(hid)}">${esc(ar.nome)}</h2>${ar.descricao?`<p>${esc(ar.descricao)}</p>`:''}</div>`;
-    const linha=(c,n)=>c.id==='ditado'?linhaDitado(c,n):c.id==='repertorio'?linhaRepertorio(c,n):linhaCat(c,n);
-    if(ar.principal){const ps=el('div','passos');cs.forEach((c,i)=>ps.append(linha(c,i+1)));sec.append(ps);}
+    const linha=(c,n)=>c.id==='ditado'?linhaDitado(c,n):c.id==='repertorio'?linhaRepertorio(c,n):c.id==='pad'?linhaPad(c):linhaCat(c,n);
+    /* o Pad de louvor é uma ferramenta do culto, não um passo de estudo: fica sem número */
+    if(ar.principal){const ps=el('div','passos');let n=0;cs.forEach(c=>ps.append(linha(c,c.id==='pad'?0:++n)));sec.append(ps);}
     else cs.forEach(c=>sec.append(linha(c)));
     caixa.append(sec);
   });
@@ -3946,6 +3949,13 @@ function cartaoMusicasRecebidas(){
   const no=el('button','btn-linha');no.type='button';no.textContent=novas.length?'Agora não':'Entendi';no.addEventListener('click',fecha);ac.append(no);
   sec.append(ac);
   return sec;
+}
+/* cartão do início que abre o Pad de louvor (pad.html): pad nos 12 tons, efeitos e batida com os dedos, para o culto */
+function linhaPad(c){
+  const b=el('a','cat');b.href='pad.html';b.style.setProperty('--c',`var(${c.cor||'--muted'})`);
+  b.innerHTML=`<h3>${esc(c.nome)}</h3><p>${esc(c.descricao||'')}</p>`;
+  b.setAttribute('aria-label',`${c.nome}. ${c.descricao||''}`);
+  return b;
 }
 /* cartão do início, como um passo de Levadas e viradas */
 function linhaRepertorio(c,passo){

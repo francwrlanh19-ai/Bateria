@@ -44,6 +44,14 @@
     "especial": true
   },
   {
+    "id": "pad",
+    "area": "levadas",
+    "nome": "Pad de louvor",
+    "descricao": "Pad nos 12 tons, efeitos e batida com os dedos, para usar no culto",
+    "cor": "--cym",
+    "especial": true
+  },
+  {
     "id": "tecnica",
     "area": "outros",
     "nome": "Técnica",

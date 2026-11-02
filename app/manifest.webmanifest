@@ -34,5 +34,20 @@
       "platform": "webapp",
       "url": "https://francwrlanh19-ai.github.io/Bateria/manifest.webmanifest"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Pad de louvor",
+      "short_name": "Pad",
+      "description": "Pad nos 12 tons, efeitos e batida para o culto",
+      "url": "./pad.html",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
   ]
 }
