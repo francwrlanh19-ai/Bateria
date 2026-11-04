@@ -1,0 +1,21 @@
+{
+  "id": "gabriel-aberturas-semicolcheia",
+  "categoria": "gabriel",
+  "ordem": 40,
+  "nivel": 3,
+  "andamento": {
+    "inicio": 60,
+    "fim": 90,
+    "passo": 5,
+    "reps": 4
+  },
+  "vozUnica": true,
+  "titulo": "Chimbal em semicolcheias com aberturas",
+  "descricao": "Chimbal em semicolcheias, caixa no 2 e no 4 e o chimbal abrindo (o) em lugares diferentes. Onde a caixa toca, o chimbal some. O 1 é a levada da folha; o 2 deixa o bumbo mais cheio; o 3 troca as aberturas de lugar.",
+  "fonte": "Groove de vídeo do Instagram (@badaboom.drums), redesenhado",
+  "exercicios": [
+    {"id":"gb-as-1","num":"1","nome":"Levada da folha","compasso":[4,4],"sub":4,"trilhas":{"hh":".xxx.xxxxx.x..xx","ho":"x.........x..x..","sn":"....x.......x...","bd":"x........xx..x.."}},
+    {"id":"gb-as-2","num":"2","nome":"Bumbo mais cheio","compasso":[4,4],"sub":4,"trilhas":{"hh":".xxx.xxxxx.x..xx","ho":"x.........x..x..","sn":"....x.......x...","bd":"x......x.xx..x.x"}},
+    {"id":"gb-as-3","num":"3","nome":"Aberturas no \"&\"","compasso":[4,4],"sub":4,"trilhas":{"hh":"xx.x.xxxxx.x.x.x","ho":"..x.......x...x.","sn":"....x.......x...","bd":"x........xx..x.."}}
+  ]
+}
