@@ -286,6 +286,34 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
 .fast small { font-size: 12.5px; line-height: 1.4; color: var(--muted); }
 .toggle[aria-pressed="true"] .sw::after { transform: translateX(16px); background: #16121b; }
 
+/* Grade da batida no formato do teclado numérico: 7 8 9 / 4 5 6 / 1 2 3 / 0 largo e ponto */
+.drums { grid-template-columns: repeat(3, 1fr); }
+.pad { height: 56px; }
+.pad.wide { grid-column: span 2; }
+.pad.rev { background: linear-gradient(90deg, var(--ink-2), oklch(0.82 0.12 var(--kh) / 0.2)); }
+.kbd {
+  position: absolute; top: 6px; right: 7px; min-width: 18px; padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px;
+  background: var(--ink); color: var(--muted); font: 700 11px/1.2 var(--body); text-align: center; pointer-events: none;
+}
+.lb { position: relative; }
+.lb .kbd { top: 4px; right: 5px; padding: 1px 4px; font-size: 10px; }
+#revLenSeg button { padding: 8px 2px; }
+#revLenSeg button b { font-size: 13.5px; }
+/* Botões do loop estreitos (uma coluna): a legenda abaixo já explica as teclas */
+@media (max-width: 899px) { .lb .kbd { display: none; } }
+/* Celular e tablet sem teclado: sem as etiquetas das teclas */
+@media (hover: none) and (pointer: coarse) { .kbd, .kbd-legend { display: none !important; } }
+
+/* Colunas: no celular uma coluna só; no computador a roda à esquerda (fixa) e os painéis à direita */
+.col-a, .col-b { display: contents; }
+@media (min-width: 900px) {
+  .app { max-width: 1120px; display: grid; grid-template-columns: 420px minmax(0, 1fr); column-gap: 36px; align-items: start; }
+  .resume { grid-column: 1 / -1; }
+  .col-a, .col-b { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+  .col-a { position: sticky; top: 16px; }
+  .pad { height: 64px; }
+}
+
 /* Ajustes */
 .sliders { display: flex; flex-direction: column; gap: 14px; }
 .slider { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 2px 12px; }
@@ -325,13 +353,14 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
 </head>
 <body>
 <main class="app" id="app">
+  <button class="resume" id="resume" type="button" hidden>O celular pausou o som. Toque aqui para voltar.</button>
+
+  <div class="col-a">
   <header class="top">
     <a class="voltar" href="./" aria-label="Voltar ao Estudo de bateria"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
     <h1>Pad de Louvor</h1>
     <span class="chip" id="wake" hidden>Tela pode apagar</span>
   </header>
-
-  <button class="resume" id="resume" type="button" hidden>O celular pausou o som. Toque aqui para voltar.</button>
 
   <section class="wheel-wrap" aria-label="Tons, no círculo das quintas">
     <div class="aura"></div>
@@ -347,6 +376,9 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
     </div>
   </section>
 
+  </div>
+
+  <div class="col-b">
   <section class="sec" aria-label="Efeitos e batida">
     <div class="seg tabs" role="tablist" aria-label="Painel">
       <button type="button" role="tab" id="tabFx" aria-controls="panelFx" aria-selected="true"><b>Efeitos</b></button>
@@ -380,7 +412,7 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
       </button>
       <button type="button" class="fx-btn stop" id="fxPanic">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
-        <span><span class="fx-name">Parar tudo</span><span class="fx-meta">corta na hora</span></span>
+        <span><span class="fx-name">Parar tudo</span><span class="fx-meta">corta na hora</span></span><kbd class="kbd">Esc</kbd>
       </button>
     </div>
       <div class="len">
@@ -394,15 +426,16 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
     <div class="beat" id="panelBeat" role="tabpanel" aria-labelledby="tabBeat" hidden>
       <div class="drums" id="drums"></div>
       <div class="loopbar">
-        <button type="button" class="lb" id="recBtn" aria-pressed="false"><span class="dot" aria-hidden="true"></span><span id="recLabel">Gravar</span></button>
-        <button type="button" class="lb" id="playBtn" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="playIcon" fill="currentColor" d="M8 5l11 7-11 7z"/></svg><span id="playLabel">Tocar</span></button>
-        <button type="button" class="lb" id="undoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Desfazer</button>
+        <button type="button" class="lb" id="recBtn" aria-pressed="false"><span class="dot" aria-hidden="true"></span><span id="recLabel">Gravar</span><kbd class="kbd">*</kbd></button>
+        <button type="button" class="lb" id="playBtn" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="playIcon" fill="currentColor" d="M8 5l11 7-11 7z"/></svg><span id="playLabel">Tocar</span><kbd class="kbd">−</kbd></button>
+        <button type="button" class="lb" id="undoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Desfazer<kbd class="kbd">/</kbd></button>
         <button type="button" class="lb" id="clearBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 7V4h4v3M6 7l1 13h10l1-13"/></svg>Limpar</button>
       </div>
       <div class="steps-row">
         <div class="steps" id="steps" aria-hidden="true"></div>
         <span class="loop-status" id="loopStatus" aria-live="polite">Loop vazio</span>
       </div>
+      <p class="note kbd-legend">No computador: teclado numérico (ou os números de cima). 1 a 9 e 0 tocam os pads, ponto ou + toca o tom, * grava, − toca e para o loop, / desfaz e Esc para tudo.</p>
     </div>
   </section>
 
@@ -434,7 +467,27 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
       <span>compassos</span>
     </div>
     <button type="button" class="toggle" id="clickBtn" aria-pressed="true"><span class="sw" aria-hidden="true"></span>Clique durante a gravação do loop</button>
-    <p class="note">Toque Subida ou Reverso no 1 do compasso: o efeito termina no 1 seguinte. O loop da batida segue este BPM. Cascata, Impacto e o Tom da batida usam o tom do pad.</p>
+    <p class="note">Subida e Reverso duram o que está marcado, no BPM: toque no tempo e eles terminam no tempo. O loop da batida segue este BPM. Cascata, Impacto, o Tom e o reverso Acorde usam o tom do pad.</p>
+  </section>
+
+  <section class="sec" aria-labelledby="tRev">
+    <div class="sec-head"><h2 id="tRev">Reverso</h2></div>
+    <div class="seg" role="radiogroup" aria-labelledby="tRev" id="revTypeSeg">
+      <button type="button" role="radio" data-rt="prato" aria-checked="true"><b>Prato</b><small>o clássico</small></button>
+      <button type="button" role="radio" data-rt="caixa" aria-checked="false"><b>Caixa</b><small>reverb da caixa</small></button>
+      <button type="button" role="radio" data-rt="acorde" aria-checked="false"><b>Acorde</b><small>no tom do pad</small></button>
+      <button type="button" role="radio" data-rt="ar" aria-checked="false"><b>Ar</b><small>vento subindo</small></button>
+    </div>
+    <div class="len">
+      <span id="revLenLabel">Duração</span>
+      <div class="seg" role="radiogroup" aria-labelledby="revLenLabel" id="revLenSeg">
+        <button type="button" role="radio" data-rl="1" aria-checked="false"><b>1 tempo</b></button>
+        <button type="button" role="radio" data-rl="2" aria-checked="false"><b>2 tempos</b></button>
+        <button type="button" role="radio" data-rl="4" aria-checked="true"><b>1 comp.</b></button>
+        <button type="button" role="radio" data-rl="8" aria-checked="false"><b>2 comp.</b></button>
+      </div>
+    </div>
+    <p class="note">Vale para o Reverso dos Efeitos e para o pad 0 da Batida. No loop, cada reverso gravado guarda o tipo e a duração escolhidos na hora: dá para misturar, por exemplo, um prato de 1 compasso no começo e caixas de 1 tempo antes do 2 e do 4.</p>
   </section>
 
   <section class="sec" aria-labelledby="tTimbre">
@@ -478,6 +531,7 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
       <li><strong>Deixe esta tela aberta.</strong> O som é gerado aqui mesmo; depois que a página abre, não precisa de internet.</li>
     </ul>
   </section>
+  </div>
 </main>
 
 <script>
@@ -673,6 +727,24 @@ const DRUMS = {
     [0, 0.011, 0.023].forEach((dt, k) => { g.gain.setValueAtTime(0.85 - k * 0.05, t + dt); g.gain.setTargetAtTime(0.04, t + dt + 0.0005, 0.0035); });
     g.gain.setValueAtTime(0.9, t + 0.035); g.gain.setTargetAtTime(0, t + 0.0355, 0.075);
     n.connect(hp); hp.connect(bp); bp.connect(g); g.connect(d);
+  } },
+  // Bumbo wet: grave longo com bastante reverb (o "boom" do worship)
+  kickWet: { secs: 1.6, peak: 0.95, send: 0.42, build(o, d) {
+    const t = 0.002, s = oscAt(o, 'sine', 150, 1.6);
+    s.frequency.setValueAtTime(150, t); s.frequency.exponentialRampToValueAtTime(50, t + 0.08); s.frequency.exponentialRampToValueAtTime(42, t + 1.2);
+    const env = envAt(o, 1, t, 0.26, 0.004), sh = o.createWaveShaper(); sh.curve = tanhCurve(1.5);
+    s.connect(env); env.connect(sh); sh.connect(d);
+    const n = noiseSrc(o, 1.6), lp = biquad(o, 'lowpass', 2500, 0.7), cg = envAt(o, 0.22, t, 0.01, 0.001);
+    n.connect(lp); lp.connect(cg); cg.connect(d);
+  } },
+  // Bumbo dry: curto, seco e com ataque (sem reverb)
+  kickDry: { secs: 0.4, peak: 0.95, send: 0, build(o, d) {
+    const t = 0.002, s = oscAt(o, 'sine', 190, 0.4);
+    s.frequency.setValueAtTime(190, t); s.frequency.exponentialRampToValueAtTime(62, t + 0.04); s.frequency.exponentialRampToValueAtTime(55, t + 0.25);
+    const env = envAt(o, 1, t, 0.065, 0.002), sh = o.createWaveShaper(); sh.curve = tanhCurve(2.4);
+    s.connect(env); env.connect(sh); sh.connect(d);
+    const n = noiseSrc(o, 0.4), hp = biquad(o, 'highpass', 2800, 0.7), cg = envAt(o, 0.55, t, 0.004, 0.0008);
+    n.connect(hp); hp.connect(cg); cg.connect(d);
   } },
   hat: { secs: 0.3, peak: 0.45, send: 0.05, build: hatBuild(0.022, 0.3) },
   open: { secs: 1.2, peak: 0.42, send: 0.08, build: hatBuild(0.16, 1.2) },
@@ -942,7 +1014,7 @@ class PadEngine {
 
   // Subida sem fim: ruído abrindo + tom de Shepard (oitavas subindo sem parar, sempre soa "subindo")
   riserHold() {
-    const c = this.ctx, MAX = 30, R = rootFreq(this.lastSemi), t = c.currentTime + 0.01;
+    const c = this.ctx, MAX = 30, R = rootFreq(this.lastSemi), t = c.currentTime + 0.03;
     const fx = this._fx(t, t + MAX + 0.1);
     const ng = fx.n(amp(c, 0));
     ng.gain.setValueAtTime(0.02, t); ng.gain.exponentialRampToValueAtTime(0.45, t + 2); ng.gain.exponentialRampToValueAtTime(0.9, t + 5);
@@ -962,33 +1034,12 @@ class PadEngine {
         for (let i = 0; i < N; i++) { const xi = x + (K - x) * i / (N - 1); a[i] = Math.pow(Math.sin(Math.PI * xi / K), 2); }
         o.frequency.setValueAtTime(R * Math.pow(2, x), ts);
         o.frequency.exponentialRampToValueAtTime(top, ts + dur);
-        g.gain.setValueCurveAtTime(a, ts, dur);   // volume zero nas pontas: a volta para o grave não aparece
-        ts += dur + 0.001; x = 0;
+        try { g.gain.setValueCurveAtTime(a, Math.max(ts, c.currentTime + 0.005), dur); } catch (e) { /* segmento perdido: as outras oitavas seguem */ }
+        ts += dur + 0.01; x = 0;   // volume zero nas pontas: a volta para o grave não aparece
       }
     }
     this._out(fx, ng, 0.9, 0.45); this._out(fx, tg, 0.8, 0.6);
     return this._holdHandle(fx, [ng.gain, tg.gain]);
-  }
-
-  // Reverso: cresce enquanto segura (quase no máximo em 1,5 s) e corta ao soltar
-  reverseHold() {
-    const c = this.ctx, MAX = 30, R = rootFreq(this.lastSemi), t = c.currentTime + 0.01;
-    const fx = this._fx(t, t + MAX + 0.1);
-    const env = fx.n(amp(c, 0));
-    env.gain.setValueAtTime(0.006, t); env.gain.exponentialRampToValueAtTime(0.33, t + 1.5); env.gain.exponentialRampToValueAtTime(0.55, t + 2.8);
-    const n = this._fxNoise(fx), hp = fx.n(biquad(c, 'highpass', 4200, 0.7)), pk = fx.n(biquad(c, 'peaking', 9000, 1));
-    pk.gain.value = 5; n.connect(hp); hp.connect(pk); pk.connect(env);
-    const mg = fx.n(amp(c, 0.05)), mbp = fx.n(biquad(c, 'bandpass', 9500, 1.2));
-    [205.3, 304.4, 369.6, 522.7, 540, 800].forEach(f => this._fxOsc(fx, 'square', f * 1.6).connect(mg));
-    mg.connect(mbp); mbp.connect(env);
-    const sw = fx.n(amp(c, 0));
-    sw.gain.setValueAtTime(0.001, t); sw.gain.exponentialRampToValueAtTime(0.04, t + 1.5); sw.gain.exponentialRampToValueAtTime(0.08, t + 3);
-    [[2, -0.4], [2 * Math.pow(2, 7 / 12), 0.4], [4, 0]].forEach(([m, pan]) => {
-      const o = this._fxOsc(fx, 'triangle', R * m), p = fx.n(c.createStereoPanner());
-      p.pan.value = pan; o.connect(p); p.connect(sw);
-    });
-    this._out(fx, env, 0.85, 0.5); this._out(fx, sw, 0.6, 0.9);
-    return this._holdHandle(fx, [env.gain, sw.gain]);
   }
 
   // Cascata contínua: os sininhos continuam caindo enquanto segura; ao soltar, os últimos soam até o fim
@@ -1053,12 +1104,12 @@ class PadEngine {
   // Subida: ruído varrendo para o agudo + glissando que termina na tônica
   riser(dur) {
     const c = this.ctx, t = c.currentTime + 0.01, end = t + dur, R = rootFreq(this.lastSemi);
-    const fx = this._fx(t, end + 0.1);
-    const ng = fx.n(amp(c, 0)); curveIn(ng.gain, t, dur, 0.9, 2.2); ng.gain.linearRampToValueAtTime(0, end + 0.03);
+    const fx = this._fx(t, end + 0.15);
+    const ng = fx.n(amp(c, 0));
     const n = this._fxNoise(fx), hp = fx.n(biquad(c, 'highpass', 160, 0.7)), bp = fx.n(biquad(c, 'bandpass', 300, 0.9));
     kr(bp.frequency).setValueAtTime(300, t); bp.frequency.exponentialRampToValueAtTime(9000, end);
     n.connect(hp); hp.connect(bp); bp.connect(ng);
-    const tg = fx.n(amp(c, 0)); curveIn(tg.gain, t, dur, 0.18, 1.8); tg.gain.linearRampToValueAtTime(0, end + 0.03);
+    const tg = fx.n(amp(c, 0));
     const lp = fx.n(biquad(c, 'lowpass', 500, 2));
     kr(lp.frequency).setValueAtTime(500, t); lp.frequency.exponentialRampToValueAtTime(7000, end);
     [[-8, -0.6], [8, 0.6]].forEach(([cents, pan]) => {
@@ -1067,25 +1118,76 @@ class PadEngine {
       const p = fx.n(c.createStereoPanner()); p.pan.value = pan; o.connect(p); p.connect(lp);
     });
     lp.connect(tg);
+    const t0 = Math.max(t, c.currentTime + 0.005), e0 = t0 + dur;
+    curveIn(ng.gain, t0, dur, 0.9, 2.2); ng.gain.linearRampToValueAtTime(0, e0 + 0.03);
+    curveIn(tg.gain, t0, dur, 0.18, 1.8); tg.gain.linearRampToValueAtTime(0, e0 + 0.03);
     this._out(fx, ng, 0.9, 0.45); this._out(fx, tg, 0.8, 0.6);
   }
 
-  // Reverso: prato ao contrário + acorde crescendo, corte seco no fim
-  reverse(dur) {
-    const c = this.ctx, t = c.currentTime + 0.01, end = t + dur, R = rootFreq(this.lastSemi);
-    const fx = this._fx(t, end + 0.1);
-    const env = fx.n(amp(c, 0)); expIn(env.gain, t, dur, 0.55, 4.5); env.gain.linearRampToValueAtTime(0, end + 0.015);
-    const n = this._fxNoise(fx), hp = fx.n(biquad(c, 'highpass', 4200, 0.7)), pk = fx.n(biquad(c, 'peaking', 9000, 1));
-    pk.gain.value = 5; n.connect(hp); hp.connect(pk); pk.connect(env);
-    const mg = fx.n(amp(c, 0.05)), mbp = fx.n(biquad(c, 'bandpass', 9500, 1.2));
-    [205.3, 304.4, 369.6, 522.7, 540, 800].forEach(f => this._fxOsc(fx, 'square', f * 1.6).connect(mg));
-    mg.connect(mbp); mbp.connect(env);
-    const sw = fx.n(amp(c, 0)); expIn(sw.gain, t, dur, 0.08, 3.2); sw.gain.linearRampToValueAtTime(0, end + 0.02);
-    [[2, -0.4], [2 * Math.pow(2, 7 / 12), 0.4], [4, 0]].forEach(([m, pan]) => {
-      const o = this._fxOsc(fx, 'triangle', R * m), p = fx.n(c.createStereoPanner());
-      p.pan.value = pan; o.connect(p); p.connect(sw);
-    });
-    this._out(fx, env, 0.85, 0.5); this._out(fx, sw, 0.6, 0.9);
+  /* Reverso: 4 tipos, com o mesmo envelope "ao contrário" (cresce e corta seco no fim).
+     _revVoice monta o som; quem chama decide a forma: com duração (Efeitos pelo BPM, pad 0, loop) ou segurando. */
+  _revVoice(fx, type, R, t, dur, hold) {
+    const c = this.ctx, E = [], O = [];
+    const env = (peak, k) => { const g = fx.n(amp(c, 0)); E.push({ g, peak, k }); return g; };
+    const sweep = (param, f0, f1) => {
+      kr(param).setValueAtTime(f0, t);
+      if (hold) { param.exponentialRampToValueAtTime(f0 * Math.sqrt(f1 / f0), t + 1.5); param.exponentialRampToValueAtTime(f1, t + 2.8); }
+      else param.exponentialRampToValueAtTime(f1, t + dur);
+    };
+    const tone = (bus, f, wave, level, pan) => {
+      const o = this._fxOsc(fx, wave, f), g = fx.n(amp(c, level)), p = fx.n(c.createStereoPanner());
+      p.pan.value = pan; o.connect(g); g.connect(p); p.connect(bus);
+    };
+    if (type === 'caixa') {          // reverb de caixa ao contrário: o "fwoosh" que entra na caixa
+      const e = env(1.4, 5.5), n = this._fxNoise(fx), hp = fx.n(biquad(c, 'highpass', 350, 0.7)), bp = fx.n(biquad(c, 'bandpass', 2000, 0.6));
+      n.connect(hp); hp.connect(bp); bp.connect(e);
+      const b = env(0.32, 6);
+      tone(b, 190, 'triangle', 0.7, -0.2); tone(b, 320, 'triangle', 0.4, 0.2);
+      O.push([e, 0.7, 0.8], [b, 0.7, 0.6]);
+    } else if (type === 'acorde') {  // acorde do tom do pad crescendo (piano ao contrário), sem a terça
+      const e = env(0.3, 3.8);
+      [0, 7, 12, 14, 19].forEach((st, i) => {
+        const f = R * 2 * Math.pow(2, st / 12), pan = [-0.5, 0.5, -0.2, 0.3, 0][i];
+        tone(e, f, 'sine', 0.5, pan); tone(e, f * 2, 'triangle', 0.12, -pan);
+      });
+      const a = env(0.045, 3), n = this._fxNoise(fx), bp = fx.n(biquad(c, 'bandpass', 6000, 0.8));
+      n.connect(bp); bp.connect(a);
+      O.push([e, 0.75, 0.8], [a, 0.5, 0.8]);
+    } else if (type === 'ar') {      // ar subindo: ruído que abre até o corte
+      const e = env(1.3, 3.5), n = this._fxNoise(fx), hp = fx.n(biquad(c, 'highpass', 200, 0.7)), bp = fx.n(biquad(c, 'bandpass', 400, 1.2));
+      sweep(bp.frequency, 400, 7000);
+      n.connect(hp); hp.connect(bp); bp.connect(e);
+      O.push([e, 0.8, 0.6]);
+    } else {                         // prato ao contrário + acorde crescendo (o clássico)
+      const e = env(0.55, 4.5), n = this._fxNoise(fx), hp = fx.n(biquad(c, 'highpass', 4200, 0.7)), pk = fx.n(biquad(c, 'peaking', 9000, 1));
+      pk.gain.value = 5; n.connect(hp); hp.connect(pk); pk.connect(e);
+      const mg = fx.n(amp(c, 0.05)), mbp = fx.n(biquad(c, 'bandpass', 9500, 1.2));
+      [205.3, 304.4, 369.6, 522.7, 540, 800].forEach(f => this._fxOsc(fx, 'square', f * 1.6).connect(mg));
+      mg.connect(mbp); mbp.connect(e);
+      const sw = env(0.08, 3.2);
+      [[2, -0.4], [2 * Math.pow(2, 7 / 12), 0.4], [4, 0]].forEach(([m, pan]) => tone(sw, R * m, 'triangle', 1, pan));
+      O.push([e, 0.85, 0.5], [sw, 0.6, 0.9]);
+    }
+    return { E, O };
+  }
+  // Reverso que termina exatamente em t + dur (t pode ser no futuro: o loop agenda antes)
+  reverseAt(t, dur, type) {
+    const c = this.ctx, R = rootFreq(this.lastSemi);
+    t = Math.max(t, c.currentTime + 0.005);
+    const fx = this._fx(t, t + dur + 0.15), v = this._revVoice(fx, type, R, t, dur, false);
+    // montar o som leva alguns ms: o envelope começa depois disso, nunca no passado
+    const t0 = Math.max(t, c.currentTime + 0.005), end = t0 + dur;
+    v.E.forEach(({ g, peak, k }) => { expIn(g.gain, t0, dur, peak, k); g.gain.linearRampToValueAtTime(0, end + 0.015); });
+    v.O.forEach(([node, d, w]) => this._out(fx, node, d, w));
+  }
+  reverse(dur, type) { this.reverseAt(this.ctx.currentTime + 0.01, dur, type); }
+  // Reverso segurando: cresce (quase no máximo em 1,5 s) e corta ao soltar
+  reverseHold(type) {
+    const c = this.ctx, MAX = 30, R = rootFreq(this.lastSemi), t = c.currentTime + 0.01;
+    const fx = this._fx(t, t + MAX + 0.1), v = this._revVoice(fx, type, R, t, 3, true);
+    v.E.forEach(({ g, peak }) => { g.gain.setValueAtTime(peak * 0.011, t); g.gain.exponentialRampToValueAtTime(peak * 0.6, t + 1.5); g.gain.exponentialRampToValueAtTime(peak, t + 2.8); });
+    v.O.forEach(([node, d, w]) => this._out(fx, node, d, w));
+    return this._holdHandle(fx, v.E.map(e => e.g.gain));
   }
 
   // Impacto: grave que cai até a tônica + estalo, com cauda longa no reverb
@@ -1199,6 +1301,7 @@ class Looper {
     this.now = o.now; this.bpm = o.bpm; this.latency = o.latency || (() => 0);
     this.play = o.play; this.click = o.click; this.onStep = o.onStep || (() => {});
     this.pattern = new Array(32).fill(0); this.skip = new Array(32).fill(0);
+    this.revAt = new Array(32).fill(null); // reverso gravado em cada passo: { t: tipo, b: duração em tempos }
     this.bars = 1; this.running = false; this.rec = false; this.clickOn = true; this.undoStack = [];
     this.n = 0; this.tNext = 0; this.refN = 0; this.refT = 0;
   }
@@ -1242,12 +1345,13 @@ class Looper {
     if (k >= this.n) this.skip[i] |= bit; // ainda não agendado nesta volta: já soou ao vivo
     return i;
   }
-  beginRec() { this.undoStack.push(this.pattern.slice()); if (this.undoStack.length > 30) this.undoStack.shift(); this.rec = true; }
+  snap() { return { p: this.pattern.slice(), r: this.revAt.slice() }; }
+  beginRec() { this.undoStack.push(this.snap()); if (this.undoStack.length > 30) this.undoStack.shift(); this.rec = true; }
   endRec() { this.rec = false; }
-  undo() { const p = this.undoStack.pop(); if (p) this.pattern = p; }
-  clear() { this.undoStack.push(this.pattern.slice()); this.pattern = new Array(32).fill(0); }
+  undo() { const u = this.undoStack.pop(); if (u) { this.pattern = u.p; this.revAt = u.r; } }
+  clear() { this.undoStack.push(this.snap()); this.pattern = new Array(32).fill(0); this.revAt = new Array(32).fill(null); }
   setBars(b) {
-    if (b === 2 && this.pattern.slice(16).every(x => !x)) for (let i = 0; i < 16; i++) this.pattern[16 + i] = this.pattern[i];
+    if (b === 2 && this.pattern.slice(16).every(x => !x)) for (let i = 0; i < 16; i++) { this.pattern[16 + i] = this.pattern[i]; this.revAt[16 + i] = this.revAt[i]; }
     this.bars = b;
   }
 }
@@ -1274,7 +1378,7 @@ const KEYS = [
 ].map(([name, alt, pt, semi], i) => ({ name, alt, pt, semi, i, h: (70 + i * 30) % 360 }));
 const keyHTML = (name) => name[0] + (name.length > 1 ? `<span class="acc">${name.slice(1)}</span>` : '');
 
-const DEF = { vol: 75, bri: 50, shim: 45, trans: 4, fxv: 75, dv: 75, tex: 'quente', bpm: 72, bars: 2, key: 0, tab: 'fx', lb: 1, clk: true, hold: 0, fast: false };
+const DEF = { vol: 75, bri: 50, shim: 45, trans: 4, fxv: 75, dv: 75, tex: 'quente', bpm: 72, bars: 2, key: 0, tab: 'fx', lb: 1, clk: true, hold: 0, fast: false, revType: 'prato', revLen: 4 };
 const S = Object.assign({}, DEF, load());
 function load() { try { return JSON.parse(localStorage.getItem('bateria.pad')) || {}; } catch (e) { return {}; } }
 function save() { try { localStorage.setItem('bateria.pad', JSON.stringify(S)); } catch (e) { /* sem armazenamento */ } }
@@ -1385,10 +1489,13 @@ function barSecs(bars) {
 function updateMeta() {
   const k = KEYS[S.key];
   $('#riserMeta').textContent = S.hold ? 'segure e solte' : `${S.bars} comp. · ${fmtS(barSecs(S.bars))}`;
-  $('#revMeta').textContent = S.hold ? 'segure e solte' : `1 comp. · ${fmtS(barSecs(1))}`;
+  const r = revAtual();
+  $('#revMeta').textContent = S.hold ? `${REV_TIPOS[r.t]} · segure` : `${REV_TIPOS[r.t]} · ${REV_LENS[r.b]}`;
+  const revPs = document.querySelector('.pad[data-id="rev"] .ps');
+  if (revPs) revPs.textContent = `${REV_TIPOS[r.t]} · ${REV_LENS[r.b]}`;
   $('#impMeta').textContent = `grave em ${k.name}`;
   $('#cascMeta').textContent = S.hold ? `segure · em ${k.name}` : `no tom de ${k.name}`;
-  const tomPs = document.querySelector('.pad[data-i="3"] .ps');
+  const tomPs = document.querySelector('.pad[data-id="tom"] .ps');
   if (tomPs) tomPs.textContent = `em ${k.name}`;
 }
 function runBar(btn, secs) {
@@ -1400,7 +1507,7 @@ function flash(btn) { btn.classList.remove('flash'); void btn.offsetWidth; btn.c
 
 const holdMode = () => { if (!S.hold) return false; if (!ctx || ctx.state !== 'running') audio(); return true; };
 $('#fxRiser').addEventListener('click', async (e) => { if (holdMode()) return; const btn = e.currentTarget, en = await audio(), d = barSecs(S.bars); en.riser(d); runBar(btn, d); });
-$('#fxReverse').addEventListener('click', async (e) => { if (holdMode()) return; const btn = e.currentTarget, en = await audio(), d = barSecs(1); en.reverse(d); runBar(btn, d); });
+$('#fxReverse').addEventListener('click', async (e) => { if (holdMode()) return; const btn = e.currentTarget, en = await audio(), r = revAtual(), d = Math.max(0.3, beatsSec(r.b) - lat()); en.reverse(d, r.t); runBar(btn, d); });
 $('#fxImpact').addEventListener('click', async (e) => { const btn = e.currentTarget, en = await audio(); en.impact(); flash(btn); });
 $('#fxCascade').addEventListener('click', async (e) => { if (holdMode()) return; const btn = e.currentTarget, en = await audio(); en.cascade(); flash(btn); });
 const windBtn = $('#fxWind'), windMeta = $('#windMeta');
@@ -1423,7 +1530,8 @@ let holdRaf = 0;
 function startHold(btn, key) {
   if (holds.has(key)) return;
   if (!eng || !ctx || ctx.state !== 'running') { audio(); return; }
-  holds.set(key, { btn, h: eng[HOLD_FX[btn.id]](), t0: ctx.currentTime });
+  const fn = HOLD_FX[btn.id];
+  holds.set(key, { btn, h: fn === 'reverseHold' ? eng.reverseHold(revAtual().t) : eng[fn](), t0: ctx.currentTime });
   btn.classList.add('holding');
   if (!holdRaf) holdRaf = requestAnimationFrame(holdTick);
 }
@@ -1479,27 +1587,37 @@ document.querySelectorAll('#holdSeg [data-hold]').forEach(b => b.addEventListene
 window.padEng = () => eng;
 
 /* ---------- Batida: pads para tocar com os dedos + loop ---------- */
+/* Pads no formato do teclado numérico: 7 8 9 / 4 5 6 / 1 2 3 / 0 (largo) e ponto.
+   bit = posição fixa no loop gravado: não mude (os loops salvos dependem dela) */
 const PADS = [
-  { id: 'hat', name: 'Chimbal', sub: 'fechado', key: 'a' },
-  { id: 'open', name: 'Chimbal', sub: 'aberto', key: 's' },
-  { id: 'shaker', name: 'Shaker', sub: 'chocalho', key: 'd' },
-  { id: 'tom', name: 'Tom', sub: 'em C', key: 'f' },
-  { id: 'kick', name: 'Bumbo', sub: 'kick', key: 'z' },
-  { id: 'snare', name: 'Caixa', sub: 'snare', key: 'x' },
-  { id: 'rim', name: 'Aro', sub: 'rim', key: 'c' },
-  { id: 'clap', name: 'Palma', sub: 'clap', key: 'v' },
+  { id: 'hat', bit: 0, name: 'Chimbal', sub: 'fechado', key: '7' },
+  { id: 'open', bit: 1, name: 'Chimbal', sub: 'aberto', key: '8' },
+  { id: 'shaker', bit: 2, name: 'Shaker', sub: 'chocalho', key: '9' },
+  { id: 'snare', bit: 5, name: 'Caixa', sub: 'snare', key: '4' },
+  { id: 'clap', bit: 7, name: 'Palma', sub: 'clap', key: '5' },
+  { id: 'rim', bit: 6, name: 'Aro', sub: 'rim', key: '6' },
+  { id: 'kick', bit: 4, name: 'Bumbo', sub: 'kick', key: '1' },
+  { id: 'kickWet', bit: 8, name: 'Bumbo wet', sub: 'com reverb', key: '2' },
+  { id: 'kickDry', bit: 9, name: 'Bumbo dry', sub: 'seco, curto', key: '3' },
+  { id: 'rev', bit: 10, name: 'Reverso', sub: '', key: '0', wide: true },
+  { id: 'tom', bit: 3, name: 'Tom', sub: 'em C', key: '.' },
 ];
+const REV_TIPOS = { prato: 'Prato', caixa: 'Caixa', acorde: 'Acorde', ar: 'Ar' };
+const REV_LENS = { 1: '1 tempo', 2: '2 tempos', 4: '1 comp.', 8: '2 comp.' };
+const revAtual = () => ({ t: REV_TIPOS[S.revType] ? S.revType : 'prato', b: REV_LENS[S.revLen] ? +S.revLen : 4 });
+const beatsSec = (b) => b * 60 / S.bpm;
 const drumsEl = $('#drums');
 const padEls = PADS.map((p, i) => {
   const b = document.createElement('button');
-  b.type = 'button'; b.className = 'pad' + (i >= 4 ? ' base' : ''); b.dataset.i = i;
-  b.setAttribute('aria-label', `${p.name} ${p.sub}`);
-  b.innerHTML = `<span class="pn">${p.name}</span><span class="ps">${p.sub}</span><span class="glow"></span>`;
+  b.type = 'button'; b.dataset.i = i; b.dataset.id = p.id;
+  b.className = 'pad' + (p.wide ? ' wide rev' : '') + (p.id.indexOf('kick') === 0 ? ' base' : '');
+  b.setAttribute('aria-label', `${p.name} ${p.sub}, tecla ${p.key === '.' ? 'ponto' : p.key}`);
+  b.innerHTML = `<span class="pn">${p.name}</span><span class="ps">${p.sub}</span><kbd class="kbd">${p.key}</kbd><span class="glow"></span>`;
   drumsEl.appendChild(b);
   return b;
 });
 function flashPad(i) { const g = padEls[i].lastElementChild; if (g.animate) g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: 'ease-out' }); }
-function flashMask(m) { for (let b = 0; b < 8; b++) if (m & (1 << b)) flashPad(b); }
+function flashMask(m) { PADS.forEach((p, i) => { if (m & (1 << p.bit)) flashPad(i); }); }
 
 const lat = () => (ctx ? (ctx.outputLatency || 0) + (ctx.baseLatency || 0) : 0);
 // No loop, chimbal e shaker acentuam a cabeça do tempo, como um baterista faria
@@ -1507,16 +1625,29 @@ function velFor(id, i) {
   if (id === 'hat' || id === 'open' || id === 'shaker') return i % 4 === 0 ? 1 : (i % 2 === 0 ? 0.82 : 0.68);
   return 0.92 + Math.random() * 0.08;
 }
+// Toca um pad agora (ao vivo) ou no tempo marcado pelo loop. O reverso termina no tempo:
+// ao vivo desconta o atraso do som; no loop usa o tipo e a duração gravados naquele passo.
+function playPad(p, t, i, fromLoop) {
+  if (p.id === 'rev') {
+    const r = (fromLoop && looper.revAt[i]) || revAtual();
+    eng.reverseAt(t, Math.max(0.2, beatsSec(r.b) - (fromLoop ? 0 : lat())), r.t);
+    return;
+  }
+  if (fromLoop) eng.hit(p.id, t, velFor(p.id, i), i % 2 ? 'shakerB' : 'shakerA');
+  else eng.hit(p.id, t, 0.9 + Math.random() * 0.1);
+}
 const visQ = [];
 const looper = new Looper({
   now: () => (ctx ? ctx.currentTime : 0),
   bpm: () => S.bpm,
   latency: lat,
-  play: (mask, t, i) => { for (let b = 0; b < 8; b++) if (mask & (1 << b)) eng.hit(PADS[b].id, t, velFor(PADS[b].id, i), i % 2 ? 'shakerB' : 'shakerA'); },
+  play: (mask, t, i) => { PADS.forEach(p => { if (mask & (1 << p.bit)) playPad(p, t, i, true); }); },
   click: (t, accent) => eng.click(t, accent),
   onStep: (n, t, mask) => visQ.push({ n, t, mask }),
 });
 looper.pattern = Array.isArray(S.pat) && S.pat.length === 32 ? S.pat.map(x => x | 0) : new Array(32).fill(0);
+looper.revAt = Array.isArray(S.revAt) && S.revAt.length === 32
+  ? S.revAt.map(r => (r && REV_TIPOS[r.t] ? { t: r.t, b: REV_LENS[r.b] ? +r.b : 4 } : null)) : new Array(32).fill(null);
 looper.bars = S.lb === 2 ? 2 : 1;
 looper.clickOn = S.clk !== false;
 
@@ -1553,14 +1684,17 @@ function draw() {
 }
 
 let saveT = 0;
-function saveLoop() { S.pat = looper.pattern.slice(); S.lb = looper.bars; save(); }
+function saveLoop() { S.pat = looper.pattern.slice(); S.revAt = looper.revAt.slice(); S.lb = looper.bars; save(); }
 function saveLoopSoon() { clearTimeout(saveT); saveT = setTimeout(saveLoop, 400); }
 function liveHit(i) {
   if (!eng || !eng.kit) return;
-  const t = ctx.currentTime;
-  eng.hit(PADS[i].id, t, 0.9 + Math.random() * 0.1);
+  const p = PADS[i], t = ctx.currentTime;
+  playPad(p, t, null, false);
   flashPad(i);
-  if (looper.rec && looper.record(1 << i, t) >= 0) { renderSteps(); saveLoopSoon(); syncLoop(); }
+  if (looper.rec) {
+    const k = looper.record(1 << p.bit, t);
+    if (k >= 0) { if (p.id === 'rev') looper.revAt[k] = revAtual(); renderSteps(); saveLoopSoon(); syncLoop(); }
+  }
 }
 // Toque no pad soa no instante em que o dedo encosta (vários dedos ao mesmo tempo)
 const pendingHits = new Set();
@@ -1579,15 +1713,6 @@ drumsEl.addEventListener('pointerup', async () => {
   list.forEach(liveHit);
 });
 drumsEl.addEventListener('contextmenu', (e) => e.preventDefault());
-document.addEventListener('keydown', (e) => {
-  if (S.tab !== 'beat' || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
-  if (e.target && e.target.matches && e.target.matches('input, textarea')) return;
-  const i = PADS.findIndex(p => p.key === e.key.toLowerCase());
-  if (i < 0) return;
-  e.preventDefault();
-  if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(i);
-  else audio().then(() => eng.kitReady).then(() => liveHit(i));
-});
 
 const recBtn = $('#recBtn'), playBtn = $('#playBtn'), undoBtn = $('#undoBtn'), clearBtn = $('#clearBtn'), clickBtn = $('#clickBtn');
 function syncLoop() {
@@ -1630,8 +1755,41 @@ function showTab(t) {
   $('#panelBeat').hidden = t !== 'beat';
 }
 $('#tabFx').addEventListener('click', () => showTab('fx'));
-$('#tabBeat').addEventListener('click', () => { showTab('beat'); audio(); });
+$('#tabBeat').addEventListener('click', () => {
+  showTab('beat'); audio();
+  if (window.innerWidth < 900) requestAnimationFrame(() => {
+    const over = $('.steps-row').getBoundingClientRect().bottom + 12 - window.innerHeight;
+    if (over > 0) window.scrollBy({ top: over, behavior: 'smooth' });
+  });
+});
 window.padLooper = looper;
+
+/* Atalhos do teclado do computador: teclado numérico ou os números de cima (o número aparece em cada pad) */
+const KEYPAD = {};
+PADS.forEach((p, i) => {
+  if (p.key === '.') ['NumpadDecimal', 'NumpadComma', 'NumpadAdd', 'Period'].forEach(c => { KEYPAD[c] = i; });
+  else { KEYPAD['Numpad' + p.key] = i; KEYPAD['Digit' + p.key] = i; }
+});
+const KEYACT = {
+  NumpadMultiply: () => recBtn.click(),
+  NumpadSubtract: () => playBtn.click(),
+  NumpadDivide: () => { if (!undoBtn.disabled) undoBtn.click(); },
+  Escape: () => $('#fxPanic').click(),
+};
+document.addEventListener('keydown', (e) => {
+  if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+  const tg = e.target;
+  if (tg && tg.matches && tg.matches('input, textarea, select') && e.code !== 'Escape') return; // digitando o BPM
+  const i = KEYPAD[e.code];
+  if (i != null) {
+    e.preventDefault();
+    if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(i);
+    else audio().then(() => eng.kitReady).then(() => liveHit(i));
+    return;
+  }
+  const act = KEYACT[e.code];
+  if (act) { e.preventDefault(); act(); }
+});
 
 /* ---------- Resposta rápida (latência baixa) ---------- */
 const fastBtn = $('#fastBtn'), fastNote = $('#fastNote');
@@ -1690,7 +1848,13 @@ async function keepAwake() {
 }
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && ctx) { keepAwake(); checkCtx(); } });
 
+// Reverso: tipo e duração (valem para o botão dos Efeitos e para o pad 0)
+document.querySelectorAll('#revTypeSeg [data-rt]').forEach(b => b.addEventListener('click', () => { S.revType = b.dataset.rt; save(); markSeg('#revTypeSeg', 'rt', S.revType); updateMeta(); }));
+document.querySelectorAll('#revLenSeg [data-rl]').forEach(b => b.addEventListener('click', () => { S.revLen = +b.dataset.rl; save(); markSeg('#revLenSeg', 'rl', S.revLen); updateMeta(); }));
+
 // Estado inicial
+markSeg('#revTypeSeg', 'rt', revAtual().t);
+markSeg('#revLenSeg', 'rl', revAtual().b);
 fastBtn.setAttribute('aria-pressed', String(!!S.fast));
 markSeg('#holdSeg', 'hold', S.hold);
 fxPanel.classList.toggle('hold', !!S.hold);
