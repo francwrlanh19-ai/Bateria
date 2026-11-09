@@ -435,7 +435,7 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
         <div class="steps" id="steps" aria-hidden="true"></div>
         <span class="loop-status" id="loopStatus" aria-live="polite">Loop vazio</span>
       </div>
-      <p class="note kbd-legend">No computador: teclado numérico (ou os números de cima). 1 a 9 e 0 tocam os pads, ponto ou + toca o tom, * grava, − toca e para o loop, / desfaz e Esc para tudo.</p>
+      <p class="note kbd-legend">No computador: teclado numérico (ou os números de cima). 1 a 9 e 0 tocam os pads, ponto ou + toca o tom, * grava, − toca e para o loop, / desfaz e Esc para tudo.<span id="latBeat"></span></p>
     </div>
   </section>
 
@@ -797,7 +797,7 @@ class PadEngine {
     lim.threshold.value = -6; lim.knee.value = 4; lim.ratio.value = 12; lim.attack.value = 0.003; lim.release.value = 0.2;
     const safe = c.createWaveShaper(), sc = new Float32Array(1025);
     for (let i = 0; i < 1025; i++) { const x = i / 512 - 1, a = Math.abs(x); sc[i] = Math.sign(x) * (a < 0.8 ? a : 0.8 + 0.2 * Math.tanh((a - 0.8) / 0.2)); }
-    safe.curve = sc; safe.oversample = 'none';
+    safe.curve = sc; safe.oversample = 'none'; this.safe = safe;
     this.master.connect(hp); hp.connect(lim); lim.connect(safe); safe.connect(c.destination);
 
     // Reverb comum (pad e efeitos), com um reserva pronto para o "Parar tudo"
@@ -820,7 +820,9 @@ class PadEngine {
 
     // Bateria
     this.drumDry = amp(c, 0); this.drumWet = amp(c, 0);
-    this.drumDry.connect(this.master); this.drumWet.connect(this.pre);
+    // A bateria seca não passa pelo limitador: ele olha 6 ms à frente e atrasa tudo. A saturação suave ainda protege.
+    // O ganho compensa os +1,2 dB que o limitador dava. A cauda de reverb da bateria continua passando por ele.
+    this.drumFast = amp(c, 1.15); this.drumDry.connect(this.drumFast); this.drumFast.connect(this.safe); this.drumWet.connect(this.pre);
     this.kit = null; this._open = null; this._shk = false;
     this.holds = new Set();
 
@@ -1380,6 +1382,11 @@ const keyHTML = (name) => name[0] + (name.length > 1 ? `<span class="acc">${name
 
 const DEF = { vol: 75, bri: 50, shim: 45, trans: 4, fxv: 75, dv: 75, tex: 'quente', bpm: 72, bars: 2, key: 0, tab: 'fx', lb: 1, clk: true, hold: 0, fast: false, revType: 'prato', revLen: 4 };
 const S = Object.assign({}, DEF, load());
+// No computador (mouse, sem tela de toque), a resposta rápida começa ligada. Só uma vez: depois vale o que a pessoa escolher.
+if (S.fastV !== 1) {
+  try { if (matchMedia('(pointer: fine)').matches && !matchMedia('(any-pointer: coarse)').matches) S.fast = true; } catch (e) { /* ok */ }
+  S.fastV = 1;
+}
 function load() { try { return JSON.parse(localStorage.getItem('bateria.pad')) || {}; } catch (e) { return {}; } }
 function save() { try { localStorage.setItem('bateria.pad', JSON.stringify(S)); } catch (e) { /* sem armazenamento */ } }
 
@@ -1797,6 +1804,8 @@ const FAST_TXT = 'Menos atraso para tocar a batida com os dedos, mas exige mais 
 function showLatency() {
   const ms = ctx ? Math.round(((ctx.baseLatency || 0) + (ctx.outputLatency || 0)) * 1000) : 0;
   fastNote.textContent = FAST_TXT + (ms ? ` Atraso atual: cerca de ${ms} ms.` : '');
+  const lb = document.getElementById('latBeat');
+  if (lb) lb.textContent = ms ? ` Atraso do som agora: cerca de ${ms} ms${S.fast ? '' : ' (ligue a Resposta rápida em Ajustes)'}.` : '';
 }
 fastBtn.addEventListener('click', () => {
   S.fast = !S.fast; save();
