@@ -838,7 +838,7 @@ a.cat{text-decoration:none;color:inherit}
 .btn-pad.soando .pad-ponto{background:var(--cym);box-shadow:0 0 0 4px color-mix(in srgb,var(--cym) 28%,transparent)}
 .btn-pad[aria-pressed="true"]{border-color:var(--cym)}
 .pad-painel{position:fixed;z-index:30;left:0;right:0;bottom:calc(81px + env(safe-area-inset-bottom,0px));height:min(62vh,560px);height:min(62dvh,560px);display:flex;flex-direction:column;background:var(--surface);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -10px 32px rgba(0,0,0,.25);overflow:hidden}
-.pad-painel[hidden],body:not(.tela-treino) .pad-painel,body.leitor .pad-painel{display:none}
+.pad-painel[hidden],body:not(.tela-treino) .pad-painel{display:none}
 .pp-topo{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 16px;border-bottom:1px solid var(--line)}
 .pp-txt{flex:1;min-width:0;display:grid;gap:1px}
 .pp-txt b{font-family:var(--f-display);font-weight:800;font-size:18px;line-height:1.1}
@@ -854,6 +854,14 @@ a.cat{text-decoration:none;color:inherit}
 @media (orientation:landscape) and (max-height:560px){
   .pad-painel{top:8px;bottom:8px;left:auto;right:calc(96px + env(safe-area-inset-right,0px));width:min(420px,50vw);height:auto;border:1px solid var(--line);border-radius:16px}
 }
+/* na tela de leitura: botão na legenda de cima e painel entre a partitura e os botões de andamento; a partitura encolhe */
+.leg-pad{width:auto;padding:0 12px;display:flex;align-items:center;gap:7px;font-size:15px}
+.leg-pad b{font-weight:700}
+.leg-pad .pad-ponto{background:rgba(29,35,41,.22)}
+.leg-pad.soando .pad-ponto{background:var(--cym);box-shadow:0 0 0 4px color-mix(in srgb,var(--cym) 28%,transparent)}
+.leg-pad[aria-pressed="true"]{border-color:var(--cym);background:color-mix(in srgb,var(--cym) 12%,transparent)}
+body.leitor .pad-painel{top:calc(54px + env(safe-area-inset-top,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));left:auto;right:calc(86px + env(safe-area-inset-right,0px));width:min(380px,42vw);height:auto;border:1px solid rgba(29,35,41,.16);border-radius:16px;z-index:33;box-shadow:0 10px 32px rgba(0,0,0,.18)}
+body.leitor.pad-aberto .papel{padding-right:calc(98px + min(380px,42vw) + env(safe-area-inset-right,0px))}
 </style>
 </head>
 <body>
@@ -936,7 +944,7 @@ a.cat{text-decoration:none;color:inherit}
         <div class="papel-in"><img class="foto" id="foto" alt="" hidden><div id="vf"></div><div class="cursor" id="cursor" hidden></div><div class="conta-grande" id="contaGrande" aria-hidden="true"><span></span></div></div>
       </div>
       <div class="legenda-deit" id="legDeit">
-        <div class="leg-lado"><button type="button" class="leg-nav" id="btnAnt" aria-label="Exercício anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="leg-nav" id="btnAjustesLeitor" aria-label="Ajustes" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L15 3.5h-4l-.3 2.5a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4L6.6 11a7.5 7.5 0 0 0 0 2l-2 1.6 2 3.4 2.4-1c.5.4 1.1.7 1.7 1l.3 2.5h4l.3-2.5c.6-.3 1.2-.6 1.7-1l2.4 1 2-3.4-2.1-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" transform="translate(-1 0)"/></svg></button></div>
+        <div class="leg-lado"><button type="button" class="leg-nav" id="btnAnt" aria-label="Exercício anterior"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="leg-nav" id="btnAjustesLeitor" aria-label="Ajustes" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L15 3.5h-4l-.3 2.5a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4L6.6 11a7.5 7.5 0 0 0 0 2l-2 1.6 2 3.4 2.4-1c.5.4 1.1.7 1.7 1l.3 2.5h4l.3-2.5c.6-.3 1.2-.6 1.7-1l2.4 1 2-3.4-2.1-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" transform="translate(-1 0)"/></svg></button><button type="button" class="leg-nav leg-pad" id="btnPadLeitor" aria-pressed="false" aria-controls="padPainel" aria-label="Pad de louvor"><span class="pad-ponto" aria-hidden="true"></span><b>Pad</b></button></div>
         <div class="leg-centro"><p class="leg-titulo" id="legNome"></p><p class="leg-sub"><span id="legInfo"></span><span class="leg-exec" id="legExec"></span></p></div>
         <div class="leg-lado"><button type="button" class="leg-nav" id="btnProx" aria-label="Próximo exercício"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></button><button type="button" class="leg-nav leg-fechar" id="btnFechaLeitor" aria-label="Sair da tela de leitura"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       </div>
@@ -3102,23 +3110,24 @@ document.addEventListener('keydown',e=>{
    com o painel escondido; com ele aberto, os números de cima também (no leitor eles continuam escolhendo a leitura).
    O andamento do pad segue o do treino (mostraBpm) e o pad para, com a transição dele, quando a pessoa sai do treino.
    Dentro do pad, espaço e setas voltam para cá: tocar/parar e andamento continuam funcionando. */
-const padPainelEl=$('#padPainel'),padFrame=$('#padFrame'),btnPad=$('#btnPad');
+const padPainelEl=$('#padPainel'),padFrame=$('#padFrame'),btnPad=$('#btnPad'),btnsPad=[btnPad,$('#btnPadLeitor')];
 let padCarregado=false,padTimer=0;
 function padApi(){try{return padCarregado&&padFrame.contentWindow&&padFrame.contentWindow.padPainel||null;}catch(e){return null;}}
 function padEstado(){
   const a=padApi();let st=null;try{st=a&&a.estado();}catch(e){}
   const soa=!!(st&&st.tocando);
-  btnPad.classList.toggle('soando',soa);
-  btnPad.setAttribute('aria-label',soa?`Pad de louvor, tocando${st.tom?' em '+st.tom:''}`:'Pad de louvor');
+  btnsPad.forEach(b=>{b.classList.toggle('soando',soa);b.setAttribute('aria-label',soa?`Pad de louvor, tocando${st.tom?' em '+st.tom:''}`:'Pad de louvor');});
 }
 function padMostra(on){
   padPainelEl.hidden=!on;
-  btnPad.setAttribute('aria-pressed',on?'true':'false');
+  btnsPad.forEach(b=>b.setAttribute('aria-pressed',on?'true':'false'));
   document.body.classList.toggle('pad-aberto',on);
+  /* a partitura da tela de leitura encolhe ou cresce: quem mede no resize (contagem grande) mede de novo */
+  requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));
   if(on&&!padFrame.getAttribute('src'))padFrame.src='pad.html#painel';
   if(on){const a=padApi();if(a)a.acordar();}
   /* o foco vai para o pad (o espaço de lá volta para o treino); ao esconder, sai do botão para o espaço tocar/parar */
-  try{if(on)padFrame.focus();else if(document.activeElement===btnPad||padPainelEl.contains(document.activeElement))document.activeElement.blur();}catch(e){}
+  try{if(on)padFrame.focus();else if(btnsPad.includes(document.activeElement)||padPainelEl.contains(document.activeElement))document.activeElement.blur();}catch(e){}
   if(!padTimer&&padFrame.getAttribute('src'))padTimer=setInterval(padEstado,1000);
 }
 padFrame.addEventListener('load',()=>{
@@ -3127,7 +3136,7 @@ padFrame.addEventListener('load',()=>{
   if(!padPainelEl.hidden){try{padFrame.focus();}catch(e){}}
   padEstado();
 });
-btnPad.addEventListener('click',()=>padMostra(padPainelEl.hidden));
+btnsPad.forEach(b=>b.addEventListener('click',()=>padMostra(padPainelEl.hidden)));
 $('#ppEsconde').addEventListener('click',()=>padMostra(false));
 function padBpm(b){try{const a=padApi();if(a)a.bpm(Math.round(b));}catch(e){}}
 function padSaiDoTreino(){try{if(!padFrame.getAttribute('src'))return;padMostra(false);const a=padApi();if(a)a.parar();setTimeout(padEstado,300);}catch(e){}}
