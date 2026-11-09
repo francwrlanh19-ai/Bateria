@@ -760,9 +760,11 @@ const TOM_REF = 130.81; // o tom é gerado em C3 e reafinado para o tom do pad
 const BELL_REF = 880;   // sininho da Cascata, gerado em A5 e reafinado nota a nota
 function tanhCurve(k) { const n = 1024, a = new Float32Array(n); for (let i = 0; i < n; i++) { const x = i / (n - 1) * 2 - 1; a[i] = Math.tanh(k * x) / Math.tanh(k); } return a; }
 function noiseSrc(o, secs) { const s = o.createBufferSource(); s.buffer = makeNoise(o, secs, false); s.start(0); return s; }
+// Envelope das peças: zero até t e sobe em `attack`. O renderKit corta o silêncio do começo,
+// então o ataque começa no primeiro instante do som (antes a rampa ocupava também os 2 ms de t).
 function envAt(o, peak, t, tau, attack) {
   const g = o.createGain(); g.gain.value = 0;
-  g.gain.setValueAtTime(0, 0); g.gain.linearRampToValueAtTime(peak, t + (attack || 0.0015)); g.gain.setTargetAtTime(0, t + (attack || 0.0015) + 0.001, tau);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + (attack || 0.0015)); g.gain.setTargetAtTime(0, t + (attack || 0.0015) + 0.001, tau);
   return g;
 }
 function oscAt(o, type, f, secs) { const s = o.createOscillator(); s.type = type; s.frequency.value = f; s.start(0); s.stop(secs); return s; }
@@ -780,7 +782,7 @@ function hatBuild(tau, secs) {
 function shakerBuild(center, tau) {
   return (o, d) => {
     const n = noiseSrc(o, 0.35), bp = biquad(o, 'bandpass', center, 1.1), hp = biquad(o, 'highpass', 3000, 0.7);
-    const env = envAt(o, 1, 0.002, tau, 0.012);
+    const env = envAt(o, 1, 0.002, tau, 0.004);
     n.connect(bp); bp.connect(hp); hp.connect(env); env.connect(d);
   };
 }
@@ -814,8 +816,9 @@ const DRUMS = {
   clap: { secs: 0.7, peak: 0.75, send: 0.3, build(o, d) {
     const t = 0.002, n = noiseSrc(o, 0.7), hp = biquad(o, 'highpass', 600, 0.7), bp = biquad(o, 'bandpass', 1150, 0.8);
     const g = o.createGain(); g.gain.value = 0; g.gain.setValueAtTime(0, 0);
-    [0, 0.011, 0.023].forEach((dt, k) => { g.gain.setValueAtTime(0.85 - k * 0.05, t + dt); g.gain.setTargetAtTime(0.04, t + dt + 0.0005, 0.0035); });
-    g.gain.setValueAtTime(0.9, t + 0.035); g.gain.setTargetAtTime(0, t + 0.0355, 0.075);
+    // As batidas de mão bem juntas: o corpo da palma chega em 20 ms (antes em 35 ms), e ela não soa atrasada no dedo
+    [0, 0.0065, 0.013].forEach((dt, k) => { g.gain.setValueAtTime(0.85 - k * 0.05, t + dt); g.gain.setTargetAtTime(0.04, t + dt + 0.0005, 0.0028); });
+    g.gain.setValueAtTime(0.9, t + 0.0195); g.gain.setTargetAtTime(0, t + 0.02, 0.075);
     n.connect(hp); hp.connect(bp); bp.connect(g); g.connect(d);
   } },
   // Bumbo wet: grave longo com bastante reverb (o "boom" do worship)
@@ -966,13 +969,25 @@ class PadEngine {
       const buf = await renderOffline(o);
       let pk = 0;
       for (let ch = 0; ch < buf.numberOfChannels; ch++) { const x = buf.getChannelData(ch); for (let i = 0; i < x.length; i++) { const a = Math.abs(x[i]); if (a > pk) pk = a; } }
-      const g = pk > 0 && d.peak ? d.peak / pk : 1, F = Math.min(buf.length, Math.floor(sr * 0.01));
-      for (let ch = 0; ch < buf.numberOfChannels; ch++) {
-        const x = buf.getChannelData(ch);
+      // Corta o silêncio do começo: o som sai no mesmo instante do toque
+      let i0 = buf.length;
+      if (pk > 0) {
+        const thr = pk * 1e-4;
+        for (let ch = 0; ch < buf.numberOfChannels; ch++) { const x = buf.getChannelData(ch); for (let i = 0; i < i0; i++) if (Math.abs(x[i]) > thr) { i0 = i; break; } }
+      }
+      i0 = i0 >= buf.length ? 0 : Math.max(0, i0 - 1);
+      let out = buf;
+      if (i0 > 0) {
+        out = this.ctx.createBuffer(buf.numberOfChannels, buf.length - i0, sr);
+        for (let ch = 0; ch < buf.numberOfChannels; ch++) out.getChannelData(ch).set(buf.getChannelData(ch).subarray(i0));
+      }
+      const g = pk > 0 && d.peak ? d.peak / pk : 1, F = Math.min(out.length, Math.floor(sr * 0.01));
+      for (let ch = 0; ch < out.numberOfChannels; ch++) {
+        const x = out.getChannelData(ch);
         for (let i = 0; i < x.length; i++) x[i] *= g;
         for (let i = 0; i < F; i++) x[x.length - 1 - i] *= i / F; // sem estalo no fim
       }
-      kit[id] = { buf, send: d.send };
+      kit[id] = { buf: out, send: d.send };
     }));
     this.kit = kit;
     return kit;
