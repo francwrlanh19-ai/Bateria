@@ -3149,6 +3149,14 @@ window.addEventListener('keydown',e=>{
   let ok=false;try{ok=e.repeat?a.temTecla(e.code):a.tecla(e.code);}catch(er){}
   if(ok){e.preventDefault();e.stopPropagation();}
 },true);
+/* soltar a tecla termina o efeito segurado no pad (Enter Subida, + Cascata, 0 Reverso com os efeitos em Segurando) */
+window.addEventListener('keyup',e=>{
+  const a=padApi();if(!a||!/^(Numpad|Digit0$)/.test(e.code))return;
+  let ok=false;try{ok=a.solta?a.solta(e.code):false;}catch(er){}
+  if(ok){e.preventDefault();e.stopPropagation();}
+},true);
+/* saiu da janela com a tecla apertada: o soltar não chega, então solta tudo */
+window.addEventListener('blur',()=>{try{const a=padApi();if(a&&a.soltaTudo)a.soltaTudo();}catch(e){}});
 
 /* ---------- Edição ---------- */
 $('#btnEditar').addEventListener('click',()=>{editando=!editando;renderPartitura();});

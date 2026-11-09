@@ -289,10 +289,18 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
 .fast small { font-size: 12.5px; line-height: 1.4; color: var(--muted); }
 .toggle[aria-pressed="true"] .sw::after { transform: translateX(16px); background: #16121b; }
 
-/* Grade da batida no formato do teclado numérico: 7 8 9 / 4 5 6 / 1 2 3 / 0 largo e ponto */
-.drums { grid-template-columns: repeat(3, 1fr); }
-.pad { height: 56px; }
+/* Grade da batida no formato do teclado numérico: 7 8 9 / 4 5 6 / 1 2 3 / 0 largo e ponto,
+   e na quarta coluna os efeitos altos, como as teclas + (Cascata) e Enter (Subida) */
+.drums { grid-template-columns: repeat(4, 1fr); }
+/* no celular estreito o nome pode quebrar em duas linhas (Bumbo wet): a linha cresce em vez de cortar o texto */
+.pad { height: auto; min-height: 56px; }
 .pad.wide { grid-column: span 2; }
+.pad.fxp { height: auto; background: linear-gradient(180deg, oklch(0.82 0.12 var(--kh) / 0.17), var(--ink-2)); }
+.pad.fx-casc { grid-column: 4; grid-row: 1 / span 2; }
+.pad.fx-sub { grid-column: 4; grid-row: 3 / span 2; }
+.pad.holding { border-color: oklch(0.82 0.12 var(--kh) / 0.85); }
+.pad.holding .glow { opacity: 0.5; }
+.pad .fill { position: absolute; left: 0; bottom: 0; height: 4px; width: 100%; transform-origin: left; transform: scaleX(var(--fill, 0)); background: oklch(0.82 0.12 var(--kh)); pointer-events: none; }
 .pad.rev { background: linear-gradient(90deg, var(--ink-2), oklch(0.82 0.12 var(--kh) / 0.2)); }
 .kbd {
   position: absolute; top: 6px; right: 7px; min-width: 18px; padding: 2px 5px; border: 1px solid var(--line); border-radius: 5px;
@@ -444,6 +452,13 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
     </div>
     <div class="beat" id="panelBeat" role="tabpanel" aria-labelledby="tabBeat" hidden>
       <div class="drums" id="drums"></div>
+      <div class="len">
+        <span id="holdLabel2">Efeitos</span>
+        <div class="seg" role="radiogroup" aria-labelledby="holdLabel2" id="holdSeg2">
+          <button type="button" role="radio" data-hold="0" aria-checked="true"><b>Pelo BPM</b></button>
+          <button type="button" role="radio" data-hold="1" aria-checked="false"><b>Segurando</b></button>
+        </div>
+      </div>
       <div class="loopbar">
         <button type="button" class="lb" id="recBtn" aria-pressed="false"><span class="dot" aria-hidden="true"></span><span id="recLabel">Gravar</span><kbd class="kbd">*</kbd></button>
         <button type="button" class="lb" id="playBtn" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="playIcon" fill="currentColor" d="M8 5l11 7-11 7z"/></svg><span id="playLabel">Tocar</span><kbd class="kbd">−</kbd></button>
@@ -454,7 +469,7 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
         <div class="steps" id="steps" aria-hidden="true"></div>
         <span class="loop-status" id="loopStatus" aria-live="polite">Loop vazio</span>
       </div>
-      <p class="note kbd-legend">No computador: teclado numérico (ou os números de cima). 1 a 9 e 0 tocam os pads, ponto ou + toca o tom, * grava, − toca e para o loop, / desfaz e Esc para tudo.<span id="latBeat"></span></p>
+      <p class="note kbd-legend">No computador: teclado numérico (ou os números de cima). 1 a 9 tocam a bateria, 0 o Reverso, Enter a Subida, + a Cascata e o ponto o tom. * grava, − toca e para o loop, / desfaz e Esc para tudo. Com os efeitos em Segurando, aperte para começar e solte para terminar.<span id="latBeat"></span></p>
     </div>
   </section>
 
@@ -1626,7 +1641,10 @@ function updateMeta() {
   const r = revAtual();
   $('#revMeta').textContent = S.hold ? `${REV_TIPOS[r.t]} · segure` : `${REV_TIPOS[r.t]} · ${REV_LENS[r.b]}`;
   const revPs = document.querySelector('.pad[data-id="rev"] .ps');
-  if (revPs) revPs.textContent = `${REV_TIPOS[r.t]} · ${REV_LENS[r.b]}`;
+  if (revPs) revPs.textContent = S.hold ? `${REV_TIPOS[r.t]} · segure` : `${REV_TIPOS[r.t]} · ${REV_LENS[r.b]}`;
+  const subPs = document.querySelector('.pad[data-fx="riser"] .ps'), cascPs = document.querySelector('.pad[data-fx="cascade"] .ps');
+  if (subPs) subPs.textContent = S.hold ? 'segure e solte' : `${S.bars} comp.`;
+  if (cascPs) cascPs.textContent = S.hold ? 'segure e solte' : `em ${k.name}`;
   $('#impMeta').textContent = `grave em ${k.name}`;
   $('#cascMeta').textContent = S.hold ? `segure · em ${k.name}` : `no tom de ${k.name}`;
   const tomPs = document.querySelector('.pad[data-id="tom"] .ps');
@@ -1657,26 +1675,31 @@ $('#fxPanic').addEventListener('click', () => {
 });
 
 /* ---------- Efeitos no modo "segurando" ---------- */
-const HOLD_FX = { fxRiser: 'riserHold', fxReverse: 'reverseHold', fxCascade: 'cascadeHold' };
+// Os efeitos que dá para segurar: botão dos Efeitos → tipo, e tipo → função do motor
+const HOLD_FX = { fxRiser: 'riser', fxReverse: 'reverse', fxCascade: 'cascade' };
+const HOLD_FN = { riser: 'riserHold', reverse: 'reverseHold', cascade: 'cascadeHold' };
 const fxPanel = $('#panelFx'), fxGrid = $('#fxGrid');
 const holds = new Map();
 let holdRaf = 0;
-function startHold(btn, key) {
+// Começa a segurar um efeito. el acende enquanto segura; meta (opcional) mostra o compasso.
+function startHold(el, key, kind, meta) {
   if (holds.has(key)) return;
   if (!eng || !ctx || ctx.state !== 'running') { audio(); return; }
-  const fn = HOLD_FX[btn.id];
-  holds.set(key, { btn, h: fn === 'reverseHold' ? eng.reverseHold(revAtual().t) : eng[fn](), t0: ctx.currentTime });
-  btn.classList.add('holding');
+  const h = kind === 'reverse' ? eng.reverseHold(revAtual().t) : eng[HOLD_FN[kind]]();
+  holds.set(key, { btn: el, meta, kind, h, t0: ctx.currentTime });
+  el.classList.add('holding');
   if (!holdRaf) holdRaf = requestAnimationFrame(holdTick);
 }
+// Solta: devolve o que estava segurando (para o loop gravar o reverso com a duração certa)
 function endHold(key) {
   const st = holds.get(key);
-  if (!st) return;
+  if (!st) return null;
   holds.delete(key);
   st.h.release();
   st.btn.classList.remove('holding');
   st.btn.style.removeProperty('--fill');
   updateMeta();
+  return st;
 }
 // Enquanto segura, a barra enche a cada compasso (no BPM marcado): ajuda a soltar no 1
 function holdTick() {
@@ -1686,7 +1709,7 @@ function holdTick() {
     const el = ctx.currentTime - st.t0;
     if (el > 30 || st.h.done) { endHold(key); return; }
     st.btn.style.setProperty('--fill', ((el % bar) / bar).toFixed(3));
-    st.btn.querySelector('.fx-meta').textContent = `segurando · comp. ${Math.floor(el / bar) + 1}`;
+    if (st.meta) st.meta.textContent = `segurando · comp. ${Math.floor(el / bar) + 1}`;
   });
   if (holds.size) holdRaf = requestAnimationFrame(holdTick);
 }
@@ -1696,25 +1719,27 @@ fxGrid.addEventListener('pointerdown', (e) => {
   if (!btn || !HOLD_FX[btn.id]) return;
   e.preventDefault();
   try { btn.setPointerCapture(e.pointerId); } catch (err) { /* ok */ }
-  startHold(btn, e.pointerId);
+  startHold(btn, e.pointerId, HOLD_FX[btn.id], btn.querySelector('.fx-meta'));
 });
 ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => fxGrid.addEventListener(type, (e) => endHold(e.pointerId)));
 fxGrid.addEventListener('contextmenu', (e) => { if (S.hold) e.preventDefault(); });
+// Espaço ou Enter num botão focado dos Efeitos (o Enter do teclado numérico é da Subida, fica de fora)
 fxGrid.addEventListener('keydown', (e) => {
-  if (!S.hold || e.repeat || (e.key !== ' ' && e.key !== 'Enter')) return;
+  if (!S.hold || e.repeat || e.code === 'NumpadEnter' || (e.key !== ' ' && e.key !== 'Enter')) return;
   const btn = e.target.closest('.fx-btn');
   if (!btn || !HOLD_FX[btn.id]) return;
   e.preventDefault();
-  startHold(btn, 'kb:' + btn.id);
+  startHold(btn, 'kb:' + btn.id, HOLD_FX[btn.id], btn.querySelector('.fx-meta'));
 });
 fxGrid.addEventListener('keyup', (e) => {
-  if (e.key !== ' ' && e.key !== 'Enter') return;
+  if (e.code === 'NumpadEnter' || (e.key !== ' ' && e.key !== 'Enter')) return;
   const btn = e.target.closest('.fx-btn');
   if (btn) endHold('kb:' + btn.id);
 });
-document.querySelectorAll('#holdSeg [data-hold]').forEach(b => b.addEventListener('click', () => {
+// A Duração dos efeitos aparece nos Efeitos e na Batida: as duas escolhas andam juntas
+document.querySelectorAll('#holdSeg [data-hold], #holdSeg2 [data-hold]').forEach(b => b.addEventListener('click', () => {
   S.hold = +b.dataset.hold; save();
-  markSeg('#holdSeg', 'hold', S.hold);
+  markSeg('#holdSeg', 'hold', S.hold); markSeg('#holdSeg2', 'hold', S.hold);
   fxPanel.classList.toggle('hold', !!S.hold);
   updateMeta();
 }));
@@ -1746,10 +1771,26 @@ const padEls = PADS.map((p, i) => {
   b.type = 'button'; b.dataset.i = i; b.dataset.id = p.id;
   b.className = 'pad' + (p.wide ? ' wide rev' : '') + (p.id.indexOf('kick') === 0 ? ' base' : '');
   b.setAttribute('aria-label', `${p.name} ${p.sub}, tecla ${p.key === '.' ? 'ponto' : p.key}`);
-  b.innerHTML = `<span class="pn">${p.name}</span><span class="ps">${p.sub}</span><kbd class="kbd">${p.key}</kbd><span class="glow"></span>`;
+  b.innerHTML = `<span class="pn">${p.name}</span><span class="ps">${p.sub}</span><kbd class="kbd">${p.key}</kbd>${p.id === 'rev' ? '<span class="fill"></span>' : ''}<span class="glow"></span>`;
   drumsEl.appendChild(b);
   return b;
 });
+const REV_I = PADS.findIndex(p => p.id === 'rev');
+// Efeitos na grade, na quarta coluna, como as teclas + e Enter do teclado numérico. Não entram no loop.
+const FX_PADS = [
+  { kind: 'cascade', name: 'Cascata', key: '+', cls: 'fx-casc', btn: 'fxCascade' },
+  { kind: 'riser', name: 'Subida', key: 'Enter', cls: 'fx-sub', btn: 'fxRiser' },
+];
+const fxPadEls = {};
+FX_PADS.forEach(f => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.dataset.fx = f.kind; b.className = 'pad fxp ' + f.cls;
+  b.setAttribute('aria-label', `${f.name}, tecla ${f.key === '+' ? 'mais' : f.key}`);
+  b.innerHTML = `<span class="pn">${f.name}</span><span class="ps"></span><kbd class="kbd">${f.key}</kbd><span class="fill"></span><span class="glow"></span>`;
+  drumsEl.appendChild(b);
+  fxPadEls[f.kind] = b;
+});
+function flashEl(el) { const g = el.querySelector('.glow'); if (g && g.animate) g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, easing: 'ease-out' }); }
 function flashPad(i) { const g = padEls[i].lastElementChild; if (g.animate) g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, easing: 'ease-out' }); }
 function flashMask(m) { PADS.forEach((p, i) => { if (m & (1 << p.bit)) flashPad(i); }); }
 
@@ -1937,9 +1978,53 @@ drumsEl.addEventListener('pointerdown', (e) => {
   const p = e.target.closest('.pad');
   if (!p) return;
   e.preventDefault();
-  const i = +p.dataset.i;
+  const fx = p.dataset.fx, i = p.dataset.i != null ? +p.dataset.i : -1;
+  // Subida e Cascata sempre, e o Reverso com os efeitos em Segurando: apertar começa, soltar termina
+  if (fx || (i === REV_I && S.hold)) {
+    if (S.hold) try { p.setPointerCapture(e.pointerId); } catch (er) { /* ok */ }
+    tocaEfeito(fx || 'reverse', 'pt:' + e.pointerId);
+    return;
+  }
   if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(i); else pendingHits.add(i);
 });
+['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => drumsEl.addEventListener(type, (e) => soltaEfeito('pt:' + e.pointerId)));
+
+/* ---------- Efeitos nos pads e nas teclas (+ Cascata, Enter Subida, 0 Reverso) ----------
+   Com os efeitos em Segurando: apertar começa e soltar termina (o reverso solto grava no loop com a duração segurada).
+   Pelo BPM: o mesmo que o botão dos Efeitos (o 0 continua o Reverso pelo BPM, com o loop de sempre). */
+const aguardando = new Set();   // apertados enquanto o áudio ainda acorda: começam se continuarem apertados
+function tocaEfeito(kind, key) {
+  const el = kind === 'reverse' ? padEls[REV_I] : fxPadEls[kind];
+  if (!S.hold) {
+    if (kind === 'reverse') { if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(REV_I); else audio().then(() => eng.kitReady).then(() => liveHit(REV_I)); return; }
+    $('#' + FX_PADS.find(f => f.kind === kind).btn).click();
+    flashEl(el);
+    return;
+  }
+  if (!key) return;
+  if (eng && ctx && ctx.state === 'running') { startHold(el, key, kind, el.querySelector('.ps')); return; }
+  aguardando.add(key);
+  audio().then(() => { if (aguardando.delete(key)) startHold(el, key, kind, el.querySelector('.ps')); });
+}
+function soltaEfeito(key) {
+  aguardando.delete(key);
+  const st = endHold(key);
+  if (st && st.kind === 'reverse') gravaReversoSegurado(st);
+}
+// Gravando o loop: o reverso entra no passo em que começou, com a duração que ficou segurado (em semicolcheias)
+function gravaReversoSegurado(st) {
+  if (!looper.rec || !ctx) return;
+  const b = Math.max(0.25, Math.round((ctx.currentTime - st.t0) * S.bpm / 60 * 4) / 4);
+  const k = looper.record(1 << PADS[REV_I].bit, st.t0);
+  if (k >= 0) { looper.revAt[k] = { t: revAtual().t, b }; renderSteps(); saveLoopSoon(); syncLoop(); }
+}
+function soltaTudoTeclado() {
+  [...holds.keys()].forEach(k => { if (String(k).indexOf('kb:') === 0) soltaEfeito(k); });
+  aguardando.forEach(k => { if (String(k).indexOf('kb:') === 0) aguardando.delete(k); });
+}
+// Saiu da janela com a tecla apertada: o soltar não chega, então solta aqui
+window.addEventListener('blur', soltaTudoTeclado);
+document.addEventListener('visibilitychange', () => { if (document.hidden) soltaTudoTeclado(); });
 // Primeiro toque com o som ainda desligado: o navegador só libera o áudio ao soltar o dedo
 drumsEl.addEventListener('pointerup', async () => {
   if (!pendingHits.size) return;
@@ -2002,17 +2087,23 @@ window.padLooper = looper;
 /* Atalhos do teclado do computador: teclado numérico ou os números de cima (o número aparece em cada pad) */
 const KEYPAD = {};
 PADS.forEach((p, i) => {
-  if (p.key === '.') ['NumpadDecimal', 'NumpadComma', 'NumpadAdd', 'Period'].forEach(c => { KEYPAD[c] = i; });
+  if (p.key === '.') ['NumpadDecimal', 'NumpadComma', 'Period'].forEach(c => { KEYPAD[c] = i; });
   else { KEYPAD['Numpad' + p.key] = i; KEYPAD['Digit' + p.key] = i; }
 });
+// Efeitos nas teclas altas do teclado numérico (o 0 é o Reverso, em KEYPAD)
+const KEYFX = { NumpadEnter: 'riser', NumpadAdd: 'cascade' };
 const KEYACT = {
   NumpadMultiply: () => recBtn.click(),
   NumpadSubtract: () => playBtn.click(),
   NumpadDivide: () => { if (!undoBtn.disabled) undoBtn.click(); },
   Escape: () => $('#fxPanic').click(),
 };
+// Efeito da tecla: + e Enter sempre; o 0 só com os efeitos em Segurando (pelo BPM ele é um pad comum)
+const fxDaTecla = (code, soltando) => KEYFX[code] || (KEYPAD[code] === REV_I && (S.hold || soltando) ? 'reverse' : null);
 // Toca uma tecla pelo código físico (Numpad1, Digit1...). Devolve true quando a tecla é do pad.
 function teclaPad(code) {
+  const fx = fxDaTecla(code, false);
+  if (fx) { tocaEfeito(fx, 'kb:' + fx); return true; }
   const i = KEYPAD[code];
   if (i != null) {
     if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(i);
@@ -2035,18 +2126,30 @@ document.addEventListener('keydown', (e) => {
     }
     return;
   }
-  if (e.repeat) { if (KEYPAD[e.code] != null || KEYACT[e.code]) e.preventDefault(); return; }
+  if (e.repeat) { if (KEYPAD[e.code] != null || KEYACT[e.code] || KEYFX[e.code]) e.preventDefault(); return; }
   if (teclaPad(e.code)) e.preventDefault();
 });
-// O espaço solto num botão do pad não pode clicar nele: no painel, o espaço é do treino
-document.addEventListener('keyup', (e) => { if (PAINEL && e.code === 'Space') e.preventDefault(); });
+// Soltar a tecla termina o efeito segurado. Devolve true quando a tecla é de efeito.
+function soltaPad(code) {
+  const fx = fxDaTecla(code, true);
+  if (!fx) return false;
+  soltaEfeito('kb:' + fx);
+  return true;
+}
+document.addEventListener('keyup', (e) => {
+  // O espaço solto num botão do pad não pode clicar nele: no painel, o espaço é do treino
+  if (PAINEL && e.code === 'Space') e.preventDefault();
+  if (soltaPad(e.code)) e.preventDefault();
+});
 
 /* ---------- Painel dentro do treino do app ----------
    O app de bateria abre pad.html#painel num painel ao lado da partitura e conversa com o pad por window.padPainel:
    manda as teclas do teclado numérico, o andamento do treino e pede para parar ao sair do treino. */
 window.padPainel = {
   tecla: (code) => teclaPad(code),
-  temTecla: (code) => KEYPAD[code] != null || !!KEYACT[code],
+  solta: (code) => soltaPad(code),
+  soltaTudo: () => soltaTudoTeclado(),
+  temTecla: (code) => KEYPAD[code] != null || !!KEYACT[code] || !!KEYFX[code],
   bpm: (v) => { v = Math.round(+v); if (v >= 40 && v <= 220 && v !== S.bpm) setBpm(v); },
   acordar: () => { audio().catch(() => {}); },
   estado: () => {
@@ -2130,7 +2233,7 @@ document.querySelectorAll('#revLenSeg [data-rl]').forEach(b => b.addEventListene
 markSeg('#revTypeSeg', 'rt', revAtual().t);
 markSeg('#revLenSeg', 'rl', revAtual().b);
 fastBtn.setAttribute('aria-pressed', String(!!S.fast));
-markSeg('#holdSeg', 'hold', S.hold);
+markSeg('#holdSeg', 'hold', S.hold); markSeg('#holdSeg2', 'hold', S.hold);
 fxPanel.classList.toggle('hold', !!S.hold);
 showTab(S.tab === 'beat' ? 'beat' : 'fx');
 markSeg('#loopSeg', 'lb', looper.bars);
@@ -2140,6 +2243,7 @@ markSeg('#texSeg', 'tex', S.tex);
 markSeg('#barsSeg', 'bars', S.bars);
 bpmIn.value = S.bpm;
 showKey(KEYS[S.key], false);
+updateMeta();
 })();
 </script>
 </body>
