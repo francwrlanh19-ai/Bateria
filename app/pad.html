@@ -516,7 +516,7 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
         <input id="dv" type="range" min="0" max="100" step="1" value="75"></div>
       <div class="fast">
         <button type="button" class="toggle" id="fastBtn" aria-pressed="false" aria-describedby="fastNote"><span class="sw" aria-hidden="true"></span>Resposta rápida dos pads</button>
-        <small id="fastNote">Menos atraso para tocar a batida com os dedos, mas exige mais do celular. Se o som travar, deixe desligado.</small>
+        <small id="fastNote">Menos atraso para tocar a batida com os dedos ou o teclado, mas exige mais do aparelho. Se o som estalar ou travar, deixe desligado.</small>
       </div>
     </div>
   </section>
@@ -1401,12 +1401,31 @@ KEYS.forEach(k => {
 });
 
 let ctx = null, eng = null, awake = false;
+// Celular e tablet (o iPad se apresenta como Mac, mas tem tela de toque)
+const MOBILE = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+// Resposta rápida no computador: pede o menor buffer que a placa de som aceita. No Windows 10/11 o Chrome usa
+// o modo de baixa latência do Windows quando o driver permite; quando não permite, fica igual ao 'interactive'.
+function makeCtx(AC) {
+  const hints = S.fast ? (MOBILE ? ['interactive'] : [0, 'interactive']) : ['playback'];
+  for (const h of hints) { try { return new AC({ latencyHint: h }); } catch (e) { /* tenta o próximo */ } }
+  return new AC();
+}
+// O Chrome troca a saída de som por uma falsa depois de 30 s de silêncio, e o primeiro som depois disso pode atrasar.
+// Com a Resposta rápida, um sinal inaudível (−120 dB) mantém a saída acordada para quem alterna a bateria e as teclas.
+function keepOutputAwake(c) {
+  try {
+    const b = c.createBuffer(1, 128, c.sampleRate);
+    b.getChannelData(0).fill(1e-6);
+    const s = c.createBufferSource(); s.buffer = b; s.loop = true;
+    s.connect(c.destination); s.start();
+  } catch (e) { /* ok */ }
+}
 // Monta o motor (reverb incluído) antes do primeiro toque, para o som sair na hora.
 function prepare() {
   if (eng) return;
   try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* só iPhone */ }
   const AC = window.AudioContext || window.webkitAudioContext;
-  ctx = ctx || new AC({ latencyHint: S.fast ? 'interactive' : 'playback' });
+  if (!ctx) { ctx = makeCtx(AC); if (S.fast) keepOutputAwake(ctx); }
   eng = new PadEngine(ctx);
   eng.lastSemi = KEYS[S.key].semi;
   eng.setPadVolume(S.vol / 100); eng.setFxVolume(S.fxv / 100); eng.setDrumVolume(S.dv / 100); eng.setBrightness(S.bri); eng.setShimmer(S.shim);
@@ -1800,7 +1819,7 @@ document.addEventListener('keydown', (e) => {
 
 /* ---------- Resposta rápida (latência baixa) ---------- */
 const fastBtn = $('#fastBtn'), fastNote = $('#fastNote');
-const FAST_TXT = 'Menos atraso para tocar a batida com os dedos, mas exige mais do celular. Se o som travar, deixe desligado.';
+const FAST_TXT = 'Menos atraso para tocar a batida com os dedos ou o teclado, mas exige mais do aparelho. Se o som estalar ou travar, deixe desligado.';
 function showLatency() {
   const ms = ctx ? Math.round(((ctx.baseLatency || 0) + (ctx.outputLatency || 0)) * 1000) : 0;
   fastNote.textContent = FAST_TXT + (ms ? ` Atraso atual: cerca de ${ms} ms.` : '');
