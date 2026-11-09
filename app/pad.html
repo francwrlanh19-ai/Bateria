@@ -40,6 +40,9 @@ button { font: inherit; color: inherit; }
 button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 .app { max-width: 460px; margin: 0 auto; padding: 16px 16px 44px; display: flex; flex-direction: column; gap: 20px; }
+/* No painel do treino do app: o painel já tem título e botão de esconder */
+.painel .top { display: none; }
+.painel .app { padding-top: 12px; padding-bottom: 24px; }
 
 /* Cabeçalho */
 [hidden] { display: none !important; }
@@ -1401,8 +1404,11 @@ KEYS.forEach(k => {
 });
 
 let ctx = null, eng = null, awake = false;
+// Dentro do treino do app de bateria o pad abre num painel (pad.html#painel), sem o cabeçalho
+const PAINEL = /painel/.test(location.hash);
+if (PAINEL) document.documentElement.classList.add('painel');
 // Celular e tablet (o iPad se apresenta como Mac, mas tem tela de toque)
-const MOBILE = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+const MOBILE =/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
 // Resposta rápida no computador: pede o menor buffer que a placa de som aceita. No Windows 10/11 o Chrome usa
 // o modo de baixa latência do Windows quando o driver permite; quando não permite, fica igual ao 'interactive'.
 function makeCtx(AC) {
@@ -1802,20 +1808,57 @@ const KEYACT = {
   NumpadDivide: () => { if (!undoBtn.disabled) undoBtn.click(); },
   Escape: () => $('#fxPanic').click(),
 };
-document.addEventListener('keydown', (e) => {
-  if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
-  const tg = e.target;
-  if (tg && tg.matches && tg.matches('input, textarea, select') && e.code !== 'Escape') return; // digitando o BPM
-  const i = KEYPAD[e.code];
+// Toca uma tecla pelo código físico (Numpad1, Digit1...). Devolve true quando a tecla é do pad.
+function teclaPad(code) {
+  const i = KEYPAD[code];
   if (i != null) {
-    e.preventDefault();
     if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(i);
     else audio().then(() => eng.kitReady).then(() => liveHit(i));
+    return true;
+  }
+  const act = KEYACT[code];
+  if (act) { act(); return true; }
+  return false;
+}
+document.addEventListener('keydown', (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const tg = e.target;
+  if (tg && tg.matches && tg.matches('input, textarea, select') && e.code !== 'Escape') return; // digitando o BPM
+  // No painel do treino, espaço e setas continuam mandando no treino do app (tocar/parar e andamento)
+  if (PAINEL && (e.code === 'Space' || e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+    e.preventDefault();
+    if (!e.repeat || e.code !== 'Space') {
+      try { window.parent.document.dispatchEvent(new KeyboardEvent('keydown', { key: e.key, code: e.code, bubbles: true, cancelable: true })); } catch (er) { /* fora do app */ }
+    }
     return;
   }
-  const act = KEYACT[e.code];
-  if (act) { e.preventDefault(); act(); }
+  if (e.repeat) { if (KEYPAD[e.code] != null || KEYACT[e.code]) e.preventDefault(); return; }
+  if (teclaPad(e.code)) e.preventDefault();
 });
+// O espaço solto num botão do pad não pode clicar nele: no painel, o espaço é do treino
+document.addEventListener('keyup', (e) => { if (PAINEL && e.code === 'Space') e.preventDefault(); });
+
+/* ---------- Painel dentro do treino do app ----------
+   O app de bateria abre pad.html#painel num painel ao lado da partitura e conversa com o pad por window.padPainel:
+   manda as teclas do teclado numérico, o andamento do treino e pede para parar ao sair do treino. */
+window.padPainel = {
+  tecla: (code) => teclaPad(code),
+  temTecla: (code) => KEYPAD[code] != null || !!KEYACT[code],
+  bpm: (v) => { v = Math.round(+v); if (v >= 40 && v <= 220 && v !== S.bpm) setBpm(v); },
+  acordar: () => { audio().catch(() => {}); },
+  estado: () => {
+    const k = eng && eng.current ? KEYS.find(x => x.semi === eng.current.semi) : null;
+    return { tocando: !!(eng && (eng.current || eng.wind || looper.running || holds.size)), tom: k ? k.name : null };
+  },
+  parar: () => {
+    if (!eng) return;
+    holds.forEach((st, key) => endHold(key));
+    if (eng.current) stopPad();
+    if (eng.wind) { eng.setWind(false, 1.5); showWind(false); }
+    if (looper.running) { looper.stop(); stopTimer(); saveLoop(); syncLoop(); }
+    checkCtx();
+  },
+};
 
 /* ---------- Resposta rápida (latência baixa) ---------- */
 const fastBtn = $('#fastBtn'), fastNote = $('#fastNote');

@@ -831,6 +831,29 @@ a.cat{text-decoration:none;color:inherit}
 
 @media (max-width:420px){.marca{font-size:27px}.hoje-cab h2{font-size:30px}.cat h3{font-size:21px}.area-topo h2{font-size:25px}}
 @media (prefers-reduced-motion:reduce){.hub .btn-primario,.hub .btn-linha{transition:none}}
+
+/* Pad de louvor no treino: pad.html#painel num painel que não para o treino */
+.btn-pad{display:inline-flex;align-items:center;gap:7px}
+.pad-ponto{width:9px;height:9px;border-radius:50%;background:var(--line);flex:none;transition:background .2s,box-shadow .2s}
+.btn-pad.soando .pad-ponto{background:var(--cym);box-shadow:0 0 0 4px color-mix(in srgb,var(--cym) 28%,transparent)}
+.btn-pad[aria-pressed="true"]{border-color:var(--cym)}
+.pad-painel{position:fixed;z-index:30;left:0;right:0;bottom:calc(81px + env(safe-area-inset-bottom,0px));height:min(62vh,560px);height:min(62dvh,560px);display:flex;flex-direction:column;background:var(--surface);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -10px 32px rgba(0,0,0,.25);overflow:hidden}
+.pad-painel[hidden],body:not(.tela-treino) .pad-painel,body.leitor .pad-painel{display:none}
+.pp-topo{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 16px;border-bottom:1px solid var(--line)}
+.pp-txt{flex:1;min-width:0;display:grid;gap:1px}
+.pp-txt b{font-family:var(--f-display);font-weight:800;font-size:18px;line-height:1.1}
+.pp-txt small{color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#padFrame{flex:1;width:100%;min-height:0;border:0;background:#0f0d14;color-scheme:dark}
+@media (max-width:959px) and (orientation:portrait){
+  body.pad-aberto.tela-treino .app{padding-bottom:calc(min(62vh,560px) + 100px)}
+}
+@media (min-width:960px){
+  .pad-painel{top:16px;right:16px;left:auto;bottom:calc(96px + env(safe-area-inset-bottom,0px));width:min(430px,38vw);height:auto;border:1px solid var(--line);border-radius:16px}
+  body.pad-aberto.tela-treino:not(.leitor) .app{margin-right:calc(min(430px,38vw) + 24px)}
+}
+@media (orientation:landscape) and (max-height:560px){
+  .pad-painel{top:8px;bottom:8px;left:auto;right:calc(96px + env(safe-area-inset-right,0px));width:min(420px,50vw);height:auto;border:1px solid var(--line);border-radius:16px}
+}
 </style>
 </head>
 <body>
@@ -859,6 +882,7 @@ a.cat{text-decoration:none;color:inherit}
           <p id="exFolha"></p>
         </div>
         <div class="part-acoes">
+          <button type="button" class="btn-linha btn-pad" id="btnPad" aria-pressed="false" aria-controls="padPainel" title="Pad de louvor"><span class="pad-ponto" aria-hidden="true"></span>Pad</button>
           <button type="button" class="btn-icone" id="btnFoco" aria-pressed="false" aria-label="Modo foco em tela cheia" title="Modo foco"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
           <button type="button" class="btn-linha" id="btnEditar" aria-pressed="false">Editar notas</button>
         </div>
@@ -1105,6 +1129,13 @@ a.cat{text-decoration:none;color:inherit}
   </div>
 </div>
 
+<div class="pad-painel" id="padPainel" role="region" aria-label="Pad de louvor" hidden>
+  <div class="pp-topo">
+    <div class="pp-txt"><b>Pad de louvor</b><small id="ppInfo">Teclado numérico toca até escondido</small></div>
+    <button type="button" class="btn-linha" id="ppEsconde" aria-label="Esconder o pad (ele continua tocando)">Esconder</button>
+  </div>
+  <iframe id="padFrame" title="Pad de louvor" allow="autoplay; screen-wake-lock"></iframe>
+</div>
 <div class="veu" id="veu" aria-hidden="true"></div>
 <div class="transporte">
   <div class="transporte-in">
@@ -2615,7 +2646,7 @@ function degraus(){
   for(let b=iniBpm();b<fim;b+=p)a.push(b);a.push(fim);
   return a;
 }
-function mostraBpm(b){$('#bpm').textContent=Math.round(b);$('#tpBpm').textContent=Math.round(b);}
+function mostraBpm(b){$('#bpm').textContent=Math.round(b);$('#tpBpm').textContent=Math.round(b);padBpm(b);}
 function atualizaEscada(bpm,frac){
   const ds=degraus();let idx=ds.findIndex(b=>b>=bpm);if(idx<0)idx=ds.length-1;
   $$('.degrau').forEach((d,i)=>{
@@ -2820,6 +2851,7 @@ const AREAS=(CONTEUDO.areas||[]).filter(a=>a&&a.id);
 const nomeArea=catId=>{const c=CONTEUDO.categorias.find(x=>x.id===catId),a=c&&AREAS.find(x=>x.id===c.area);return a?a.nome:'';};
 function aplicaTela(t){
   if(tela==='treino'&&t!=='treino'&&eng)parar();
+  if(tela==='treino'&&t!=='treino')padSaiDoTreino();
   if(t!=='treino'&&document.body.classList.contains('foco'))mostraFoco(false);
   if(t!=='treino')saiTelaCheiaDeitado();
   if(t!=='categoria')paraDitado();
@@ -3064,6 +3096,50 @@ document.addEventListener('keydown',e=>{
   }
   else if(e.key==='Escape'&&leitorManual){if(!desempilha('leitor'))fechaLeitor();}
 });
+
+/* ---------- Pad de louvor no treino ----------
+   O botão Pad abre pad.html#painel num painel (iframe) sem parar o treino. O teclado numérico toca a batida do pad mesmo
+   com o painel escondido; com ele aberto, os números de cima também (no leitor eles continuam escolhendo a leitura).
+   O andamento do pad segue o do treino (mostraBpm) e o pad para, com a transição dele, quando a pessoa sai do treino.
+   Dentro do pad, espaço e setas voltam para cá: tocar/parar e andamento continuam funcionando. */
+const padPainelEl=$('#padPainel'),padFrame=$('#padFrame'),btnPad=$('#btnPad');
+let padCarregado=false,padTimer=0;
+function padApi(){try{return padCarregado&&padFrame.contentWindow&&padFrame.contentWindow.padPainel||null;}catch(e){return null;}}
+function padEstado(){
+  const a=padApi();let st=null;try{st=a&&a.estado();}catch(e){}
+  const soa=!!(st&&st.tocando);
+  btnPad.classList.toggle('soando',soa);
+  btnPad.setAttribute('aria-label',soa?`Pad de louvor, tocando${st.tom?' em '+st.tom:''}`:'Pad de louvor');
+}
+function padMostra(on){
+  padPainelEl.hidden=!on;
+  btnPad.setAttribute('aria-pressed',on?'true':'false');
+  document.body.classList.toggle('pad-aberto',on);
+  if(on&&!padFrame.getAttribute('src'))padFrame.src='pad.html#painel';
+  if(on){const a=padApi();if(a)a.acordar();}
+  /* o foco vai para o pad (o espaço de lá volta para o treino); ao esconder, sai do botão para o espaço tocar/parar */
+  try{if(on)padFrame.focus();else if(document.activeElement===btnPad||padPainelEl.contains(document.activeElement))document.activeElement.blur();}catch(e){}
+  if(!padTimer&&padFrame.getAttribute('src'))padTimer=setInterval(padEstado,1000);
+}
+padFrame.addEventListener('load',()=>{
+  padCarregado=true;
+  const a=padApi();if(a){a.bpm(+$('#tpBpm').textContent);a.acordar();}
+  if(!padPainelEl.hidden){try{padFrame.focus();}catch(e){}}
+  padEstado();
+});
+btnPad.addEventListener('click',()=>padMostra(padPainelEl.hidden));
+$('#ppEsconde').addEventListener('click',()=>padMostra(false));
+function padBpm(b){try{const a=padApi();if(a)a.bpm(Math.round(b));}catch(e){}}
+function padSaiDoTreino(){try{if(!padFrame.getAttribute('src'))return;padMostra(false);const a=padApi();if(a)a.parar();setTimeout(padEstado,300);}catch(e){}}
+window.addEventListener('keydown',e=>{
+  const a=padApi();if(!a||tela!=='treino'||e.ctrlKey||e.metaKey||e.altKey)return;
+  const alvo=e.target;if(alvo&&(alvo.tagName==='INPUT'||alvo.tagName==='SELECT'||alvo.tagName==='TEXTAREA'))return;
+  const num=/^Numpad/.test(e.code);
+  const cima=/^(Digit[0-9]|Period|Comma)$/.test(e.code)&&!padPainelEl.hidden&&!document.body.classList.contains('leitor');
+  if(!num&&!cima)return;
+  let ok=false;try{ok=e.repeat?a.temTecla(e.code):a.tecla(e.code);}catch(er){}
+  if(ok){e.preventDefault();e.stopPropagation();}
+},true);
 
 /* ---------- Edição ---------- */
 $('#btnEditar').addEventListener('click',()=>{editando=!editando;renderPartitura();});
