@@ -338,6 +338,22 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
 .slider input[type=range]::-moz-range-track { height: 6px; border-radius: 3px; background: var(--line); }
 .slider input[type=range]::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--accent); }
 .slider input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--text); border: 4px solid var(--accent); }
+/* Controles com o zero no meio (equalizador, afinação): a cor sai do meio */
+.slider.bi input[type=range]::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, var(--line) 0 var(--a, 50%), var(--accent) var(--a, 50%) var(--b, 50%), var(--line) var(--b, 50%) 100%);
+}
+
+/* Som da batida */
+.zerar { border: 0; background: none; padding: 4px 0; color: var(--muted); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.sub-head { margin-top: 6px; }
+.sub-head h3 { margin: 0; font-size: 15.5px; font-weight: 700; }
+.som-seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.som-seg button {
+  border: 1px solid var(--line); background: var(--ink-2); color: var(--muted); border-radius: 999px;
+  padding: 8px 12px; font-size: 13.5px; font-weight: 700; cursor: pointer; touch-action: manipulation;
+}
+.som-seg button[aria-checked="true"] { background: var(--ink-3); color: var(--text); box-shadow: inset 0 0 0 1px oklch(0.82 0.12 var(--kh) / 0.6); }
+.som-seg button.mexido::after { content: ''; display: inline-block; width: 6px; height: 6px; margin-left: 6px; border-radius: 50%; background: oklch(0.82 0.12 var(--kh)); vertical-align: middle; }
 
 /* Antes do culto */
 .tips { background: var(--ink-2); border: 1px solid var(--line); border-radius: 16px; padding: 16px 16px 4px; }
@@ -491,6 +507,42 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
       </div>
     </div>
     <p class="note">Vale para o Reverso dos Efeitos e para o pad 0 da Batida. No loop, cada reverso gravado guarda o tipo e a duração escolhidos na hora: dá para misturar, por exemplo, um prato de 1 compasso no começo e caixas de 1 tempo antes do 2 e do 4.</p>
+  </section>
+
+  <section class="sec" aria-labelledby="tSom">
+    <div class="sec-head"><h2 id="tSom">Som da batida</h2><button type="button" class="zerar" id="eqZerar">Zerar equalizador</button></div>
+    <div class="sliders">
+      <div class="slider bi"><label for="eqG">Graves</label><output id="eqGOut" for="eqG">0 dB</output>
+        <input id="eqG" type="range" min="-12" max="12" step="1" value="0"></div>
+      <div class="slider bi"><label for="eqM">Médios</label><output id="eqMOut" for="eqM">0 dB</output>
+        <input id="eqM" type="range" min="-12" max="12" step="1" value="0"></div>
+      <div class="slider bi"><label for="eqA">Agudos</label><output id="eqAOut" for="eqA">0 dB</output>
+        <input id="eqA" type="range" min="-12" max="12" step="1" value="0"></div>
+      <div class="slider"><label for="eqF">Abafar</label><output id="eqFOut" for="eqF">aberto</output>
+        <input id="eqF" type="range" min="0" max="100" step="1" value="0"><small>Fecha a batida inteira, como um filtro. Bom na introdução; abra no refrão.</small></div>
+    </div>
+    <div class="sec-head sub-head"><h3 id="tCadaSom">Efeito em cada som</h3><button type="button" class="zerar" id="somZerar">Zerar este som</button></div>
+    <div class="som-seg" role="radiogroup" aria-labelledby="tCadaSom" id="somSeg"></div>
+    <div class="sliders">
+      <div class="slider"><label for="somV">Volume</label><output id="somVOut" for="somV">100%</output>
+        <input id="somV" type="range" min="0" max="150" step="1" value="100"></div>
+      <div class="slider bi"><label for="somT">Afinação</label><output id="somTOut" for="somT">original</output>
+        <input id="somT" type="range" min="-12" max="12" step="1" value="0"></div>
+      <div class="slider"><label for="somR">Reverb</label><output id="somROut" for="somR">0%</output>
+        <input id="somR" type="range" min="0" max="100" step="1" value="0"></div>
+      <div class="slider"><label for="somD">Delay</label><output id="somDOut" for="somD">0%</output>
+        <input id="somD" type="range" min="0" max="100" step="1" value="0"></div>
+    </div>
+    <div class="sec-head sub-head"><h3 id="dlyLabel">Ritmo do delay</h3></div>
+    <div class="seg" role="radiogroup" aria-labelledby="dlyLabel" id="dlySeg">
+      <button type="button" role="radio" data-dv="1" aria-checked="false"><b>1/4</b><small>semínima</small></button>
+      <button type="button" role="radio" data-dv="0.75" aria-checked="true"><b>1/8 .</b><small>pontuada</small></button>
+      <button type="button" role="radio" data-dv="0.5" aria-checked="false"><b>1/8</b><small>colcheia</small></button>
+      <button type="button" role="radio" data-dv="0.25" aria-checked="false"><b>1/16</b><small>semicolch.</small></button>
+    </div>
+    <div class="slider"><label for="dlyFb">Repetições do delay</label><output id="dlyFbOut" for="dlyFb">35%</output>
+      <input id="dlyFb" type="range" min="0" max="90" step="1" value="35"></div>
+    <p class="note">Escolha o som e mexa: ao soltar, ele toca para você ouvir. Vale para os pads, o teclado e o loop. O delay segue o BPM do Ritmo da música; a colcheia pontuada é a do worship. Dois toques num controle voltam ao normal.</p>
   </section>
 
   <section class="sec" aria-labelledby="tTimbre">
@@ -821,11 +873,25 @@ class PadEngine {
     this.fxDry = amp(c, 0); this.fxWet = amp(c, 0);
     this.fxDry.connect(this.master); this.fxWet.connect(this.pre);
 
-    // Bateria
+    // Bateria: entrada → equalizador (graves, médios, agudos) → abafar (passa-baixas) → volume (drumDry).
+    // Filtros biquad não atrasam o som. O clique do metrônomo entra direto no drumDry, para o abafar não abafar o clique.
+    this.drumIn = amp(c, 1);
+    this.eqG = biquad(c, 'lowshelf', 110, 0.7); this.eqM = biquad(c, 'peaking', 900, 0.9); this.eqA = biquad(c, 'highshelf', 6500, 0.7);
+    this.filt = biquad(c, 'lowpass', c.sampleRate / 2, 0.8);
+    this.drumIn.connect(this.eqG); this.eqG.connect(this.eqM); this.eqM.connect(this.eqA); this.eqA.connect(this.filt);
     this.drumDry = amp(c, 0); this.drumWet = amp(c, 0);
+    this.filt.connect(this.drumDry);
     // A bateria seca não passa pelo limitador: ele olha 6 ms à frente e atrasa tudo. A saturação suave ainda protege.
     // O ganho compensa os +1,2 dB que o limitador dava. A cauda de reverb da bateria continua passando por ele.
-    this.drumFast = amp(c, 1.15); this.drumDry.connect(this.drumFast); this.drumFast.connect(this.safe); this.drumWet.connect(this.pre);
+    this.drumFast = amp(c, 1.15); this.drumDry.connect(this.drumFast); this.drumFast.connect(this.safe);
+    // O que vai para o reverb também passa pelo abafar, para a cauda fechar junto
+    this.filtWet = biquad(c, 'lowpass', c.sampleRate / 2, 0.7); this.drumWet.connect(this.filtWet); this.filtWet.connect(this.pre);
+    // Delay no tempo da música: cada som manda o quanto quiser; as repetições perdem graves e agudos e voltam pelo equalizador
+    this.dlyIn = amp(c, 1); this.dlyHp = biquad(c, 'highpass', 220, 0.6); this.dly = c.createDelay(3);
+    this.dlyTone = biquad(c, 'lowpass', 5200, 0.6); this.dlyFb = amp(c, 0.35); this.dlyOut = amp(c, 0.8); this._dlyFb = 0.35;
+    this.dly.delayTime.value = 0.5;
+    this.dlyIn.connect(this.dlyHp); this.dlyHp.connect(this.dly); this.dly.connect(this.dlyTone);
+    this.dlyTone.connect(this.dlyFb); this.dlyFb.connect(this.dly); this.dlyTone.connect(this.dlyOut); this.dlyOut.connect(this.drumIn);
     this.kit = null; this._open = null; this._shk = false;
     this.holds = new Set();
 
@@ -833,6 +899,29 @@ class PadEngine {
   }
 
   setDrumVolume(v) { const g = DRUM_GAIN * v * v, t = this.ctx.currentTime; this.drumDry.gain.setTargetAtTime(g, t, 0.03); this.drumWet.gain.setTargetAtTime(g, t, 0.03); }
+  // Equalizador da bateria, em dB (−12 a +12)
+  setEq(g, m, a) {
+    const t = this.ctx.currentTime;
+    this.eqG.gain.setTargetAtTime(+g || 0, t, 0.03); this.eqM.gain.setTargetAtTime(+m || 0, t, 0.03); this.eqA.gain.setTargetAtTime(+a || 0, t, 0.03);
+  }
+  // Abafar: 0 aberto, 1 bem fechado (o corte desce de 20 kHz a 250 Hz em escala de ouvido)
+  // Aberto de todo, o corte vai para a metade da taxa de amostragem: aí o filtro deixa passar tudo, até o estalo do ataque
+  setFiltro(p) {
+    p = Math.min(1, Math.max(0, +p || 0));
+    const t = this.ctx.currentTime, ny = this.ctx.sampleRate / 2;
+    [this.filt, this.filtWet].forEach(fl => {
+      fl.frequency.cancelScheduledValues(t);
+      if (p === 0) fl.frequency.setValueAtTime(ny, t);
+      else fl.frequency.setTargetAtTime(Math.min(20000, ny) * Math.pow(250 / 20000, p), t, 0.04);
+    });
+  }
+  // Delay: tempo em segundos (o app manda pelo BPM) e repetições (0 a 0,9)
+  setDelay(sec, fb) {
+    const t = this.ctx.currentTime;
+    this._dlyFb = Math.min(0.9, Math.max(0, +fb || 0));
+    this.dly.delayTime.setTargetAtTime(Math.min(2.9, Math.max(0.02, +sec || 0.5)), t, 0.04);
+    this.dlyFb.gain.setTargetAtTime(this._dlyFb, t, 0.04);
+  }
 
   async renderKit() {
     const sr = this.ctx.sampleRate, OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext, kit = {};
@@ -854,8 +943,9 @@ class PadEngine {
     return kit;
   }
 
-  // Toca uma peça da bateria agora (ou no tempo marcado pelo loop)
-  hit(id, when, vel, variant) {
+  // Toca uma peça da bateria agora (ou no tempo marcado pelo loop).
+  // o (opcional), o ajuste daquele som: v volume (1 = normal), t afinação em semitons, r reverb a mais, d quanto vai para o delay.
+  hit(id, when, vel, variant, o) {
     const kit = this.kit;
     if (!kit) return false;
     const c = this.ctx, t = Math.max(when || 0, c.currentTime);
@@ -865,15 +955,19 @@ class PadEngine {
     if (!k) return false;
     if (id === 'hat' || id === 'open') this._choke(t); // chimbal fechado abafa o aberto, como no real
     const s = c.createBufferSource(); s.buffer = k.buf;
-    if (id === 'tom') s.playbackRate.value = rootFreq(this.lastSemi) / TOM_REF;
-    const g = amp(c, vel == null ? 0.95 : vel);
-    s.connect(g); g.connect(this.drumDry);
-    let w = null;
-    if (k.send) { w = amp(c, k.send); g.connect(w); w.connect(this.drumWet); }
+    let rate = id === 'tom' ? rootFreq(this.lastSemi) / TOM_REF : 1;
+    if (o && o.t) rate *= Math.pow(2, o.t / 12);
+    if (rate !== 1) s.playbackRate.value = rate;
+    const g = amp(c, (vel == null ? 0.95 : vel) * (o && o.v != null ? o.v : 1));
+    s.connect(g); g.connect(this.drumIn);
+    let w = null, wd = null;
+    const send = (k.send || 0) + (o && o.r ? o.r : 0);
+    if (send) { w = amp(c, send); g.connect(w); w.connect(this.drumWet); }
+    if (o && o.d) { wd = amp(c, o.d); g.connect(wd); wd.connect(this.dlyIn); }
     if (id === 'open') this._open = { s, g };
     s.start(t);
     s.onended = () => {
-      try { s.disconnect(); g.disconnect(); if (w) w.disconnect(); } catch (e) { /* ok */ }
+      try { s.disconnect(); g.disconnect(); if (w) w.disconnect(); if (wd) wd.disconnect(); } catch (e) { /* ok */ }
       if (this._open && this._open.s === s) this._open = null;
     };
     return true;
@@ -1280,6 +1374,13 @@ class PadEngine {
     this.stop(0.15);
     this.setWind(false, 0.15);
     this._choke(t);
+    // Corta as repetições do delay: sem volta e sem saída até a linha esvaziar, depois tudo volta como estava
+    this.dlyFb.gain.setTargetAtTime(0, t, 0.015); this.dlyOut.gain.setTargetAtTime(0, t, 0.015);
+    clearTimeout(this._dlyBack);
+    this._dlyBack = setTimeout(() => {
+      const n = c.currentTime;
+      this.dlyFb.gain.setTargetAtTime(this._dlyFb, n, 0.02); this.dlyOut.gain.setTargetAtTime(0.8, n, 0.02);
+    }, (this.dly.delayTime.value + 0.2) * 1000);
     this.holds.forEach(h => h.release(true));
     this.fxActive.forEach(fx => {
       fade(c, fx.dry.gain, 0, 0.08, 'out'); fade(c, fx.wet.gain, 0, 0.08, 'out');
@@ -1435,6 +1536,7 @@ function prepare() {
   eng = new PadEngine(ctx);
   eng.lastSemi = KEYS[S.key].semi;
   eng.setPadVolume(S.vol / 100); eng.setFxVolume(S.fxv / 100); eng.setDrumVolume(S.dv / 100); eng.setBrightness(S.bri); eng.setShimmer(S.shim);
+  aplicaSom();
   eng.kitReady = eng.renderKit().catch(() => null);
   ctx.onstatechange = checkCtx;
 }
@@ -1500,7 +1602,7 @@ document.querySelectorAll('#barsSeg [data-bars]').forEach(b => b.addEventListene
 
 // Tempo
 const bpmIn = $('#bpm');
-function setBpm(v) { S.bpm = Math.max(40, Math.min(220, Math.round(v) || DEF.bpm)); bpmIn.value = S.bpm; save(); updateMeta(); }
+function setBpm(v) { S.bpm = Math.max(40, Math.min(220, Math.round(v) || DEF.bpm)); bpmIn.value = S.bpm; save(); updateMeta(); aplicaDelay(); }
 $('#bpmDown').addEventListener('click', () => setBpm(S.bpm - 1));
 $('#bpmUp').addEventListener('click', () => setBpm(S.bpm + 1));
 bpmIn.addEventListener('change', () => setBpm(+bpmIn.value));
@@ -1665,8 +1767,109 @@ function playPad(p, t, i, fromLoop) {
     eng.reverseAt(t, Math.max(0.2, beatsSec(r.b) - (fromLoop ? 0 : lat())), r.t);
     return;
   }
-  if (fromLoop) eng.hit(p.id, t, velFor(p.id, i), i % 2 ? 'shakerB' : 'shakerA');
-  else eng.hit(p.id, t, 0.9 + Math.random() * 0.1);
+  if (fromLoop) eng.hit(p.id, t, velFor(p.id, i), i % 2 ? 'shakerB' : 'shakerA', somOpts(p.id));
+  else eng.hit(p.id, t, 0.9 + Math.random() * 0.1, undefined, somOpts(p.id));
+}
+
+/* ---------- Som da batida: equalizador, abafar, efeito em cada som e delay no BPM ----------
+   S.eq {g, m, a em dB; f abafar 0-100}, S.som {id do pad: {v volume %, t semitons, r reverb %, d delay %}},
+   S.dly {div em tempos, fb repetições %}. O reverso (pad 0) tem os ajustes próprios e fica de fora. */
+const SOM_DEF = { v: 100, t: 0, r: 0, d: 0 };
+const SOM_NOMES = { kick: 'Bumbo', kickWet: 'Bumbo wet', kickDry: 'Bumbo dry', snare: 'Caixa', clap: 'Palma', rim: 'Aro', hat: 'Chimbal', open: 'Chimbal aberto', shaker: 'Shaker', tom: 'Tom' };
+if (!S.eq || typeof S.eq !== 'object') S.eq = { g: 0, m: 0, a: 0, f: 0 };
+if (!S.som || typeof S.som !== 'object') S.som = {};
+if (!S.dly || typeof S.dly !== 'object') S.dly = { div: 0.75, fb: 35 };
+let somSel = SOM_NOMES[S.somSel] ? S.somSel : 'snare';
+const somDe = (id) => Object.assign({}, SOM_DEF, S.som[id] || {});
+const mexido = (id) => { const s = S.som[id]; return !!s && (s.v !== 100 || !!s.t || !!s.r || !!s.d); };
+function somOpts(id) {
+  if (!S.som[id]) return null;
+  const s = somDe(id);
+  return { v: s.v / 100, t: s.t, r: s.r / 100 * 0.8, d: s.d / 100 };
+}
+function aplicaDelay() { if (eng) eng.setDelay(beatsSec(+S.dly.div || 0.75), (S.dly.fb == null ? 35 : S.dly.fb) / 100); }
+function aplicaSom() {
+  if (!eng) return;
+  eng.setEq(S.eq.g, S.eq.m, S.eq.a); eng.setFiltro((S.eq.f || 0) / 100); aplicaDelay();
+}
+// Pinta o controle: a cor sai da esquerda, ou do zero quando o zero fica no meio
+function pinta(el, out, txt) {
+  const v = +el.value, min = +el.min, max = +el.max, p = (v - min) / (max - min) * 100;
+  el.style.setProperty('--p', p + '%');
+  if (min < 0) { const z = -min / (max - min) * 100; el.style.setProperty('--a', Math.min(p, z) + '%'); el.style.setProperty('--b', Math.max(p, z) + '%'); }
+  out.textContent = txt(v);
+}
+const dB = (v) => v === 0 ? '0 dB' : (v > 0 ? '+' : '−') + Math.abs(v) + ' dB';
+const pct = (v) => v + '%';
+const semi = (v) => v === 0 ? 'original' : (v > 0 ? '+' : '−') + Math.abs(v) + (Math.abs(v) === 1 ? ' semitom' : ' semitons');
+const abaf = (v) => v === 0 ? 'aberto' : v + '%';
+// Dois toques num controle voltam ao valor normal
+function zeraNoDuplo(el, normal) { el.addEventListener('dblclick', () => { el.value = normal; el.dispatchEvent(new Event('input')); el.dispatchEvent(new Event('change')); }); }
+
+const EQ_UI = { eqG: ['g', dB, 0], eqM: ['m', dB, 0], eqA: ['a', dB, 0], eqF: ['f', abaf, 0] };
+Object.entries(EQ_UI).forEach(([id, [k, fmt, normal]]) => {
+  const el = $('#' + id), out = $('#' + id + 'Out');
+  el.value = S.eq[k] || 0; pinta(el, out, fmt);
+  el.addEventListener('input', () => {
+    S.eq[k] = +el.value; pinta(el, out, fmt); save();
+    if (!eng) return;
+    if (k === 'f') eng.setFiltro(S.eq.f / 100); else eng.setEq(S.eq.g, S.eq.m, S.eq.a);
+  });
+  zeraNoDuplo(el, normal);
+});
+$('#eqZerar').addEventListener('click', () => {
+  Object.keys(EQ_UI).forEach(id => { const el = $('#' + id); el.value = 0; el.dispatchEvent(new Event('input')); });
+});
+
+const somSeg = $('#somSeg');
+Object.keys(SOM_NOMES).forEach(id => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.setAttribute('role', 'radio'); b.dataset.som = id; b.textContent = SOM_NOMES[id];
+  somSeg.appendChild(b);
+});
+// Toca o som escolhido, com o ajuste dele, para ouvir a mudança
+async function ouveSom() {
+  const p = PADS.find(x => x.id === somSel);
+  if (!p) return;
+  await audio(); if (eng.kitReady) await eng.kitReady;
+  playPad(p, ctx.currentTime, null, false);
+}
+const SOM_UI = { somV: ['v', pct, 100], somT: ['t', semi, 0], somR: ['r', pct, 0], somD: ['d', pct, 0] };
+function mostraSom() {
+  somSeg.querySelectorAll('button').forEach(b => { b.setAttribute('aria-checked', String(b.dataset.som === somSel)); b.classList.toggle('mexido', mexido(b.dataset.som)); });
+  const s = somDe(somSel);
+  Object.entries(SOM_UI).forEach(([id, [k, fmt]]) => { const el = $('#' + id); el.value = s[k]; pinta(el, $('#' + id + 'Out'), fmt); });
+  const nome = SOM_NOMES[somSel];
+  Object.keys(SOM_UI).forEach(id => $('#' + id).setAttribute('aria-description', 'Ajuste de ' + nome));
+}
+somSeg.addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-som]');
+  if (!b) return;
+  somSel = b.dataset.som; S.somSel = somSel; save(); mostraSom(); ouveSom();
+});
+Object.entries(SOM_UI).forEach(([id, [k, fmt, normal]]) => {
+  const el = $('#' + id), out = $('#' + id + 'Out');
+  el.addEventListener('input', () => {
+    const s = somDe(somSel); s[k] = +el.value;
+    if (s.v === 100 && !s.t && !s.r && !s.d) delete S.som[somSel]; else S.som[somSel] = s;
+    pinta(el, out, fmt); save();
+    const b = somSeg.querySelector(`[data-som="${somSel}"]`); if (b) b.classList.toggle('mexido', mexido(somSel));
+  });
+  el.addEventListener('change', ouveSom);
+  zeraNoDuplo(el, normal);
+});
+$('#somZerar').addEventListener('click', () => { delete S.som[somSel]; save(); mostraSom(); ouveSom(); });
+mostraSom();
+
+document.querySelectorAll('#dlySeg [data-dv]').forEach(b => b.addEventListener('click', () => {
+  S.dly.div = +b.dataset.dv; save(); markSeg('#dlySeg', 'dv', S.dly.div); aplicaDelay();
+}));
+markSeg('#dlySeg', 'dv', S.dly.div);
+{
+  const el = $('#dlyFb'), out = $('#dlyFbOut');
+  el.value = S.dly.fb == null ? 35 : S.dly.fb; pinta(el, out, pct);
+  el.addEventListener('input', () => { S.dly.fb = +el.value; pinta(el, out, pct); save(); aplicaDelay(); });
+  zeraNoDuplo(el, 35);
 }
 const visQ = [];
 const looper = new Looper({
