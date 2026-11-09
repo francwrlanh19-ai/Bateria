@@ -3146,7 +3146,8 @@ window.addEventListener('keydown',e=>{
   const num=/^Numpad/.test(e.code);
   const cima=/^(Digit[0-9]|Period|Comma)$/.test(e.code)&&!padPainelEl.hidden&&!document.body.classList.contains('leitor');
   if(!num&&!cima)return;
-  let ok=false;try{ok=e.repeat?a.temTecla(e.code):a.tecla(e.code);}catch(er){}
+  /* a hora da tecla vai junto (em hora absoluta: o pad tem outro relógio de página), para a gravação do loop não depender de quando o código rodou */
+  let ok=false;try{ok=e.repeat?a.temTecla(e.code):a.tecla(e.code,performance.timeOrigin+e.timeStamp);}catch(er){}
   if(ok){e.preventDefault();e.stopPropagation();}
 },true);
 /* soltar a tecla termina o efeito segurado no pad (Enter Subida, + Cascata, 0 Reverso com os efeitos em Segurando) */

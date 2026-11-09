@@ -351,6 +351,13 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
   background: linear-gradient(to right, var(--line) 0 var(--a, 50%), var(--accent) var(--a, 50%) var(--b, 50%), var(--line) var(--b, 50%) 100%);
 }
 
+/* Precisão da gravação */
+.prec { margin: -4px 0 0; color: var(--text); }
+.acerto { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; align-items: center; }
+.acerto .lb { padding: 0 14px; white-space: nowrap; }
+.acerto .note { margin: 0; }
+.acerto .zerar { grid-column: 2; justify-self: start; }
+
 /* Som da batida */
 .zerar { border: 0; background: none; padding: 4px 0; color: var(--muted); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .sub-head { margin-top: 6px; }
@@ -468,6 +475,19 @@ h2 { font-family: var(--display); font-weight: 400; font-size: 21px; letter-spac
       <div class="steps-row">
         <div class="steps" id="steps" aria-hidden="true"></div>
         <span class="loop-status" id="loopStatus" aria-live="polite">Loop vazio</span>
+      </div>
+      <p class="note prec" id="precInfo" aria-live="polite" hidden></p>
+      <div class="len">
+        <span id="snapLabel">Encaixe</span>
+        <div class="seg" role="radiogroup" aria-labelledby="snapLabel" id="snapSeg">
+          <button type="button" role="radio" data-snap="2" aria-checked="false"><b>1/8</b><small>colcheia</small></button>
+          <button type="button" role="radio" data-snap="1" aria-checked="true"><b>1/16</b><small>semicolcheia</small></button>
+        </div>
+      </div>
+      <div class="acerto">
+        <button type="button" class="lb" id="acertoBtn">Acertar o tempo</button>
+        <p class="note" id="acertoInfo" aria-live="polite"></p>
+        <button type="button" class="zerar" id="acertoZerar" hidden>Zerar acerto</button>
       </div>
       <p class="note kbd-legend">No computador: teclado numérico (ou os números de cima). 1 a 9 tocam a bateria, 0 o Reverso, Enter a Subida, + a Cascata e o ponto o tom. * grava, − toca e para o loop, / desfaz e Esc para tudo. Com os efeitos em Segurando, aperte para começar e solte para terminar.<span id="latBeat"></span></p>
     </div>
@@ -1425,6 +1445,8 @@ class Looper {
     this.revAt = new Array(32).fill(null); // reverso gravado em cada passo: { t: tipo, b: duração em tempos }
     this.bars = 1; this.running = false; this.rec = false; this.clickOn = true; this.undoStack = [];
     this.n = 0; this.tNext = 0; this.refN = 0; this.refT = 0;
+    this.encaixe = 1;      // grava no passo mais próximo: 1 = semicolcheia, 2 = colcheia
+    this.lastDev = null;   // quanto o último toque gravado ficou antes (−) ou depois (+) do passo, em segundos
   }
   get len() { return this.bars * 16; }
   step() { return 60 / this.bpm() / 4; }
@@ -1456,11 +1478,15 @@ class Looper {
       this.n++; this.tNext += this.step();
     }
   }
-  // Toque ao vivo no instante t do relógio de áudio: grava no passo mais próximo
+  // Toque ao vivo: t é a hora ouvida do toque no relógio de áudio (o que saía no fone naquele instante).
+  // Desconta o acerto medido (latency) e grava no passo mais próximo do encaixe.
   record(bit, t) {
+    this.lastDev = null;
     if (!this.running || !this.rec) return -1;
-    const k = Math.round(this.refN + (t - this.latency() - this.refT) / this.step());
+    const q = this.encaixe === 2 ? 2 : 1, x = this.refN + (t - this.latency() - this.refT) / this.step();
+    const k = Math.round(x / q) * q;
     if (k < 0) return -1;
+    this.lastDev = (x - k) * this.step();
     const i = k % this.len;
     this.pattern[i] |= bit;
     if (k >= this.n) this.skip[i] |= bit; // ainda não agendado nesta volta: já soou ao vivo
@@ -1682,11 +1708,11 @@ const fxPanel = $('#panelFx'), fxGrid = $('#fxGrid');
 const holds = new Map();
 let holdRaf = 0;
 // Começa a segurar um efeito. el acende enquanto segura; meta (opcional) mostra o compasso.
-function startHold(el, key, kind, meta) {
+function startHold(el, key, kind, meta, ev) {
   if (holds.has(key)) return;
   if (!eng || !ctx || ctx.state !== 'running') { audio(); return; }
   const h = kind === 'reverse' ? eng.reverseHold(revAtual().t) : eng[HOLD_FN[kind]]();
-  holds.set(key, { btn: el, meta, kind, h, t0: ctx.currentTime });
+  holds.set(key, { btn: el, meta, kind, h, t0: ctx.currentTime, tOuv: tempoOuvido(ev) });
   el.classList.add('holding');
   if (!holdRaf) holdRaf = requestAnimationFrame(holdTick);
 }
@@ -1916,11 +1942,12 @@ const visQ = [];
 const looper = new Looper({
   now: () => (ctx ? ctx.currentTime : 0),
   bpm: () => S.bpm,
-  latency: lat,
+  latency: () => S.calib || 0,
   play: (mask, t, i) => { PADS.forEach(p => { if (mask & (1 << p.bit)) playPad(p, t, i, true); }); },
   click: (t, accent) => eng.click(t, accent),
   onStep: (n, t, mask) => visQ.push({ n, t, mask }),
 });
+looper.encaixe = S.encaixe === 2 ? 2 : 1;
 looper.pattern = Array.isArray(S.pat) && S.pat.length === 32 ? S.pat.map(x => x | 0) : new Array(32).fill(0);
 looper.revAt = Array.isArray(S.revAt) && S.revAt.length === 32
   ? S.revAt.map(r => (r && REV_TIPOS[r.t] ? { t: r.t, b: REV_LENS[r.b] ? +r.b : 4 } : null)) : new Array(32).fill(null);
@@ -1962,14 +1989,34 @@ function draw() {
 let saveT = 0;
 function saveLoop() { S.pat = looper.pattern.slice(); S.revAt = looper.revAt.slice(); S.lb = looper.bars; save(); }
 function saveLoopSoon() { clearTimeout(saveT); saveT = setTimeout(saveLoop, 400); }
-function liveHit(i) {
+// Hora do toque no relógio de áudio, no ponto que estava saindo no fone naquele instante. Usa a hora do próprio
+// evento (tecla ou dedo), não a hora em que o código rodou: um engasgo da tela não empurra o toque na gravação.
+// ev pode ser o evento, { absMs } (hora absoluta mandada pelo app do treino) ou nada.
+function tempoOuvido(ev) {
+  if (!ctx) return 0;
+  const agora = performance.now();
+  let ts = agora;
+  if (ev && ev.absMs) ts = ev.absMs - performance.timeOrigin;
+  else if (ev && ev.timeStamp > 0) ts = ev.timeStamp;
+  if (!(ts <= agora + 5 && ts > agora - 1000)) ts = agora;
+  let o = null;
+  try { o = ctx.getOutputTimestamp ? ctx.getOutputTimestamp() : null; } catch (e) { /* ok */ }
+  if (o && o.performanceTime > 0 && o.contextTime > 0) return o.contextTime + (ts - o.performanceTime) / 1000;
+  return ctx.currentTime - lat() - (agora - ts) / 1000;
+}
+function liveHit(i, ev) {
   if (!eng || !eng.kit) return;
   const p = PADS[i], t = ctx.currentTime;
   playPad(p, t, null, false);
   flashPad(i);
+  if (acerto) { acertoToque(ev); return; }   // medindo o tempo: o toque não grava
   if (looper.rec) {
-    const k = looper.record(1 << p.bit, t);
-    if (k >= 0) { if (p.id === 'rev') looper.revAt[k] = revAtual(); renderSteps(); saveLoopSoon(); syncLoop(); }
+    const k = looper.record(1 << p.bit, tempoOuvido(ev));
+    if (k >= 0) {
+      if (p.id === 'rev') looper.revAt[k] = revAtual();
+      notaPrecisao(looper.lastDev);
+      renderSteps(); saveLoopSoon(); syncLoop();
+    }
   }
 }
 // Toque no pad soa no instante em que o dedo encosta (vários dedos ao mesmo tempo)
@@ -1982,10 +2029,10 @@ drumsEl.addEventListener('pointerdown', (e) => {
   // Subida e Cascata sempre, e o Reverso com os efeitos em Segurando: apertar começa, soltar termina
   if (fx || (i === REV_I && S.hold)) {
     if (S.hold) try { p.setPointerCapture(e.pointerId); } catch (er) { /* ok */ }
-    tocaEfeito(fx || 'reverse', 'pt:' + e.pointerId);
+    tocaEfeito(fx || 'reverse', 'pt:' + e.pointerId, e);
     return;
   }
-  if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(i); else pendingHits.add(i);
+  if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(i, e); else pendingHits.add(i);
 });
 ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(type => drumsEl.addEventListener(type, (e) => soltaEfeito('pt:' + e.pointerId)));
 
@@ -1993,16 +2040,16 @@ drumsEl.addEventListener('pointerdown', (e) => {
    Com os efeitos em Segurando: apertar começa e soltar termina (o reverso solto grava no loop com a duração segurada).
    Pelo BPM: o mesmo que o botão dos Efeitos (o 0 continua o Reverso pelo BPM, com o loop de sempre). */
 const aguardando = new Set();   // apertados enquanto o áudio ainda acorda: começam se continuarem apertados
-function tocaEfeito(kind, key) {
+function tocaEfeito(kind, key, ev) {
   const el = kind === 'reverse' ? padEls[REV_I] : fxPadEls[kind];
   if (!S.hold) {
-    if (kind === 'reverse') { if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(REV_I); else audio().then(() => eng.kitReady).then(() => liveHit(REV_I)); return; }
+    if (kind === 'reverse') { if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(REV_I, ev); else audio().then(() => eng.kitReady).then(() => liveHit(REV_I)); return; }
     $('#' + FX_PADS.find(f => f.kind === kind).btn).click();
     flashEl(el);
     return;
   }
   if (!key) return;
-  if (eng && ctx && ctx.state === 'running') { startHold(el, key, kind, el.querySelector('.ps')); return; }
+  if (eng && ctx && ctx.state === 'running') { startHold(el, key, kind, el.querySelector('.ps'), ev); return; }
   aguardando.add(key);
   audio().then(() => { if (aguardando.delete(key)) startHold(el, key, kind, el.querySelector('.ps')); });
 }
@@ -2015,7 +2062,7 @@ function soltaEfeito(key) {
 function gravaReversoSegurado(st) {
   if (!looper.rec || !ctx) return;
   const b = Math.max(0.25, Math.round((ctx.currentTime - st.t0) * S.bpm / 60 * 4) / 4);
-  const k = looper.record(1 << PADS[REV_I].bit, st.t0);
+  const k = looper.record(1 << PADS[REV_I].bit, st.tOuv);
   if (k >= 0) { looper.revAt[k] = { t: revAtual().t, b }; renderSteps(); saveLoopSoon(); syncLoop(); }
 }
 function soltaTudoTeclado() {
@@ -2047,17 +2094,89 @@ function syncLoop() {
 }
 recBtn.addEventListener('click', async () => {
   await audio(); if (eng.kitReady) await eng.kitReady;
-  if (!looper.running) { looper.beginRec(); looper.start(true); startTimer(); }
-  else if (looper.rec) { looper.endRec(); saveLoop(); }
-  else looper.beginRec();
+  if (acerto) return;
+  if (!looper.running) { looper.beginRec(); comecaPrecisao(); looper.start(true); startTimer(); }
+  else if (looper.rec) { looper.endRec(); fimGravacao(); saveLoop(); }
+  else { looper.beginRec(); comecaPrecisao(); }
   syncLoop(); checkCtx();
 });
 playBtn.addEventListener('click', async () => {
   await audio(); if (eng.kitReady) await eng.kitReady;
-  if (looper.running) { looper.stop(); stopTimer(); saveLoop(); }
+  if (acerto) return;
+  if (looper.running) { const gravava = looper.rec; looper.stop(); stopTimer(); saveLoop(); if (gravava) fimGravacao(); }
   else { looper.start(false); startTimer(); }
   syncLoop(); checkCtx();
 });
+
+/* ---------- Precisão da gravação: encaixe, acerto do tempo e resumo ----------
+   Acertar o tempo: 4 cliques de contagem e 16 para tocar junto. A mediana de quanto cada toque caiu depois (ou antes)
+   do clique vira S.calib, que a gravação desconta (soma o atraso do teclado e o jeito de tocar de cada um).
+   O resumo mostra, depois de cada gravação, a média e quantos toques caíram até 25 ms do passo. */
+const precInfo = $('#precInfo'), acertoBtn = $('#acertoBtn'), acertoInfo = $('#acertoInfo'), acertoZerar = $('#acertoZerar');
+let prec = null, acerto = null;
+const emMs = (x) => Math.round(x * 1000);
+function comecaPrecisao() { prec = { n: 0, soma: 0, ok: 0 }; }
+function notaPrecisao(dev) { if (dev == null || !prec) return; prec.n++; prec.soma += dev; if (Math.abs(dev) <= 0.025) prec.ok++; }
+function fimGravacao() {
+  const p = prec; prec = null;
+  if (!p || !p.n) return;
+  const med = emMs(p.soma / p.n), pc = Math.round(p.ok / p.n * 100);
+  const lado = Math.abs(med) <= 3 ? 'em cima do tempo' : `${Math.abs(med)} ms ${med > 0 ? 'depois' : 'antes'} do tempo`;
+  precInfo.textContent = `Última gravação: ${p.n} toque${p.n > 1 ? 's' : ''}, em média ${lado}; ${pc}% caíram até 25 ms do tempo.`;
+  precInfo.hidden = false;
+}
+function mostraAcerto() {
+  const c = emMs(S.calib || 0);
+  acertoZerar.hidden = !c;
+  acertoInfo.textContent = c
+    ? `Acerto salvo: a gravação desconta ${Math.abs(c)} ms de ${c > 0 ? 'atraso' : 'adiantamento'} das suas batidas.`
+    : 'Toque um pad junto com 16 cliques: o app mede se suas batidas chegam antes ou depois e corrige a gravação.';
+}
+acertoBtn.addEventListener('click', async () => {
+  if (acerto) return;
+  await audio(); if (eng.kitReady) await eng.kitReady;
+  if (looper.running) { const gravava = looper.rec; looper.stop(); stopTimer(); saveLoop(); if (gravava) fimGravacao(); syncLoop(); }
+  const beat = 60 / S.bpm, CONT = 4, N = 16, t0 = ctx.currentTime + 0.4, clicks = [];
+  for (let j = 0; j < CONT + N; j++) { const t = t0 + j * beat; eng.click(t, j === 0 || j === CONT); if (j >= CONT) clicks.push(t); }
+  acerto = { clicks, devs: [], t0, beat, CONT, N };
+  acertoBtn.disabled = true; acertoBtn.textContent = 'Medindo…';
+  requestAnimationFrame(acertoTick);
+});
+function acertoTick() {
+  const a = acerto;
+  if (!a) return;
+  const j = Math.floor((ctx.currentTime - lat() - a.t0) / a.beat);
+  if (j < a.CONT) acertoInfo.textContent = j < 0 ? 'Ouça a contagem de 4 e toque um pad em cada clique.' : `Contagem: ${a.CONT - j}…`;
+  else if (j < a.CONT + a.N) acertoInfo.textContent = `Toque junto: clique ${j - a.CONT + 1} de ${a.N}.`;
+  else { acertoFim(); return; }
+  requestAnimationFrame(acertoTick);
+}
+function acertoToque(ev) {
+  const a = acerto, t = tempoOuvido(ev);
+  let best = null;
+  for (const c of a.clicks) { const d = t - c; if (best === null || Math.abs(d) < Math.abs(best)) best = d; }
+  if (best !== null && Math.abs(best) < a.beat * 0.4) a.devs.push(best);
+}
+function acertoFim() {
+  const a = acerto; acerto = null;
+  acertoBtn.disabled = false; acertoBtn.textContent = 'Acertar o tempo';
+  if (a.devs.length < 8) { acertoInfo.textContent = `Poucos toques (${a.devs.length} de ${a.N}). Tente de novo: um toque em cada clique.`; return; }
+  const s = a.devs.slice().sort((x, y) => x - y), meio = s[Math.floor(s.length / 2)];
+  const desv = s.map(d => Math.abs(d - meio)).sort((x, y) => x - y)[Math.floor(s.length / 2)];
+  S.calib = Math.max(-0.2, Math.min(0.2, meio)); save();
+  const c = emMs(S.calib), d = Math.max(1, emMs(desv));
+  const lado = Math.abs(c) <= 3 ? 'em cima do clique' : `${Math.abs(c)} ms ${c > 0 ? 'depois' : 'antes'} do clique`;
+  const nota = d <= 12 ? 'muito firme' : d <= 25 ? 'firme' : 'vale treinar devagar com o clique';
+  acertoInfo.textContent = `Suas batidas chegaram ${lado}, e a gravação agora desconta isso. Variação entre os toques: ±${d} ms (${nota}).`;
+  acertoZerar.hidden = !c;
+}
+acertoZerar.addEventListener('click', () => { S.calib = 0; save(); mostraAcerto(); });
+document.querySelectorAll('#snapSeg [data-snap]').forEach(b => b.addEventListener('click', () => {
+  S.encaixe = +b.dataset.snap === 2 ? 2 : 1; looper.encaixe = S.encaixe; save(); markSeg('#snapSeg', 'snap', S.encaixe);
+}));
+markSeg('#snapSeg', 'snap', S.encaixe === 2 ? 2 : 1);
+mostraAcerto();
+window.padAcerto = () => acerto;   // para os testes
 undoBtn.addEventListener('click', () => { looper.undo(); renderSteps(); saveLoop(); syncLoop(); });
 clearBtn.addEventListener('click', () => { looper.clear(); renderSteps(); saveLoop(); syncLoop(); });
 document.querySelectorAll('#loopSeg [data-lb]').forEach(b => b.addEventListener('click', () => {
@@ -2101,12 +2220,12 @@ const KEYACT = {
 // Efeito da tecla: + e Enter sempre; o 0 só com os efeitos em Segurando (pelo BPM ele é um pad comum)
 const fxDaTecla = (code, soltando) => KEYFX[code] || (KEYPAD[code] === REV_I && (S.hold || soltando) ? 'reverse' : null);
 // Toca uma tecla pelo código físico (Numpad1, Digit1...). Devolve true quando a tecla é do pad.
-function teclaPad(code) {
+function teclaPad(code, ev) {
   const fx = fxDaTecla(code, false);
-  if (fx) { tocaEfeito(fx, 'kb:' + fx); return true; }
+  if (fx) { tocaEfeito(fx, 'kb:' + fx, ev); return true; }
   const i = KEYPAD[code];
   if (i != null) {
-    if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(i);
+    if (ctx && ctx.state === 'running' && eng && eng.kit) liveHit(i, ev);
     else audio().then(() => eng.kitReady).then(() => liveHit(i));
     return true;
   }
@@ -2127,7 +2246,7 @@ document.addEventListener('keydown', (e) => {
     return;
   }
   if (e.repeat) { if (KEYPAD[e.code] != null || KEYACT[e.code] || KEYFX[e.code]) e.preventDefault(); return; }
-  if (teclaPad(e.code)) e.preventDefault();
+  if (teclaPad(e.code, e)) e.preventDefault();
 });
 // Soltar a tecla termina o efeito segurado. Devolve true quando a tecla é de efeito.
 function soltaPad(code) {
@@ -2146,7 +2265,7 @@ document.addEventListener('keyup', (e) => {
    O app de bateria abre pad.html#painel num painel ao lado da partitura e conversa com o pad por window.padPainel:
    manda as teclas do teclado numérico, o andamento do treino e pede para parar ao sair do treino. */
 window.padPainel = {
-  tecla: (code) => teclaPad(code),
+  tecla: (code, absMs) => teclaPad(code, absMs ? { absMs } : null),
   solta: (code) => soltaPad(code),
   soltaTudo: () => soltaTudoTeclado(),
   temTecla: (code) => KEYPAD[code] != null || !!KEYACT[code] || !!KEYFX[code],
