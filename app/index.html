@@ -312,7 +312,6 @@ body.foco .leitura{display:none}
 .hub-card .seta-hub{justify-self:start;margin-top:6px;font-size:14px;font-weight:700;color:var(--brass)}
 .hub-card.rotina-card .seta-hub{color:var(--sn)}
 .hub-tit{font-size:18px;font-weight:700}
-.areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:14px;align-items:start}
 .area{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px 2px;min-width:0}
 .area-topo{display:grid;gap:4px;padding:2px 0 10px}
 .area-topo h2{font-family:var(--f-display);font-weight:800;font-size:27px;line-height:1;display:flex;align-items:center;gap:9px}
@@ -803,7 +802,6 @@ body.foco .partitura{gap:10px}
 .busca input{height:54px;border-radius:999px;border:2px solid var(--line);padding:0 20px}
 
 /* áreas: fundo tingido com a cor de cada uma */
-.areas{gap:16px}
 .area{border:0;border-radius:26px;padding:14px 12px 14px;background:color-mix(in srgb,var(--c) 13%,var(--surface))}
 .area-topo{display:grid;grid-template-columns:46px minmax(0,1fr);column-gap:12px;row-gap:2px;align-items:center;padding:0 4px 12px}
 .area-ico{grid-row:1 / span 2;width:46px;height:46px;border-radius:15px;display:grid;place-items:center;font-size:25px;line-height:1;background:var(--surface);box-shadow:0 3px 0 color-mix(in srgb,var(--c) 45%,transparent)}
@@ -819,9 +817,7 @@ a.cat{text-decoration:none;color:inherit}
 .cat-barra{width:64px;height:8px;border-radius:999px}
 .cat:active{transform:translateY(2px);box-shadow:0 1px 0 color-mix(in srgb,var(--c) 45%,transparent)}
 .area .copia{background:var(--surface);border-top:0;border-radius:18px;padding:12px 14px}
-/* área principal: ocupa a largura toda e numera as categorias como passos */
-.area-principal{grid-column:1 / -1}
-.passos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px}
+/* área principal: numera as categorias como passos */
 .cat[data-passo]{grid-template-columns:30px minmax(0,1fr) auto}
 .cat[data-passo]::before{content:attr(data-passo);width:30px;height:30px;display:grid;place-items:center;background:var(--ink);color:var(--surface);font-family:var(--f-display);font-weight:800;font-size:16px;line-height:1}
 
@@ -830,6 +826,39 @@ a.cat{text-decoration:none;color:inherit}
 .recebida{border-radius:22px}
 
 @media (max-width:420px){.marca{font-size:27px}.hoje-cab h2{font-size:30px}.cat h3{font-size:21px}.area-topo h2{font-size:25px}}
+
+/* ===== Início em blocos =====
+   Celular: uma coluna. Computador (.hub-largo, a partir de 960px): o estudo à esquerda e o dia à direita,
+   cada coluna com a sua altura, para não sobrar buraco entre os blocos. */
+.hub-grade{display:grid;gap:16px;align-items:start;min-width:0}
+.hub-grade>*,.hub-col>*{min-width:0}
+.hub-largo{grid-template-columns:minmax(0,1fr) minmax(330px,380px);gap:20px 24px}
+.hub-col{display:grid;gap:16px;align-content:start;min-width:0}
+.area{container-type:inline-size}
+.cats{display:grid;gap:10px}
+.cats>.cat{align-content:center}
+@container (min-width:620px){
+  .cats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cats>:last-child:nth-child(odd){grid-column:1 / -1}
+}
+/* Ferramentas: uma linha para cada no celular, três cartões lado a lado quando cabe */
+.ferr-grade{display:grid;gap:10px}
+.ferr{appearance:none;display:grid;grid-template-columns:44px minmax(0,1fr);align-items:center;column-gap:12px;text-align:left;color:inherit;text-decoration:none;font:inherit;background:var(--surface);border:0;border-radius:18px;padding:10px 14px 10px 10px;min-height:64px;box-shadow:0 3px 0 color-mix(in srgb,var(--c) 45%,transparent);cursor:pointer;transition:transform .06s ease-out,box-shadow .06s ease-out}
+.ferr:active{transform:translateY(2px);box-shadow:0 1px 0 color-mix(in srgb,var(--c) 45%,transparent)}
+.ferr-ico{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:23px;line-height:1;background:color-mix(in srgb,var(--c) 22%,var(--surface))}
+.ferr-txt{display:grid;gap:1px;min-width:0}
+.ferr b{font-family:var(--f-display);font-weight:800;font-size:21px;line-height:1.1}
+.ferr small{font-size:13px;color:var(--muted);line-height:1.25}
+@container (min-width:520px){
+  .ferr-grade{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ferr{grid-template-columns:minmax(0,1fr);align-items:start;align-content:start;row-gap:8px;padding:12px 14px 14px}
+}
+/* coluna do dia, mais estreita */
+.hub-lado .hoje-cab h2{font-size:30px}
+/* aviso do site para computador */
+.aviso-pc{border-color:var(--fogo)}
+.aviso-pc p{font-size:15px;line-height:1.4}
+.aviso-pc .btn-linha{justify-self:start;min-height:44px}
 @media (prefers-reduced-motion:reduce){.hub .btn-primario,.hub .btn-linha{transition:none}}
 
 /* Pad de louvor no treino: pad.html#painel num painel que não para o treino */
@@ -2902,6 +2931,7 @@ function renderHub(){
   const h=$('#hub');h.innerHTML='';
   const sq=$('#seqTopo'),nsq=diasSeguidos();
   if(sq){sq.hidden=!nsq;sq.textContent=`🔥 ${nsq}`;sq.title=`${nsq} ${nsq===1?'dia seguido':'dias seguidos'} de estudo`;sq.setAttribute('aria-label',sq.title);}
+  const mpc=cartaoModoPc();if(mpc)h.append(mpc);
   const rec=cartaoRecebida();if(rec)h.append(rec);
   const rm=cartaoMusicasRecebidas();if(rm)h.append(rm);
   const nov=cartaoNovidades();if(nov)h.append(nov);
@@ -2911,30 +2941,27 @@ function renderHub(){
   if(bb)bb.setAttribute('aria-expanded',abreBusca?'true':'false');
   if(abreBusca)h.append(caixaBusca());
   const res=el('div','busca-res');res.id='buscaRes';res.hidden=true;h.append(res);
-  /* Continuar (o último exercício aberto) numa faixa fina, e logo depois as áreas */
-  h.append(barraContinuar());
-  /* Áreas: as principais (Leitura, Levadas e viradas) primeiro, com as categorias numeradas como passos; depois Outros,
-     o treino de hoje com os últimos 7 dias e, por fim, Neste celular */
-  const caixa=el('div','areas');caixa.id='areasHub';
-  const cats=CONTEUDO.categorias.filter(c=>!c.especial||c.id==='ditado'||c.id==='repertorio'||c.id==='pad');
-  const grupos=AREAS.length?AREAS:[{id:'',nome:'Categorias'}];
+  /* Início em blocos fixos, sem buracos. No celular, uma coluna: Continuar, as áreas principais (Leitura e Levadas e viradas,
+     que o usuário pediu no topo), Ferramentas, as outras áreas, o Treino de hoje, os últimos 7 dias e Neste celular.
+     No computador (HUB_LARGO), o estudo fica à esquerda e o dia à direita, cada coluna com a sua altura. */
+  const largo=HUB_LARGO.matches;
+  const grade=el('div','hub-grade'+(largo?' hub-largo':''));grade.id='areasHub';
+  const cats=CONTEUDO.categorias.filter(c=>(!c.especial||c.id==='ditado'||c.id==='repertorio')&&c.id!=='pad');
+  const grupos=AREAS.length?AREAS:[{id:'',nome:'Categorias'}],secs=[];
   grupos.forEach(ar=>{
     const cs=cats.filter(c=>!ar.id||c.area===ar.id);if(!cs.length)return;
     const sec=el('section','area'+(ar.principal?' area-principal':''));sec.style.setProperty('--c',`var(${ar.cor||'--muted'})`);
+    sec.dataset.area=ar.id||'todas';
     const hid='area-'+(ar.id||'todas');sec.setAttribute('aria-labelledby',hid);
     sec.innerHTML=`<div class="area-topo"><span class="area-ico" aria-hidden="true">${esc(ar.icone||'')}</span><h2 id="${esc(hid)}">${esc(ar.nome)}</h2>${ar.descricao?`<p>${esc(ar.descricao)}</p>`:''}</div>`;
-    const linha=(c,n)=>c.id==='ditado'?linhaDitado(c,n):c.id==='repertorio'?linhaRepertorio(c,n):c.id==='pad'?linhaPad(c):linhaCat(c,n);
-    /* o Pad de louvor é uma ferramenta do culto, não um passo de estudo: fica sem número */
-    if(ar.principal){const ps=el('div','passos');let n=0;cs.forEach(c=>ps.append(linha(c,c.id==='pad'?0:++n)));sec.append(ps);}
-    else cs.forEach(c=>sec.append(linha(c)));
-    caixa.append(sec);
+    const linha=(c,n)=>c.id==='ditado'?linhaDitado(c,n):c.id==='repertorio'?linhaRepertorio(c,n):linhaCat(c,n);
+    const box=el('div','cats');let n=0;
+    cs.forEach(c=>box.append(linha(c,ar.principal?++n:0)));
+    sec.append(box);secs.push(sec);
   });
-  caixa.append(cartaoHoje(),cartaoSemana());
-  /* Neste celular: rotinas, exercícios criados e a cópia dos dados */
+  /* Neste celular: instalar, a cópia dos dados e a versão */
   const cel=el('section','area area-celular');cel.style.setProperty('--c','var(--muted)');cel.setAttribute('aria-labelledby','area-celular');
-  cel.innerHTML='<div class="area-topo"><span class="area-ico" aria-hidden="true">📱</span><h2 id="area-celular">Neste celular</h2><p>Suas rotinas, seus exercícios e uma cópia dos dados</p></div>';
-  cel.append(linhaEspecial('rotina','Minhas rotinas',`${rotinas.length} ${rotinas.length===1?'rotina':'rotinas'}. Monte, toque em sequência e envie por link.`));
-  cel.append(linhaEspecial('meus','Meus exercícios',meus.length?`${meus.length} ${meus.length===1?'exercício criado':'exercícios criados'} por você`:'Crie um exercício e marque as notas na grade'));
+  cel.innerHTML='<div class="area-topo"><span class="area-ico" aria-hidden="true">📱</span><h2 id="area-celular">Neste celular</h2><p>Uma cópia dos seus dados e a versão do app</p></div>';
   const cp=el('div','copia');
   const info=el('p');info.id='copiaInfo';info.textContent=infoCopia();
   const acs=el('div','copia-acoes');
@@ -2942,15 +2969,53 @@ function renderHub(){
   const b2=el('button','btn-linha');b2.type='button';b2.textContent='Restaurar cópia';b2.addEventListener('click',()=>pedeCopia(cp));
   acs.append(b1,b2);cp.append(info,acs);
   const li=linhaInstalar();if(li)cel.append(li);
-  cel.append(cp,linhaVersao());caixa.append(cel);
-  h.append(caixa);
+  cel.append(cp,linhaVersao());
+  const cont=barraContinuar(),ferr=blocoFerramentas(),hoje=cartaoHoje(),sem=cartaoSemana();
+  if(largo){
+    const princ=el('div','hub-col hub-princ'),lado=el('div','hub-col hub-lado');
+    princ.append(cont,...secs);lado.append(ferr,hoje,sem,cel);grade.append(princ,lado);
+  }else{
+    let k=0;while(k<secs.length&&secs[k].classList.contains('area-principal'))k++;
+    grade.append(cont,...secs.slice(0,k),ferr,...secs.slice(k),hoje,sem,cel);
+  }
+  h.append(grade);
   aplicaBusca();
 }
-function linhaEspecial(id,nome,txt){
-  const b=el('button','cat');b.type='button';b.style.setProperty('--c','var(--muted)');
-  b.innerHTML=`<h3>${esc(nome)}</h3><p>${esc(txt)}</p>`;
-  b.addEventListener('click',()=>{abaAtiva=id;filtroCat='todos';mudaTela('categoria');});
-  return b;
+/* Ferramentas do início: o Pad de louvor (outra página) e o que você monta neste celular (rotinas e exercícios) */
+function blocoFerramentas(){
+  const sec=el('section','area ferramentas');sec.style.setProperty('--c','var(--muted)');sec.setAttribute('aria-labelledby','area-ferr');
+  sec.innerHTML='<div class="area-topo"><span class="area-ico" aria-hidden="true">🧰</span><h2 id="area-ferr">Ferramentas</h2><p>O pad para o culto e o que você monta</p></div>';
+  const box=el('div','ferr-grade');
+  const item=(cor,ico,nome,txt,acao)=>{
+    const b=el(typeof acao==='string'?'a':'button','ferr');b.style.setProperty('--c',`var(${cor})`);
+    if(typeof acao==='string')b.href=acao;else{b.type='button';b.addEventListener('click',acao);}
+    b.innerHTML=`<span class="ferr-ico" aria-hidden="true">${ico}</span><span class="ferr-txt"><b>${esc(nome)}</b><small>${esc(txt)}</small></span>`;
+    b.setAttribute('aria-label',`${nome}: ${txt}`);
+    return b;
+  };
+  const abre=id=>()=>{abaAtiva=id;filtroCat='todos';mudaTela('categoria');};
+  const pad=CONTEUDO.categorias.find(c=>c.id==='pad');
+  if(pad)box.append(item(pad.cor||'--cym','🎹',pad.nome,'Para tocar no culto','pad.html'));
+  box.append(
+    item('--sn','🔁','Minhas rotinas',rotinas.length?`${rotinas.length} ${rotinas.length===1?'rotina':'rotinas'}`:'Monte uma sequência',abre('rotina')),
+    item('--tom','✏️','Meus exercícios',meus.length?`${meus.length} ${meus.length===1?'criado':'criados'} por você`:'Crie o seu na grade',abre('meus')));
+  sec.append(box);
+  return sec;
+}
+/* largura em que o início vira duas colunas; ao cruzar, redesenha (menos com a busca em uso) */
+const HUB_LARGO=matchMedia('(min-width:960px)');
+{const f=()=>{if(tela==='hub'&&!(document.activeElement&&document.activeElement.id==='busca'))renderHub();};
+ try{HUB_LARGO.addEventListener('change',f);}catch(e){if(HUB_LARGO.addListener)HUB_LARGO.addListener(f);}}
+/* celular no "site para computador": a página fica com uns 980 px de largura e tudo miúdo */
+function cartaoModoPc(){
+  const sw=screen.width||0,lw=document.documentElement.clientWidth||innerWidth;
+  if(!sw||sw>=600||lw<sw*1.5||LS.get('avisoPc','')===diaHoje())return null;
+  const sec=el('section','recebida aviso-pc');sec.setAttribute('role','note');
+  sec.innerHTML='<p><b>O celular está abrindo a versão para computador</b>, por isso fica tudo miúdo e fora do lugar. No Chrome, toque nos três pontinhos ⋮ e desmarque <b>Site para computador</b>.</p>';
+  const ok=el('button','btn-linha');ok.type='button';ok.textContent='Entendi';
+  ok.addEventListener('click',()=>{LS.set('avisoPc',diaHoje());sec.remove();});
+  sec.append(ok);
+  return sec;
 }
 function linhaCat(c,passo){
   const ests=[];listas().forEach(l=>{if(abaDe(l)===c.id)l.exercicios.forEach(ex=>ests.push(estadoDe(ex,l).est));});
@@ -4043,13 +4108,6 @@ function cartaoMusicasRecebidas(){
   const no=el('button','btn-linha');no.type='button';no.textContent=novas.length?'Agora não':'Entendi';no.addEventListener('click',fecha);ac.append(no);
   sec.append(ac);
   return sec;
-}
-/* cartão do início que abre o Pad de louvor (pad.html): pad nos 12 tons, efeitos e batida com os dedos, para o culto */
-function linhaPad(c){
-  const b=el('a','cat');b.href='pad.html';b.style.setProperty('--c',`var(${c.cor||'--muted'})`);
-  b.innerHTML=`<h3>${esc(c.nome)}</h3><p>${esc(c.descricao||'')}</p>`;
-  b.setAttribute('aria-label',`${c.nome}. ${c.descricao||''}`);
-  return b;
 }
 /* cartão do início, como um passo de Levadas e viradas */
 function linhaRepertorio(c,passo){
